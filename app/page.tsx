@@ -1,23 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 
-// Reusable Comic Burst Component
-const ComicBurst = ({ children, color = "#03A9F4" }) => (
-  <div className="burst-wrapper relative flex items-center justify-center">
-    <svg viewBox="0 0 500 300" className="w-full h-auto">
-      <path 
-        d="M250,10 L290,50 L350,20 L360,70 L430,40 L410,100 L490,110 L430,160 L480,220 L400,210 L380,280 L310,230 L250,290 L190,230 L120,280 L100,210 L20,220 L70,160 L10,110 L90,100 L70,40 L140,70 L150,20 L210,50 Z" 
-        fill={color} 
-        stroke="black" 
-        strokeWidth="8"
-      />
-    </svg>
-    <div className="absolute inset-0 flex items-center justify-center p-8">
-      {children}
-    </div>
-  </div>
-);
-
 export default function SpideyInvite() {
   const [code, setCode] = useState('');
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -46,9 +29,7 @@ export default function SpideyInvite() {
 
   useEffect(() => {
     if (isUnlocked && intelRef.current) {
-      setTimeout(() => {
-        intelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 300);
+      intelRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [isUnlocked]);
 
@@ -58,38 +39,57 @@ export default function SpideyInvite() {
       if (thwipAudio.current) thwipAudio.current.play();
       setIsUnlocked(true);
     } else {
-      alert("THWIP! Try again!");
+      alert("THWIP! WRONG CODE!");
     }
   };
 
   return (
-    <main className="min-h-screen w-full flex flex-col items-center py-8 px-4 space-y-10">
+    <main className="w-full max-w-md flex-center py-10 px-4 space-y-12">
       <audio ref={thwipAudio} src="https://www.myinstants.com/media/sounds/thwip.mp3" />
 
-      {/* HEADER */}
-      <ComicBurst>
-        <h1 className="font-comic text-3xl md:text-5xl text-white text-center leading-none uppercase">
-          <span className="text-stroke block">YOU'RE INVITED TO</span>
-          <span className="text-black text-4xl md:text-6xl block mt-1">LUCAS'S 5TH</span>
-          <span className="text-stroke block mt-1">BIRTHDAY PARTY!</span>
-        </h1>
-      </ComicBurst>
+      {/* HEADER BURST: Using an SVG Background to avoid text clipping */}
+      <div className="relative w-full flex-center p-8 min-h-[250px] justify-center">
+        {/* Jagged SVG Background */}
+        <div className="absolute inset-0 z-0">
+          <svg viewBox="0 0 500 500" preserveAspectRatio="none" className="w-full h-full drop-shadow-[6px_6px_0px_rgba(0,0,0,1)]">
+            <path 
+              d="M250,20 L310,80 L390,30 L400,120 L480,90 L440,180 L500,250 L440,320 L480,410 L400,380 L390,470 L310,420 L250,480 L190,420 L110,470 L100,380 L20,410 L60,320 L0,250 L60,180 L20,90 L100,120 L110,30 L190,80 Z" 
+              fill="#03A9F4" 
+              stroke="black" 
+              strokeWidth="10"
+            />
+          </svg>
+        </div>
+        
+        {/* Header Text: Positioned relatively to stack properly */}
+        <div className="relative z-10 flex-center space-y-2">
+          <h1 className="font-comic text-3xl md:text-4xl text-white text-stroke uppercase">
+            YOU'RE INVITED TO
+          </h1>
+          <h1 className="font-comic text-5xl md:text-6xl text-black uppercase">
+            LUCAS'S 5TH
+          </h1>
+          <h1 className="font-comic text-3xl md:text-4xl text-white text-stroke uppercase">
+            BIRTHDAY PARTY!
+          </h1>
+        </div>
+      </div>
 
-      {/* CODE ENTRY */}
+      {/* CODE ENTRY SECTION */}
       {!isUnlocked && (
-        <div className="w-full max-w-sm flex flex-col items-center">
-          <h2 className="font-comic text-4xl text-black mb-4 italic">ENTER SECRET CODE</h2>
-          <form onSubmit={handleVerify} className="w-full relative flex flex-col items-center">
+        <div className="w-full flex-center space-y-6">
+          <h2 className="font-comic text-4xl text-black italic">ENTER SECRET CODE</h2>
+          <form onSubmit={handleVerify} className="w-full flex-center space-y-4">
             <input 
               type="text" 
               value={code} 
               onChange={(e) => setCode(e.target.value)}
-              className="w-full p-4 border-8 border-black text-center text-4xl font-bold uppercase bg-white shadow-[10px_10px_0px_black] outline-none"
+              className="w-full max-w-[280px] p-4 border-8 border-black text-center text-4xl font-bold uppercase bg-white shadow-[8px_8px_0px_black] outline-none"
               placeholder="_____"
             />
             <button 
               type="submit" 
-              className="bg-[#E62429] text-white font-comic text-3xl py-2 px-8 border-4 border-black mt-6 shadow-[4px_4px_0px_black] hover:scale-105 active:translate-y-1 transition-all"
+              className="bg-[#E62429] text-white font-comic text-4xl py-2 px-10 border-4 border-black shadow-[4px_4px_0px_black] active:translate-y-1 transition-all"
             >
               GO TIME!
             </button>
@@ -99,29 +99,33 @@ export default function SpideyInvite() {
 
       {/* REVEALED CONTENT */}
       {isUnlocked && (
-        <div ref={intelRef} className="w-full max-w-md space-y-10 animate-in zoom-in duration-500">
-          <div className="bg-[#03A9F4] border-8 border-black p-6 text-white text-center shadow-[10px_10px_0px_black] transform rotate-1">
-            <p className="font-comic text-3xl uppercase">DATE: FRIDAY, MARCH 27 @ 2:00 PM</p>
-            <p className="font-comic text-3xl uppercase mt-4">LOCATION: SPIDEY SECRET BASE HQ</p>
+        <div ref={intelRef} className="w-full flex-center space-y-10 animate-in zoom-in duration-500">
+          
+          {/* Mission Intel Panel */}
+          <div className="w-full bg-[#03A9F4] border-8 border-black p-6 text-white shadow-[10px_10px_0px_black] transform rotate-1">
+            <p className="font-comic text-3xl uppercase leading-tight">DATE: FRIDAY, MARCH 27 @ 2:00 PM</p>
+            <p className="font-comic text-3xl uppercase leading-tight mt-4">LOCATION: SPIDEY SECRET BASE HQ</p>
           </div>
 
           {!hasRSVPd ? (
-            <div className="bg-[#E62429] border-8 border-black p-6 shadow-[10px_10px_0px_black] transform -rotate-1">
-              <h3 className="font-comic text-4xl text-[#FFEB3B] text-center mb-6 underline">MISSION INTEL!</h3>
-              <form action="https://formspree.io/f/YOUR_ID_HERE" method="POST" onSubmit={() => setHasRSVPd(true)} className="space-y-4">
-                <input type="text" name="hero" placeholder="HERO NAME" required className="w-full p-4 border-4 border-black font-bold uppercase text-center" />
-                <input type="number" name="guests" placeholder="GUESTS" required className="w-full p-4 border-4 border-black font-bold uppercase text-center" />
+            /* RSVP Section */
+            <div className="w-full bg-[#E62429] border-8 border-black p-6 shadow-[10px_10px_0px_black] transform -rotate-1">
+              <h3 className="font-comic text-4xl text-[#FFEB3B] mb-6 underline">MISSION INTEL!</h3>
+              <form action="https://formspree.io/f/YOUR_ID_HERE" method="POST" onSubmit={() => setHasRSVPd(true)} className="w-full space-y-4">
+                <input type="text" name="hero" placeholder="HERO NAME" required className="w-full p-4 border-4 border-black font-bold uppercase text-center text-black" />
+                <input type="number" name="guests" placeholder="GUESTS" required className="w-full p-4 border-4 border-black font-bold uppercase text-center text-black" />
                 <button type="submit" className="w-full bg-[#FFEB3B] text-black font-comic text-4xl py-4 border-4 border-black shadow-[6px_6px_0px_black]">
                   SEND RSVP
                 </button>
               </form>
             </div>
           ) : (
-            <div className="bg-white border-8 border-black p-8 text-center shadow-[10px_10px_0px_black]">
+            /* Countdown Section */
+            <div className="w-full bg-white border-8 border-black p-8 shadow-[10px_10px_0px_black]">
               <h3 className="font-comic text-5xl text-[#E62429] mb-6">LAUNCHING IN:</h3>
               <div className="grid grid-cols-4 gap-2">
                 {Object.entries(timeLeft).map(([label, val]) => (
-                  <div key={label} className="flex flex-col bg-yellow-400 border-4 border-black p-2">
+                  <div key={label} className="flex-center bg-[#FFEB3B] border-4 border-black p-2">
                     <span className="font-comic text-3xl text-black">{val}</span>
                     <span className="text-[10px] font-black uppercase text-black">{label}</span>
                   </div>
