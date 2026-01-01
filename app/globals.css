@@ -7,18 +7,31 @@ body {
   overflow-x: hidden;
   display: flex;
   justify-content: center;
+  min-height: 100vh;
 }
 
 .font-comic { font-family: 'Bangers', cursive; }
 
-.text-stroke {
-  paint-order: stroke fill;
-  -webkit-text-stroke: 6px black;
+/* The Starburst Effect using Background Image to ensure it scales with text */
+.burst-box {
+  background-color: #03A9F4;
+  border: 4px solid black;
+  position: relative;
+  /* This creates a jagged-like shadow/border effect without clipping content */
+  box-shadow: 8px 8px 0px black;
+  filter: drop-shadow(4px 4px 0px #000);
 }
 
-/* Responsive container for SVGs */
-.burst-wrapper {
-  filter: drop-shadow(8px 8px 0px rgba(0,0,0,1));
-  width: 100%;
-  max-width: 500px;
+/* Ensure text doesn't overlap on small screens */
+.text-stroke {
+  paint-order: stroke fill;
+  -webkit-text-stroke: 4px black;
+}
+
+/* Aggressive centering for all flex children */
+.flex-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
