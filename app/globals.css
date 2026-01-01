@@ -1,16 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@keyframes breathe {
-  0%, 100% { opacity: 0.8; letter-spacing: 0.05em; }
-  50% { opacity: 1; letter-spacing: 0.1em; }
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:italic@0;1&family=Inter:wght@200;300;400&display=swap');
+
+:root {
+  --bg: #0a0a0a;
+  --text: #ffffff;
 }
 
-.animate-elegant {
-  animation: breathe 4s ease-in-out infinite;
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  overflow: hidden;
 }
 
-/* Custom scrollbar for a clean look */
-::-webkit-scrollbar {
-  width: 0px;
+/* Elegant "fade-in" for the text */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-reveal {
+  animation: fadeInUp 1.5s ease-out forwards;
+}
+
+.font-serif {
+  font-family: 'Instrument Serif', serif;
+}
+
+/* Subtly shimmering particles */
+@keyframes shimmer {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
 }
