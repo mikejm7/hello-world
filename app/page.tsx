@@ -44,41 +44,34 @@ export default function SpideyParty() {
   };
 
   return (
-    <main className="relative min-h-screen w-full flex flex-col items-center justify-start pt-20 pb-10 px-6 overflow-x-hidden">
+    <main className="min-h-screen w-full flex flex-col items-center justify-center bg-white p-6">
       
-      {/* IMPROVED BACKGROUND IMAGE LOGIC */}
-      <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ 
-          // Using a more reliable Spidey & Friends action shot
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://wallpapers.com/images/featured/spiderman-across-the-spider-verse-99v86t2377b61sk6.jpg')`,
-          backgroundColor: '#001f5b' // Fallback color is now Spidey Blue instead of Black
-        }}
-      />
-
       <audio ref={audioRef} loop src="https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptoken=1040375" />
 
-      <div className="relative z-10 w-full max-w-lg flex flex-col items-center text-center">
+      <div className="w-full max-w-md flex flex-col items-center text-center space-y-12">
         
-        {/* HEADER TEXT */}
-        <div className="mb-24 animate-swing">
-          <div className="bg-[#e62429] comic-border p-6 transform -rotate-1">
-            <h1 className="text-4xl md:text-5xl font-comic text-white leading-tight uppercase tracking-tighter text-glow">
-              You're invited to <br/> Lucas's 5th birthday party!
-            </h1>
-          </div>
+        {/* HEADER */}
+        <div className="bg-[#e62429] comic-border p-6 transform -rotate-1">
+          <h1 className="text-3xl md:text-5xl font-comic text-white leading-tight uppercase tracking-tight">
+            You're invited to <br/> Lucas's 5th birthday party!
+          </h1>
         </div>
 
         {!isUnlocked ? (
-          <button 
-            onClick={() => setShowModal(true)}
-            className="bg-yellow-400 text-black font-comic text-3xl py-4 px-10 comic-border hover:scale-105 active:scale-95 transition-all animate-bounce"
-          >
-            OPEN MISSION FILE
-          </button>
+          /* INITIAL STATE: ACCESS BUTTON */
+          <div className="flex flex-col items-center space-y-4">
+             <button 
+              onClick={() => setShowModal(true)}
+              className="bg-yellow-400 text-black font-comic text-3xl py-4 px-10 comic-border hover:bg-yellow-300 active:scale-95 transition-all animate-bounce"
+            >
+              ENTER SECRET CODE
+            </button>
+            <p className="font-bold text-[#001f5b] uppercase tracking-widest text-sm italic">Identification Required</p>
+          </div>
         ) : (
-          <div className="space-y-6 w-full animate-slide">
-            <div className="bg-white/95 backdrop-blur-sm comic-border p-8">
+          /* UNLOCKED STATE */
+          <div className="w-full space-y-8 animate-slide">
+            <div className="bg-white comic-border p-8 border-[#001f5b]">
               <h2 className="bg-yellow-400 p-2 comic-border -mt-12 mb-6 text-center font-comic text-3xl text-black">MISSION INTEL</h2>
               <div className="text-[#001f5b] space-y-4 font-comic text-2xl">
                 <p>📅 Friday, March 27 @ 2:00 PM</p>
@@ -87,30 +80,50 @@ export default function SpideyParty() {
             </div>
 
             {!hasRSVPd ? (
+              /* RSVP SECTION */
               <div className="bg-[#e62429] comic-border p-8">
-                <h3 className="font-comic text-3xl text-white mb-4 italic">TEAM UP?</h3>
+                <h3 className="font-comic text-3xl text-white mb-6 uppercase italic">Team Up?</h3>
                 <form 
                   action="https://formspree.io/f/YOUR_ID_HERE" 
                   method="POST" 
                   onSubmit={() => setHasRSVPd(true)} 
-                  className="space-y-3"
+                  className="space-y-4 text-left"
                 >
-                  <input type="text" name="name" placeholder="HERO NAME" required className="w-full p-3 border-4 border-black font-bold uppercase outline-none text-black" />
-                  <select name="attending" className="w-full p-3 border-4 border-black font-bold uppercase text-black">
-                    <option value="yes">YES! COUNT ME IN!</option>
-                    <option value="no">NO, BUSY SAVING THE CITY</option>
-                  </select>
-                  <button type="submit" className="w-full bg-yellow-400 text-black font-comic text-3xl py-3 border-4 border-black active:scale-95">SEND RSVP</button>
+                  <div>
+                    <label className="text-white font-bold text-xs uppercase mb-1 block">Hero Name</label>
+                    <input type="text" name="name" required className="w-full p-3 border-2 border-black font-bold uppercase text-black" />
+                  </div>
+                  <div>
+                    <label className="text-white font-bold text-xs uppercase mb-1 block">Attending</label>
+                    <select name="attending" className="w-full p-3 border-2 border-black font-bold uppercase text-black">
+                      <option value="yes">YES! COUNT ME IN!</option>
+                      <option value="no">NO, BUSY SAVING THE CITY</option>
+                    </select>
+                  </div>
+                  <button type="submit" className="w-full bg-yellow-400 text-black font-comic text-3xl py-3 border-4 border-black active:scale-95 mt-4">SEND RSVP</button>
                 </form>
               </div>
             ) : (
-              <div className="bg-white comic-border p-8 text-center animate-reveal">
+              /* COUNTDOWN SECTION */
+              <div className="bg-white comic-border p-8 text-center animate-reveal border-[#e62429]">
                 <h3 className="font-comic text-4xl text-[#e62429] mb-4">LAUNCHING IN:</h3>
                 <div className="grid grid-cols-4 gap-2 font-comic text-[#001f5b]">
-                  <div className="flex flex-col bg-gray-100 p-1 border border-black"><span className="text-2xl">{timeLeft.days}</span><span className="text-[8px]">DAYS</span></div>
-                  <div className="flex flex-col bg-gray-100 p-1 border border-black"><span className="text-2xl">{timeLeft.hours}</span><span className="text-[8px]">HRS</span></div>
-                  <div className="flex flex-col bg-gray-100 p-1 border border-black"><span className="text-2xl">{timeLeft.mins}</span><span className="text-[8px]">MINS</span></div>
-                  <div className="flex flex-col bg-gray-100 p-1 border border-black"><span className="text-2xl">{timeLeft.secs}</span><span className="text-[8px]">SECS</span></div>
+                  <div className="flex flex-col bg-gray-100 p-2 border-2 border-black">
+                    <span className="text-3xl">{timeLeft.days}</span>
+                    <span className="text-[10px]">DAYS</span>
+                  </div>
+                  <div className="flex flex-col bg-gray-100 p-2 border-2 border-black">
+                    <span className="text-3xl">{timeLeft.hours}</span>
+                    <span className="text-[10px]">HRS</span>
+                  </div>
+                  <div className="flex flex-col bg-gray-100 p-2 border-2 border-black">
+                    <span className="text-3xl">{timeLeft.mins}</span>
+                    <span className="text-[10px]">MINS</span>
+                  </div>
+                  <div className="flex flex-col bg-gray-100 p-2 border-2 border-black">
+                    <span className="text-3xl">{timeLeft.secs}</span>
+                    <span className="text-[10px]">SECS</span>
+                  </div>
                 </div>
               </div>
             )}
@@ -118,30 +131,31 @@ export default function SpideyParty() {
         )}
       </div>
 
-      {/* MODAL OVERLAY */}
+      {/* OVERLAY MODAL */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 animate-fade">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setShowModal(false)} />
-          <div className="relative bg-white comic-border p-8 w-full max-w-sm animate-slide text-center">
-            <h2 className="font-comic text-3xl text-[#001f5b] mb-4">IDENTIFICATION REQUIRED</h2>
-            <p className="mb-6 font-bold text-gray-600">Enter the secret code from your invite:</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/50 backdrop-blur-sm">
+          <div className="relative bg-white comic-border p-8 w-full max-w-sm text-center">
+            <h2 className="font-comic text-3xl text-[#001f5b] mb-4 uppercase">Verify Identity</h2>
             <form onSubmit={handleVerify} className="space-y-4">
               <input 
                 type="text" 
                 value={inviteCode} 
                 onChange={(e) => setInviteCode(e.target.value)} 
-                placeholder="_____" 
+                placeholder="SECRET CODE" 
                 autoFocus
-                className="w-full p-4 border-4 border-black text-center font-bold text-3xl uppercase outline-none focus:bg-yellow-50 text-black" 
+                className="w-full p-4 border-4 border-black text-center font-bold text-3xl uppercase outline-none text-black" 
               />
               <button type="submit" className="w-full bg-[#e62429] text-white font-comic text-3xl py-4 comic-border active:scale-95">
                 ACCESS HQ
               </button>
+              <button type="button" onClick={() => setShowModal(false)} className="text-sm font-bold text-gray-400 uppercase tracking-widest mt-2 underline">
+                Cancel
+              </button>
             </form>
-            {error && <p className="mt-4 text-red-600 font-bold animate-bounce">{error}</p>}
+            {error && <p className="mt-4 text-red-600 font-bold">{error}</p>}
           </div>
         </div>
       )}
     </main>
   );
-}
+      }
