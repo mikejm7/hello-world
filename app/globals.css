@@ -1,23 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   background-color: #FFEB3B;
   margin: 0;
   padding: 0;
-  display: flex;
-  align-items: center; 
-  justify-content: center;
-  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.font-comic {
   font-family: 'Bangers', cursive;
-  overflow: hidden;
 }
-
-/* Remove default input styles and the underline */
-input {
-  border: none;
-  outline: none;
-  background: white;
-  appearance: none;
-}
-
-.font-comic { font-family: 'Bangers', cursive; }
