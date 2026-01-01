@@ -9,7 +9,6 @@ body {
 
 .font-comic { font-family: 'Bangers', system-ui; }
 
-/* The Jagged Title Burst */
 .burst-border {
   background: #03a9f4;
   border: 4px solid black;
@@ -17,7 +16,6 @@ body {
   padding: 2rem;
 }
 
-/* The Jagged "Enter Code" Burst */
 .code-burst {
   background: white;
   border: 4px solid black;
