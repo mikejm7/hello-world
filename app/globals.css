@@ -8,21 +8,27 @@ body {
   background-color: #FFEB3B;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Important to hide the web slinger when off-screen */
+  overflow-x: hidden; /* Hides Spidey when he flies off-screen */
 }
 
 .font-comic {
   font-family: 'Bangers', cursive;
 }
 
-/* The Web Slinger Animation */
-@keyframes swing {
-  0% { transform: translate(-20vw, 20vh) rotate(15deg); }
-  25% { transform: translate(30vw, -10vh) rotate(0deg); }
-  50% { transform: translate(60vw, 15vh) rotate(-15deg); }
-  100% { transform: translate(120vw, -20vh) rotate(0deg); }
+/* The Swinging Animation */
+@keyframes swing-across {
+  0% { 
+    transform: translate(-30vw, -10vh) rotate(20deg); 
+  }
+  40% { 
+    transform: translate(50vw, 15vh) rotate(-10deg); 
+  }
+  100% { 
+    transform: translate(120vw, -20vh) rotate(-30deg); 
+  }
 }
 
 .animate-swing {
-  animation: swing 6s linear infinite;
+  /* Runs for 5 seconds, repeats forever, linear speed */
+  animation: swing-across 5s linear infinite;
 }
