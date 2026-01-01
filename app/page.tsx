@@ -1,18 +1,20 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 
-export default function SpideyInvite() {
+export default function SpideyParty() {
   const [code, setCode] = useState('');
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [hasRSVPd, setHasRSVPd] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hrs: 0, mins: 0, secs: 0 });
+  const [isThwipping, setIsThwipping] = useState(false);
 
   const intelRef = useRef<HTMLDivElement>(null);
-  const countdownRef = useRef<HTMLDivElement>(null);
-  const thwipAudio = useRef<HTMLAudioElement>(null);
-  
+  const rsvpRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
   const SECRET_CODE = "SPIDEY6";
 
+  // Countdown Logic
   useEffect(() => {
     const target = new Date("March 27, 2026 14:00:00").getTime();
     const interval = setInterval(() => {
@@ -29,102 +31,105 @@ export default function SpideyInvite() {
     return () => clearInterval(interval);
   }, []);
 
+  // Auto-scroll logic
   useEffect(() => {
     if (isUnlocked && intelRef.current) {
-      intelRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      intelRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [isUnlocked]);
-
-  useEffect(() => {
-    if (hasRSVPd && countdownRef.current) {
-      countdownRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [hasRSVPd]);
 
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
     if (code.toUpperCase() === SECRET_CODE) {
-      if (thwipAudio.current) thwipAudio.current.play();
-      setIsUnlocked(true);
+      setIsThwipping(true);
+      if (audioRef.current) audioRef.current.play();
+      setTimeout(() => {
+        setIsUnlocked(true);
+        setIsThwipping(false);
+      }, 300);
     } else {
       alert("THWIP! WRONG CODE!");
     }
   };
 
   return (
-    <main className="min-h-screen w-full flex flex-col items-center py-12 px-4 space-y-12">
-      <audio ref={thwipAudio} src="https://www.myinstants.com/media/sounds/thwip.mp3" />
+    <main className="min-h-screen w-full flex flex-col items-center py-10 px-4 space-y-12">
+      <audio ref={audioRef} src="https://www.myinstants.com/media/sounds/thwip.mp3" />
       
       {/* HEADER BURST */}
-      <div className="w-full max-w-xl burst-border flex flex-col items-center justify-center shadow-2xl">
-        <h1 className="font-comic text-4xl md:text-6xl text-white text-center leading-none uppercase text-glow">
+      <div className="w-full max-w-xl burst-container flex flex-col items-center justify-center">
+        <h1 className="font-comic text-4xl md:text-6xl text-white text-center leading-none uppercase text-stroke">
           YOU'RE INVITED TO<br/>
           <span className="text-black text-5xl md:text-7xl">LUCAS'S 5TH</span><br/>
           BIRTHDAY PARTY!
         </h1>
       </div>
 
-      {/* CODE ENTRY BOX */}
-      {!isUnlocked && (
-        <div className="w-full max-w-sm flex flex-col items-center">
-          <div className="code-burst w-full flex flex-col items-center mb-[-20px] relative z-10">
-             <h2 className="font-comic text-3xl text-black uppercase">Enter Secret Code</h2>
-          </div>
-          <form onSubmit={handleVerify} className="w-full flex flex-col items-center">
-            <input 
-              type="text" 
-              value={code} 
-              onChange={(e) => setCode(e.target.value)}
-              className="w-full p-4 border-8 border-black text-center text-4xl font-bold uppercase bg-white outline-none"
-              placeholder="_____"
-            />
-            <button type="submit" className="bg-[#e62429] text-white font-comic text-4xl py-3 px-12 border-4 border-black mt-4 hover:scale-105 transition-transform active:scale-95 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-              GO TIME!
-            </button>
-          </form>
+      {/* CODE ENTRY SECTION */}
+      <div className={`w-full max-w-md flex flex-col items-center relative ${isThwipping ? 'thwip-effect' : ''}`}>
+        <div className="bg-white border-4 border-black p-2 px-6 transform rotate-[-2deg] mb-[-15px] z-20 flex items-center shadow-[4px_4px_0px_black]">
+           <h2 className="font-comic text-2xl text-black">ENTER SECRET CODE</h2>
         </div>
-      )}
+        
+        <form onSubmit={handleVerify} className="w-full flex flex-col items-center relative">
+          <input 
+            type="text" 
+            value={code} 
+            disabled={isUnlocked}
+            onChange={(e) => setCode(e.target.value)}
+            className="w-full p-4 border-[6px] border-black text-center text-3xl font-bold uppercase bg-white outline-none z-10"
+            placeholder="_____"
+          />
+          <button 
+            type="submit" 
+            className="bg-[#E62429] text-white font-comic text-2xl py-2 px-6 border-4 border-black absolute -bottom-6 right-4 z-30 hover:scale-105 active:scale-95 transition-transform"
+          >
+            GO TIME!
+          </button>
+        </form>
+      </div>
 
-      {/* REVEALED CONTENT */}
+      {/* HIDDEN CONTENT REVEALED */}
       {isUnlocked && (
-        <div ref={intelRef} className="w-full max-w-lg space-y-10">
+        <div ref={intelRef} className="w-full max-w-lg space-y-8 animate-in fade-in slide-in-from-bottom-10 duration-700">
           
-          <div className="bg-[#03a9f4] comic-panel p-6 text-white text-center transform rotate-1">
-            <p className="font-comic text-2xl md:text-4xl uppercase tracking-tighter">
+          {/* DATE & LOCATION PANEL */}
+          <div className="bg-[#03A9F4] tilted-panel p-6 text-white text-center">
+            <p className="font-comic text-2xl md:text-3xl uppercase leading-tight">
               DATE: FRIDAY, MARCH 27 @ 2:00 PM
             </p>
-            <p className="font-comic text-2xl md:text-4xl uppercase tracking-tighter mt-2">
+            <p className="font-comic text-2xl md:text-3xl uppercase leading-tight mt-2">
               LOCATION: SPIDEY SECRET BASE HQ
             </p>
           </div>
 
           {!hasRSVPd ? (
-            <div className="bg-[#e62429] comic-panel p-6 transform -rotate-1">
-              <h3 className="font-comic text-4xl text-yellow-400 text-center mb-6 italic underline uppercase">MISSION INTEL UNLOCKED!</h3>
+            <div className="bg-[#E62429] tilted-panel p-6 transform rotate-[1.5deg]">
+              <h3 className="font-comic text-3xl text-[#FFEB3B] text-center mb-6 italic underline uppercase">MISSION INTEL UNLOCKED!</h3>
               <form action="https://formspree.io/f/YOUR_ID_HERE" method="POST" onSubmit={() => setHasRSVPd(true)} className="space-y-4">
-                <input type="text" name="hero" placeholder="HERO NAME" required className="w-full p-4 border-4 border-black font-bold uppercase text-center" />
-                <input type="number" name="guests" placeholder="GUEST COUNT" required className="w-full p-4 border-4 border-black font-bold uppercase text-center" />
-                <button type="submit" className="w-full bg-yellow-400 text-black font-comic text-4xl py-4 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all">
+                <input type="text" name="hero" placeholder="HERO NAME" required className="w-full p-3 border-4 border-black font-bold uppercase" />
+                <input type="number" name="guests" placeholder="GUEST COUNT" required className="w-full p-3 border-4 border-black font-bold uppercase" />
+                <button type="submit" className="w-full bg-[#FFEB3B] text-black font-comic text-4xl py-3 border-4 border-black shadow-[6px_6px_0px_black] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all">
                   SEND RSVP
                 </button>
               </form>
             </div>
           ) : (
-            <div ref={countdownRef} className="bg-white comic-panel p-8 text-center border-black">
-              <h3 className="font-comic text-5xl text-[#e62429] mb-6 uppercase">LAUNCHING IN:</h3>
+            <div className="bg-white tilted-panel p-8 text-center border-black">
+              <h3 className="font-comic text-4xl text-[#E62429] mb-6 uppercase">MISSION STARTS IN:</h3>
               <div className="grid grid-cols-4 gap-2">
                 {Object.entries(timeLeft).map(([label, val]) => (
-                  <div key={label} className="flex flex-col bg-yellow-400 border-4 border-black p-2">
-                    <span className="font-comic text-4xl text-black">{val}</span>
-                    <span className="text-xs font-black uppercase text-black">{label}</span>
+                  <div key={label} className="flex flex-col bg-[#FFEB3B] border-4 border-black p-2">
+                    <span className="font-comic text-3xl">{val}</span>
+                    <span className="text-[10px] font-black uppercase">{label}</span>
                   </div>
                 ))}
               </div>
-              <p className="mt-8 font-comic text-3xl text-[#001f5b] uppercase italic">SUIT UP, HERO!</p>
             </div>
           )}
         </div>
       )}
     </main>
   );
-      }
+    }
+      
