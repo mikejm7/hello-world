@@ -63,9 +63,10 @@ export default function ComingSoon() {
 
       <div className="relative z-10 bg-black/60 p-10 rounded-3xl border border-white/10 backdrop-blur-md max-w-md w-full mx-4 text-center">
         {/* Neon Glitch Text */}
-        <h1 className="text-5xl font-black text-white mb-2 tracking-tighter animate-glitch uppercase italic">
-          Coming Soon
-        </h1>
+        <h1 className="text-5xl font-black mb-2 tracking-tighter animate-glitch uppercase italic drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+  Coming Soon
+</h1>
+
         <p className="text-xl text-white/90 mb-8 font-light italic">
           A brand new you!
         </p>
