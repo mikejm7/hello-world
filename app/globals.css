@@ -8,26 +8,20 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #ffffff; /* Solid White Background */
+  background-color: #ffffff;
   font-family: 'Open Sans', sans-serif;
   color: #000000;
+  /* Centering at the root level */
+  display: flex;
+  justify-content: center;
+  text-align: center;
 }
 
 .font-comic {
   font-family: 'Bangers', system-ui;
 }
 
-/* The thick comic book border style */
 .comic-border {
   border: 4px solid #000000;
   box-shadow: 6px 6px 0px #000000;
-}
-
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-.animate-slide {
-  animation: slideUp 0.4s ease-out forwards;
 }
