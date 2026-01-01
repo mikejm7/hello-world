@@ -46,12 +46,13 @@ export default function SpideyParty() {
   return (
     <main className="relative min-h-screen w-full flex flex-col items-center justify-start pt-20 pb-10 px-6 overflow-x-hidden">
       
-      {/* BACKGROUND IMAGE: Three Spideys Shooting Webs */}
+      {/* IMPROVED BACKGROUND IMAGE LOGIC */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ 
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.alphacoders.com/131/1316413.jpeg')`,
-          backgroundPosition: 'center 20%'
+          // Using a more reliable Spidey & Friends action shot
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://wallpapers.com/images/featured/spiderman-across-the-spider-verse-99v86t2377b61sk6.jpg')`,
+          backgroundColor: '#001f5b' // Fallback color is now Spidey Blue instead of Black
         }}
       />
 
@@ -59,7 +60,7 @@ export default function SpideyParty() {
 
       <div className="relative z-10 w-full max-w-lg flex flex-col items-center text-center">
         
-        {/* MAIN HEADER */}
+        {/* HEADER TEXT */}
         <div className="mb-24 animate-swing">
           <div className="bg-[#e62429] comic-border p-6 transform -rotate-1">
             <h1 className="text-4xl md:text-5xl font-comic text-white leading-tight uppercase tracking-tighter text-glow">
@@ -69,7 +70,6 @@ export default function SpideyParty() {
         </div>
 
         {!isUnlocked ? (
-          /* INITIAL VIEW: Access Button */
           <button 
             onClick={() => setShowModal(true)}
             className="bg-yellow-400 text-black font-comic text-3xl py-4 px-10 comic-border hover:scale-105 active:scale-95 transition-all animate-bounce"
@@ -77,10 +77,9 @@ export default function SpideyParty() {
             OPEN MISSION FILE
           </button>
         ) : (
-          /* REVEALED CONTENT (POST-CODE) */
           <div className="space-y-6 w-full animate-slide">
             <div className="bg-white/95 backdrop-blur-sm comic-border p-8">
-              <h2 className="bg-yellow-400 p-2 comic-border -mt-12 mb-6 text-center font-comic text-3xl">MISSION INTEL</h2>
+              <h2 className="bg-yellow-400 p-2 comic-border -mt-12 mb-6 text-center font-comic text-3xl text-black">MISSION INTEL</h2>
               <div className="text-[#001f5b] space-y-4 font-comic text-2xl">
                 <p>📅 Friday, March 27 @ 2:00 PM</p>
                 <p>📍 Spidey Secret Base HQ</p>
@@ -90,9 +89,14 @@ export default function SpideyParty() {
             {!hasRSVPd ? (
               <div className="bg-[#e62429] comic-border p-8">
                 <h3 className="font-comic text-3xl text-white mb-4 italic">TEAM UP?</h3>
-                <form action="https://formspree.io/f/YOUR_ID_HERE" method="POST" onSubmit={() => setHasRSVPd(true)} className="space-y-3">
-                  <input type="text" name="name" placeholder="HERO NAME" required className="w-full p-3 border-4 border-black font-bold uppercase outline-none" />
-                  <select name="attending" className="w-full p-3 border-4 border-black font-bold uppercase">
+                <form 
+                  action="https://formspree.io/f/YOUR_ID_HERE" 
+                  method="POST" 
+                  onSubmit={() => setHasRSVPd(true)} 
+                  className="space-y-3"
+                >
+                  <input type="text" name="name" placeholder="HERO NAME" required className="w-full p-3 border-4 border-black font-bold uppercase outline-none text-black" />
+                  <select name="attending" className="w-full p-3 border-4 border-black font-bold uppercase text-black">
                     <option value="yes">YES! COUNT ME IN!</option>
                     <option value="no">NO, BUSY SAVING THE CITY</option>
                   </select>
@@ -103,12 +107,10 @@ export default function SpideyParty() {
               <div className="bg-white comic-border p-8 text-center animate-reveal">
                 <h3 className="font-comic text-4xl text-[#e62429] mb-4">LAUNCHING IN:</h3>
                 <div className="grid grid-cols-4 gap-2 font-comic text-[#001f5b]">
-                  {Object.entries(timeLeft).map(([key, val]) => (
-                    <div key={key} className="flex flex-col bg-gray-100 p-2 border-2 border-black">
-                      <span className="text-3xl">{val}</span>
-                      <span className="text-[10px] uppercase">{key}</span>
-                    </div>
-                  ))}
+                  <div className="flex flex-col bg-gray-100 p-1 border border-black"><span className="text-2xl">{timeLeft.days}</span><span className="text-[8px]">DAYS</span></div>
+                  <div className="flex flex-col bg-gray-100 p-1 border border-black"><span className="text-2xl">{timeLeft.hours}</span><span className="text-[8px]">HRS</span></div>
+                  <div className="flex flex-col bg-gray-100 p-1 border border-black"><span className="text-2xl">{timeLeft.mins}</span><span className="text-[8px]">MINS</span></div>
+                  <div className="flex flex-col bg-gray-100 p-1 border border-black"><span className="text-2xl">{timeLeft.secs}</span><span className="text-[8px]">SECS</span></div>
                 </div>
               </div>
             )}
@@ -116,7 +118,7 @@ export default function SpideyParty() {
         )}
       </div>
 
-      {/* MODAL OVERLAY for Code Entry */}
+      {/* MODAL OVERLAY */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 animate-fade">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setShowModal(false)} />
@@ -130,13 +132,10 @@ export default function SpideyParty() {
                 onChange={(e) => setInviteCode(e.target.value)} 
                 placeholder="_____" 
                 autoFocus
-                className="w-full p-4 border-4 border-black text-center font-bold text-3xl uppercase outline-none focus:bg-yellow-50" 
+                className="w-full p-4 border-4 border-black text-center font-bold text-3xl uppercase outline-none focus:bg-yellow-50 text-black" 
               />
               <button type="submit" className="w-full bg-[#e62429] text-white font-comic text-3xl py-4 comic-border active:scale-95">
                 ACCESS HQ
-              </button>
-              <button type="button" onClick={() => setShowModal(false)} className="text-sm font-bold text-gray-400 uppercase tracking-widest mt-2">
-                Close
               </button>
             </form>
             {error && <p className="mt-4 text-red-600 font-bold animate-bounce">{error}</p>}
