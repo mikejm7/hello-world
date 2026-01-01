@@ -1,15 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
 
 body {
-  background-color: #FFEB3B; /* Spidey Yellow */
+  background-color: #FFEB3B;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
   display: flex;
+  align-items: center; /* Vertically centers the content */
   justify-content: center;
+  min-height: 100vh;
   font-family: 'Bangers', cursive;
+  overflow-x: hidden;
+}
+
+/* Remove the default underline and styling from the input */
+input {
+  border: none;
+  outline: none;
+  background: white;
+  appearance: none;
 }
 
 .font-comic { font-family: 'Bangers', cursive; }
-
-input::placeholder { color: #ccc; }
