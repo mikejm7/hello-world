@@ -1,37 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
 
 body {
   background-color: #FFEB3B;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
   display: flex;
   justify-content: center;
-  min-height: 100vh;
 }
 
 .font-comic { font-family: 'Bangers', cursive; }
 
-/* The Starburst Effect using Background Image to ensure it scales with text */
-.burst-box {
-  background-color: #03A9F4;
-  border: 4px solid black;
-  position: relative;
-  /* This creates a jagged-like shadow/border effect without clipping content */
-  box-shadow: 8px 8px 0px black;
-  filter: drop-shadow(4px 4px 0px #000);
+/* Legibility fix: Adds a white 'halo' or background behind the black text */
+.text-readable {
+  color: black;
+  text-shadow: 
+    2px 2px 0px #fff,
+    -2px -2px 0px #fff,
+    2px -2px 0px #fff,
+    -2px 2px 0px #fff;
 }
 
-/* Ensure text doesn't overlap on small screens */
-.text-stroke {
-  paint-order: stroke fill;
-  -webkit-text-stroke: 4px black;
-}
-
-/* Aggressive centering for all flex children */
-.flex-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+.comic-border {
+  border: 6px solid black;
+  box-shadow: 10px 10px 0px black;
 }
