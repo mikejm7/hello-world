@@ -1,68 +1,120 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 
-export default function ComingSoon() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, min: 0, sec: 0 });
+export default function SpideyParty() {
+  const [inviteCode, setInviteCode] = useState('');
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    // 1. COUNTDOWN LOGIC (1 YEAR)
-    const target = new Date();
-    target.setFullYear(target.getFullYear() + 1);
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const dist = target.getTime() - now;
-      setTimeLeft({
-        days: Math.floor(dist / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        min: Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60)),
-        sec: Math.floor((dist % (1000 * 60)) / 1000),
-      });
-    }, 1000);
+  // SET YOUR SECRET CODE HERE
+  const SECRET_CODE = "SPIDEY6"; 
 
-    // 2. STARDUST CANVAS LOGIC
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const stars: { x: number; y: number; size: number; speed: number; alpha: number }[] = [];
-    for (let i = 0; i < 150; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 1.5,
-        speed: 0.1 + Math.random() * 0.2,
-        alpha: Math.random()
-      });
+  const handleVerify = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (inviteCode.toUpperCase() === SECRET_CODE) {
+      setIsUnlocked(true);
+      setError('');
+    } else {
+      setError('THWIP! That code is not correct. Try again!');
     }
-
-    function animate() {
-      ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
-      ctx!.fillStyle = '#ffffff';
-      
-      stars.forEach(s => {
-        ctx!.globalAlpha = Math.abs(Math.sin(Date.now() * 0.001 * s.speed)) * 0.8; // Twinkle
-        ctx!.beginPath();
-        ctx!.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-        ctx!.fill();
-        
-        s.y -= s.speed; // Drift upwards
-        if (s.y < 0) s.y = canvas!.height;
-      });
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    return () => clearInterval(timer);
-  }, []);
+  };
 
   return (
-    <main className="relative min-h-screen w-full flex flex-col items-center justify-center p-6 text-white">
-      <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none" />
+    <main className="min-h-screen bg-[#001f5b] p-4 flex flex-col items-center justify-center relative overflow-hidden">
+      {/* Decorative "Web" Background Element */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" 
+           style={{ backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`, backgroundSize: '40px 40px' }}>
+      </div>
+
+      <div className="relative z-10 max-w-lg w-full">
+        {/* Header Section */}
+        <div className="text-center mb-8 animate-swing">
+          <div className="inline-block bg-[#e62429] comic-border p-4 transform -rotate-2">
+            <h1 className="text-5xl md:text-6xl font-comic text-white tracking-widest uppercase">
+              You're Invited!
+            </h1>
+          </div>
+          <p className="font-comic text-2xl text-white mt-4 tracking-wider">
+            To a Spidey & Amazing Friends Adventure!
+          </p>
+        </div>
+
+        {!isUnlocked ? (
+          /* Locked State: Code Entry */
+          <div className="bg-white comic-border p-8 text-center">
+            <h2 className="font-comic text-3xl mb-4 text-[#001f5b]">Unlock the Secret Mission</h2>
+            <p className="text-gray-600 mb-6">Enter the secret code found on your physical invitation to see the time and place!</p>
+            
+            <form onSubmit={handleVerify} className="space-y-4">
+              <input
+                type="text"
+                value={inviteCode}
+                onChange={(e) => setInviteCode(e.target.value)}
+                placeholder="ENTER CODE HERE"
+                className="w-full p-4 border-4 border-black text-center font-bold text-2xl uppercase focus:outline-none focus:ring-4 focus:ring-[#e62429]"
+              />
+              <button 
+                type="submit"
+                className="w-full bg-[#e62429] hover:bg-red-700 text-white font-comic text-3xl py-4 comic-border transition-transform active:scale-95"
+              >
+                VERIFY ACCESS
+              </button>
+            </form>
+            {error && <p className="mt-4 text-red-600 font-bold italic">{error}</p>}
+          </div>
+        ) : (
+          /* Unlocked State: Party Info */
+          <div className="bg-white comic-border p-8 animate-reveal space-y-6">
+            <div className="bg-yellow-400 p-2 comic-border -mt-12 mb-4 transform rotate-1">
+              <h2 className="font-comic text-4xl text-black text-center italic">GO SPIDEY TEAM!</h2>
+            </div>
+            
+            <div className="space-y-4 text-[#001f5b]">
+              <div className="flex items-center gap-4">
+                <span className="text-4xl">📅</span>
+                <div>
+                  <p className="font-bold uppercase text-sm">When:</p>
+                  <p className="text-2xl font-comic">Saturday, August 15th @ 2:00 PM</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 border-t-2 border-dashed border-gray-200 pt-4">
+                <span className="text-4xl">📍</span>
+                <div>
+                  <p className="font-bold uppercase text-sm">Where:</p>
+                  <p className="text-2xl font-comic leading-tight">
+                    Spidey Secret Base<br/>
+                    123 Hero Lane, Adventure City
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 border-t-2 border-dashed border-gray-200 pt-4">
+                <span className="text-4xl">🎁</span>
+                <div>
+                  <p className="font-bold uppercase text-sm">Mission Details:</p>
+                  <p className="text-lg">Come dressed as your favorite hero! Pizza and Cake will be served at the HQ.</p>
+                </div>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => window.print()}
+              className="w-full mt-6 bg-[#001f5b] text-white font-comic text-2xl py-3 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              SAVE MISSION INTEL
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Footer Branding */}
+      <footer className="mt-12 text-white/50 font-comic tracking-widest text-sm">
+        TEAM UP! — 2026 — ADVENTURE AWAITS
+      </footer>
+    </main>
+  );
+}
 
       <div className="relative z-10 w-full max-w-2xl text-center space-y-12 animate-reveal">
         {/* Branding */}
