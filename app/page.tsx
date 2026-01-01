@@ -7,7 +7,7 @@ export default function LucasParty() {
   const [hasRSVPd, setHasRSVPd] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hrs: 0, mins: 0, secs: 0 });
 
-  const SECRET_CODE = "SPIDEY6";
+  const SECRET_CODE = "SPIDEY31";
 
   useEffect(() => {
     const target = new Date("March 27, 2026 14:00:00").getTime();
