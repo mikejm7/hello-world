@@ -1,27 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Open+Sans:wght@400;700&display=swap');
-
-:root {
-  --spidey-red: #e62429;
-  --spidey-blue: #001f5b;
-}
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@700&display=swap');
 
 body {
+  background-color: #ffeb3b; /* Bright Comic Yellow */
+  background-image: radial-gradient(#000000 10%, transparent 10%);
+  background-size: 20px 20px;
+  background-attachment: fixed;
+  font-family: 'Inter', sans-serif;
   margin: 0;
-  padding: 0;
-  background-color: #ffffff;
-  font-family: 'Open Sans', sans-serif;
-  color: #000000;
-  /* Centering at the root level */
-  display: flex;
-  justify-content: center;
-  text-align: center;
 }
 
-.font-comic {
-  font-family: 'Bangers', system-ui;
+.font-comic { font-family: 'Bangers', system-ui; }
+
+/* The thick, messy comic border */
+.comic-box {
+  border: 4px solid #000;
+  box-shadow: 8px 8px 0px #000;
+  position: relative;
 }
 
-.comic-border {
-  border: 4px solid #000000;
-  box-shadow: 6px 6px 0px #000000;
+/* Red "Go Time" Button style */
+.btn-action {
+  background: #e62429;
+  color: white;
+  border: 3px solid #000;
+  transform: skew(-5deg);
+  transition: all 0.2s;
 }
+
+.btn-action:active { transform: skew(-5deg) scale(0.95); }
