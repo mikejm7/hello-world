@@ -9,7 +9,6 @@ export default function ComingSoon() {
     // TIMER LOGIC
     const targetDate = new Date();
     targetDate.setFullYear(targetDate.getFullYear() + 1);
-
     const timer = setInterval(() => {
       const now = new Date().getTime();
       const distance = targetDate.getTime() - now;
@@ -21,7 +20,7 @@ export default function ComingSoon() {
       });
     }, 1000);
 
-    // RAINBOW MATRIX LOGIC
+    // MONOCHROME MATRIX LOGIC
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -30,70 +29,80 @@ export default function ComingSoon() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const fontSize = 16;
+    const characters = "01"; // Minimalist binary or use "ABC..."
+    const fontSize = 14;
     const columns = canvas.width / fontSize;
     const drops: number[] = [];
-    for (let i = 0; i < columns; i++) drops[i] = 1;
+    for (let i = 0; i < columns; i++) drops[i] = Math.random() * -100;
 
     function draw() {
-      ctx!.fillStyle = "rgba(0, 0, 0, 0.1)"; // Darker for better contrast
+      ctx!.fillStyle = "rgba(0, 0, 0, 0.1)"; 
       ctx!.fillRect(0, 0, canvas!.width, canvas!.height);
 
       for (let i = 0; i < drops.length; i++) {
-        // This line creates the Rainbow Roll from left to right
-        const hue = (i / columns) * 360; 
-        ctx!.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        // Monochromatic Gray Tones
+        const opacity = Math.random() * 0.5;
+        ctx!.fillStyle = `rgba(255, 255, 255, ${opacity})`;
         
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        const text = characters.charAt(Math.floor(Math.random() * characters.length));
         ctx!.fillText(text, i * fontSize, drops[i] * fontSize);
 
-        if (drops[i] * fontSize > canvas!.height && Math.random() > 0.975) drops[i] = 0;
+        if (drops[i] * fontSize > canvas!.height && Math.random() > 0.98) drops[i] = 0;
         drops[i]++;
       }
     }
 
-    const matrixInterval = setInterval(draw, 33);
-    return () => { clearInterval(timer); clearInterval(matrixInterval); };
+    const interval = setInterval(draw, 50); // Slower for elegance
+    return () => { clearInterval(timer); clearInterval(interval); };
   }, []);
 
   return (
-    <main className="relative min-h-screen w-full bg-black flex items-center justify-center overflow-hidden">
-      <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full" />
+    <main className="relative min-h-screen w-full bg-black flex flex-col items-center justify-center overflow-hidden font-sans">
+      <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full opacity-30" />
 
-      <div className="relative z-10 bg-black/60 p-10 rounded-3xl border border-white/10 backdrop-blur-md max-w-md w-full mx-4 text-center">
-        {/* Neon Glitch Text */}
-        <h1 className="text-5xl font-black mb-2 tracking-tighter animate-glitch uppercase italic drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
-  Coming Soon
-</h1>
-
-        <p className="text-xl text-white/90 mb-8 font-light italic">
-          A brand new you!
+      <div className="relative z-10 w-full max-w-xl px-6 text-center">
+        <h1 className="text-sm tracking-[0.5em] uppercase text-white/40 mb-4">
+          Establishment 2026
+        </h1>
+        
+        <h2 className="text-6xl md:text-7xl font-extralight text-white mb-2 tracking-tighter animate-elegant">
+          Coming Soon
+        </h2>
+        
+        <p className="text-lg text-white/60 mb-12 font-light tracking-wide italic">
+          A brand new you
         </p>
 
-        {/* Countdown Timer */}
-        <div className="grid grid-cols-4 gap-3 mb-8 text-white font-mono">
+        {/* Minimalist Countdown */}
+        <div className="flex justify-center space-x-8 md:space-x-12 mb-16">
           {Object.entries(timeLeft).map(([label, value]) => (
-            <div key={label} className="flex flex-col bg-white/5 border border-white/20 p-2 rounded-lg">
-              <span className="text-2xl font-bold">{value}</span>
-              <span className="text-[10px] uppercase opacity-60">{label.slice(0,3)}</span>
+            <div key={label} className="flex flex-col items-center">
+              <span className="text-3xl md:text-4xl font-light text-white">{value}</span>
+              <span className="text-[10px] uppercase tracking-widest text-white/40 mt-1">{label}</span>
             </div>
           ))}
         </div>
 
-        <form action="https://formspree.io/f/YOUR_ID_HERE" method="POST" className="flex flex-col gap-4">
-          <input
-            type="email"
-            name="email"
-            placeholder="your@email.com"
-            required
-            className="p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all"
-          />
-          <button type="submit" className="bg-white text-black font-black py-4 px-6 rounded-xl hover:bg-gray-200 transition-all active:scale-95 uppercase tracking-widest">
-            Notify Me
-          </button>
+        {/* Refined Form */}
+        <form action="https://formspree.io/f/YOUR_ID_HERE" method="POST" className="max-w-sm mx-auto group">
+          <div className="relative border-b border-white/20 focus-within:border-white transition-colors duration-500">
+            <input
+              type="email"
+              name="email"
+              placeholder="Email address"
+              required
+              className="w-full py-3 bg-transparent text-white placeholder:text-white/20 focus:outline-none font-light"
+            />
+            <button type="submit" className="absolute right-0 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-[0.2em] text-white/40 hover:text-white transition-colors">
+              Join
+            </button>
+          </div>
         </form>
       </div>
+      
+      <footer className="absolute bottom-8 text-[10px] tracking-[0.3em] text-white/20 uppercase">
+        Privately Encrypted
+      </footer>
     </main>
   );
 }
