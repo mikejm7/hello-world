@@ -1,37 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:italic@0;1&family=Inter:wght@200;300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Open+Sans:wght@400;700&display=swap');
 
 :root {
-  --bg: #0a0a0a;
-  --text: #ffffff;
+  --spidey-red: #e62429;
+  --spidey-blue: #001f5b;
 }
 
 body {
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  overflow: hidden;
+  background-color: #f0f0f0;
+  font-family: 'Open Sans', sans-serif;
 }
 
-/* Elegant "fade-in" for the text */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+.font-comic {
+  font-family: 'Bangers', system-ui;
 }
 
-.animate-reveal {
-  animation: fadeInUp 1.5s ease-out forwards;
+/* Comic book border effect */
+.comic-border {
+  border: 4px solid black;
+  box-shadow: 8px 8px 0px black;
 }
 
-.font-serif {
-  font-family: 'Instrument Serif', serif;
+@keyframes web-swing {
+  0% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+  100% { transform: rotate(-5deg); }
 }
 
-/* Subtly shimmering particles */
-@keyframes shimmer {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.8; }
+.animate-swing {
+  animation: web-swing 3s ease-in-out infinite;
 }
