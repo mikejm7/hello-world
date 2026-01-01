@@ -9,6 +9,8 @@ export default function SpideyInvite() {
 
   const intelRef = useRef<HTMLDivElement>(null);
   const countdownRef = useRef<HTMLDivElement>(null);
+  const thwipAudio = useRef<HTMLAudioElement>(null);
+  
   const SECRET_CODE = "SPIDEY6";
 
   useEffect(() => {
@@ -41,12 +43,17 @@ export default function SpideyInvite() {
 
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
-    if (code.toUpperCase() === SECRET_CODE) setIsUnlocked(true);
-    else alert("THWIP! WRONG CODE!");
+    if (code.toUpperCase() === SECRET_CODE) {
+      if (thwipAudio.current) thwipAudio.current.play();
+      setIsUnlocked(true);
+    } else {
+      alert("THWIP! WRONG CODE!");
+    }
   };
 
   return (
     <main className="min-h-screen w-full flex flex-col items-center py-12 px-4 space-y-12">
+      <audio ref={thwipAudio} src="https://www.myinstants.com/media/sounds/thwip.mp3" />
       
       {/* HEADER BURST */}
       <div className="w-full max-w-xl burst-border flex flex-col items-center justify-center shadow-2xl">
@@ -61,7 +68,7 @@ export default function SpideyInvite() {
       {!isUnlocked && (
         <div className="w-full max-w-sm flex flex-col items-center">
           <div className="code-burst w-full flex flex-col items-center mb-[-20px] relative z-10">
-             <h2 className="font-comic text-3xl text-black">ENTER SECRET CODE</h2>
+             <h2 className="font-comic text-3xl text-black uppercase">Enter Secret Code</h2>
           </div>
           <form onSubmit={handleVerify} className="w-full flex flex-col items-center">
             <input 
@@ -82,7 +89,6 @@ export default function SpideyInvite() {
       {isUnlocked && (
         <div ref={intelRef} className="w-full max-w-lg space-y-10">
           
-          {/* INFO PANEL */}
           <div className="bg-[#03a9f4] comic-panel p-6 text-white text-center transform rotate-1">
             <p className="font-comic text-2xl md:text-4xl uppercase tracking-tighter">
               DATE: FRIDAY, MARCH 27 @ 2:00 PM
@@ -93,7 +99,6 @@ export default function SpideyInvite() {
           </div>
 
           {!hasRSVPd ? (
-            /* RSVP FORM */
             <div className="bg-[#e62429] comic-panel p-6 transform -rotate-1">
               <h3 className="font-comic text-4xl text-yellow-400 text-center mb-6 italic underline uppercase">MISSION INTEL UNLOCKED!</h3>
               <form action="https://formspree.io/f/YOUR_ID_HERE" method="POST" onSubmit={() => setHasRSVPd(true)} className="space-y-4">
@@ -105,14 +110,13 @@ export default function SpideyInvite() {
               </form>
             </div>
           ) : (
-            /* COUNTDOWN */
             <div ref={countdownRef} className="bg-white comic-panel p-8 text-center border-black">
               <h3 className="font-comic text-5xl text-[#e62429] mb-6 uppercase">LAUNCHING IN:</h3>
               <div className="grid grid-cols-4 gap-2">
                 {Object.entries(timeLeft).map(([label, val]) => (
                   <div key={label} className="flex flex-col bg-yellow-400 border-4 border-black p-2">
-                    <span className="font-comic text-4xl">{val}</span>
-                    <span className="text-xs font-black uppercase">{label}</span>
+                    <span className="font-comic text-4xl text-black">{val}</span>
+                    <span className="text-xs font-black uppercase text-black">{label}</span>
                   </div>
                 ))}
               </div>
@@ -123,4 +127,4 @@ export default function SpideyInvite() {
       )}
     </main>
   );
-}
+      }
