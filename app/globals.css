@@ -8,7 +8,7 @@ body {
   background-color: #FFEB3B;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Hides Spidey when he flies off-screen */
+  overflow-x: hidden;
 }
 
 .font-comic {
@@ -18,17 +18,18 @@ body {
 /* The Swinging Animation */
 @keyframes swing-across {
   0% { 
-    transform: translate(-30vw, -10vh) rotate(20deg); 
+    transform: translate(-30vw, -10vh) rotate(25deg); 
   }
-  40% { 
-    transform: translate(50vw, 15vh) rotate(-10deg); 
+  50% { 
+    /* The bottom of the arc arc */
+    transform: translate(45vw, 20vh) rotate(0deg); 
   }
   100% { 
-    transform: translate(120vw, -20vh) rotate(-30deg); 
+    transform: translate(120vw, -20vh) rotate(-35deg); 
   }
 }
 
 .animate-swing {
-  /* Runs for 5 seconds, repeats forever, linear speed */
-  animation: swing-across 5s linear infinite;
+  /* 7s for cinematic weight, ease-in-out for natural physics */
+  animation: swing-across 7s ease-in-out infinite;
 }
