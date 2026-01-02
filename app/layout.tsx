@@ -1,8 +1,8 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'Coming Soon',
-  description: 'My new website is under construction.',
+  title: 'Spidey Birthday Invite',
+  description: 'Enter the secret code to unlock the mission intel!',
 }
 
 export default function RootLayout({
