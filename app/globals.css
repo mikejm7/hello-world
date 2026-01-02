@@ -15,13 +15,11 @@ body {
   font-family: 'Bangers', cursive;
 }
 
-/* The Swinging Animation */
 @keyframes swing-across {
   0% { 
     transform: translate(-30vw, -10vh) rotate(25deg); 
   }
   50% { 
-    /* The bottom of the arc arc */
     transform: translate(45vw, 20vh) rotate(0deg); 
   }
   100% { 
@@ -30,6 +28,5 @@ body {
 }
 
 .animate-swing {
-  /* 7s for cinematic weight, ease-in-out for natural physics */
   animation: swing-across 7s ease-in-out infinite;
 }
