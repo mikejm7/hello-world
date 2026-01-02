@@ -18,31 +18,30 @@ body {
 @keyframes spidey-path {
   0% { 
     /* Start Top Right */
-    transform: translate(100vw, -10vh) rotate(-20deg); 
+    transform: translate(100vw, -10vh) rotate(-15deg); 
   }
   35% { 
-    /* Move to shoot point near Left Center */
-    transform: translate(10vw, 40vh) rotate(0deg); 
+    /* Pulls in toward the web anchor on the left */
+    transform: translate(15vw, 35vh) rotate(0deg); 
   }
   100% { 
-    /* Swing down to Lower Right */
-    transform: translate(110vw, 90vh) rotate(30deg); 
+    /* Swings away to Lower Right */
+    transform: translate(110vw, 95vh) rotate(25deg); 
   }
 }
 
-/* We animate the web's length/visibility to match the movement */
 @keyframes web-stretch {
   0% { opacity: 0; stroke-dashoffset: 1000; }
-  20% { opacity: 1; stroke-dashoffset: 0; }
-  35% { opacity: 1; }
+  5% { opacity: 1; stroke-dashoffset: 0; } /* Fast shot */
+  40% { opacity: 1; }
   100% { opacity: 0; }
 }
 
 .animate-spidey-path {
-  animation: spidey-path 5s ease-in-out infinite;
+  animation: spidey-path 6s ease-in-out infinite;
 }
 
 .web-line {
   stroke-dasharray: 1000;
-  animation: web-stretch 5s ease-in-out infinite;
+  animation: web-stretch 6s ease-in-out infinite;
 }
