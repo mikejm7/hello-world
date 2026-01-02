@@ -4,45 +4,32 @@ import './globals.css';
 
 const WebSlinger = () => (
   <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-    {/* The animated container for Spidey */}
+    {/* Moving Container */}
     <div className="absolute top-0 left-0 animate-spidey-path">
       <div className="relative w-40 h-40">
-        
-        {/* The Web: Now anchored relative to Spidey's position */}
         <svg 
           className="absolute overflow-visible" 
           style={{ top: '0', left: '0', width: '2000px', height: '2000px' }}
         >
           <line 
-            x1="45"    /* Spidey's Hand X (Internal to his div) */
-            y1="110"   /* Spidey's Hand Y (Internal to his div) */
-            x2="-1000" /* Far left target */
-            y2="-200"  /* Upward angle for the swing anchor */
+            x1="45"    /* Hand X */
+            y1="110"   /* Hand Y */
+            x2="-1000" /* Anchor point (Top Left) */
+            y2="-800" 
             stroke="white" 
-            strokeWidth="4" 
+            strokeWidth="5" 
             className="web-line"
+            style={{ strokeLinecap: 'round' }}
           />
         </svg>
-        
         <img 
           src="/spidey-swing.png" 
           alt="Spidey" 
-          className="w-full h-auto drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)]"
+          className="w-full h-auto drop-shadow-[0_25px_50px_rgba(0,0,0,0.5)]"
           onError={(e) => { e.currentTarget.style.display = 'none'; }}
         />
       </div>
     </div>
-  </div>
-);
-
-const ComicHeader = () => (
-  <div className="w-full max-w-[320px] mb-12 transform -rotate-2 relative z-10">
-    <svg viewBox="0 0 600 500" className="overflow-visible filter drop-shadow-[8px_8px_0px_rgba(0,0,0,1)]">
-      <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
-      <text x="50%" y="35%" textAnchor="middle" fontSize="42" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic">YOU'RE INVITED TO</text>
-      <text x="50%" y="54%" textAnchor="middle" fontSize="82" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic">LUCAS'S 5TH</text>
-      <text x="50%" y="73%" textAnchor="middle" fontSize="42" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic">BIRTHDAY PARTY!</text>
-    </svg>
   </div>
 );
 
@@ -57,9 +44,10 @@ export default function SpideyInvite() {
     if (code.toUpperCase() === "SPIDEY6") {
       if (audioRef.current) audioRef.current.play();
       setIsUnlocked(true);
+      setError(false);
     } else {
       setError(true);
-      setTimeout(() => setError(false), 500); // Reset pulse after 0.5s
+      setTimeout(() => setError(false), 500);
     }
   };
 
@@ -70,7 +58,15 @@ export default function SpideyInvite() {
       <WebSlinger />
 
       <div className="relative z-10 flex flex-col items-center w-full max-w-[360px]">
-        <ComicHeader />
+        {/* Header Section */}
+        <div className="w-full max-w-[320px] mb-12 transform -rotate-2">
+            <svg viewBox="0 0 600 500" className="overflow-visible filter drop-shadow-[10px_10px_0px_rgba(0,0,0,1)]">
+                <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
+                <text x="50%" y="35%" textAnchor="middle" fontSize="42" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic italic">YOU'RE INVITED TO</text>
+                <text x="50%" y="54%" textAnchor="middle" fontSize="82" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic italic">LUCAS'S 5TH</text>
+                <text x="50%" y="73%" textAnchor="middle" fontSize="42" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic italic">BIRTHDAY PARTY!</text>
+            </svg>
+        </div>
 
         {!isUnlocked ? (
           <div className="w-full flex flex-col items-center mt-4">
@@ -80,7 +76,7 @@ export default function SpideyInvite() {
                 type="text" 
                 value={code} 
                 onChange={(e) => setCode(e.target.value.toUpperCase())}
-                className="w-[260px] p-3 border-[6px] border-black text-center text-3xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase focus:outline-none"
+                className={`w-[260px] p-3 border-[6px] border-black text-center text-3xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase focus:outline-none transition-transform ${error ? 'animate-shake' : ''}`}
               />
               <button type="submit" className="bg-[#E62429] text-white text-4xl py-2 px-12 border-[5px] border-black shadow-[6px_6px_0px_black] active:translate-y-1 active:shadow-none transition-all uppercase">
                 ENTER
@@ -100,4 +96,3 @@ export default function SpideyInvite() {
     </main>
   );
 }
-  
