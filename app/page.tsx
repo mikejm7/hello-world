@@ -2,46 +2,38 @@
 import React, { useState, useRef } from 'react';
 import './globals.css';
 
-// --- BACKGROUND ANIMATION COMPONENT ---
+// --- ENHANCED SWINGING COMPONENT ---
 const WebSlinger = () => (
-  /* z-50 ensures the character and web fly OVER the header and invitation content */
   <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-50 overflow-hidden">
-    {/* origin-top-right matches the right-to-left swing trajectory */}
     <div className="absolute top-0 left-0 w-[300px] animate-swing origin-top-right">
       <div className="relative">
-        
-        {/* SVG positioned to anchor the web at the top-right of the screen and connect to the hand */}
         <svg 
           className="absolute overflow-visible" 
           style={{ top: '-380px', left: '0px', width: '600px', height: '500px' }}
         >
            <line 
-             x1="600"   /* Web origin (off-screen top right) */
+             x1="600" 
              y1="0" 
-             x2="115"   /* Adjusted to land on Spidey's right hand */
-             y2="455"   /* Adjusted to land on Spidey's right hand */
+             x2="115" 
+             y2="455" 
              stroke="white" 
-             strokeWidth="6" 
+             strokeWidth="8" 
              strokeLinecap="round"
-             style={{ filter: 'drop-shadow(2px 2px 0px rgba(0,0,0,0.5))' }}
+             style={{ filter: 'drop-shadow(0px 0px 8px rgba(255,255,255,0.8))' }}
            />
         </svg>
-        
         <img 
           src="/spidey-swing.png" 
-          alt="Spidey Swinging" 
-          /* Scale is original (not flipped) so he faces the right but moves left */
-          className="w-48 h-auto drop-shadow-2xl relative z-10"
-          onError={(e) => {
-            e.currentTarget.style.display = 'none';
-          }}
+          alt="Spidey" 
+          className="w-48 h-auto drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)] relative z-10"
+          onError={(e) => { e.currentTarget.style.opacity = '0'; }}
         />
       </div>
     </div>
   </div>
 );
 
-// --- HEADER COMPONENT ---
+// --- COMIC BURST HEADER ---
 const ComicHeader = () => (
   <div className="w-full max-w-[320px] mb-20 transform -rotate-2 relative z-10">
     <svg 
@@ -54,11 +46,10 @@ const ComicHeader = () => (
         fill="#03A9F4" 
         stroke="black" 
         strokeWidth="14" 
-        strokeLinejoin="miter" 
       />
-      <text x="50%" y="35%" textAnchor="middle" fontSize="42" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" fontFamily="Bangers">YOU'RE INVITED TO</text>
-      <text x="50%" y="54%" textAnchor="middle" fontSize="82" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" fontFamily="Bangers">LUCAS'S 5TH</text>
-      <text x="50%" y="73%" textAnchor="middle" fontSize="42" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" fontFamily="Bangers">BIRTHDAY PARTY!</text>
+      <text x="50%" y="35%" textAnchor="middle" fontSize="42" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic">YOU'RE INVITED TO</text>
+      <text x="50%" y="54%" textAnchor="middle" fontSize="82" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic">LUCAS'S 5TH</text>
+      <text x="50%" y="73%" textAnchor="middle" fontSize="42" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic">BIRTHDAY PARTY!</text>
     </svg>
   </div>
 );
@@ -66,13 +57,16 @@ const ComicHeader = () => (
 export default function SpideyInvite() {
   const [code, setCode] = useState('');
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const [showSplat, setShowSplat] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
     if (code.toUpperCase() === "SPIDEY6") {
       if (audioRef.current) audioRef.current.play();
-      setIsUnlocked(true);
+      setShowSplat(true);
+      // Wait for the splat animation before showing the content
+      setTimeout(() => setIsUnlocked(true), 500);
     } else {
       alert("THWIP! WRONG CODE!");
     }
@@ -82,17 +76,24 @@ export default function SpideyInvite() {
     <main className="w-full min-h-screen bg-[#FFEB3B] flex flex-col items-center justify-center px-4 font-comic relative overflow-hidden">
       <audio ref={audioRef} src="https://www.myinstants.com/media/sounds/thwip.mp3" />
 
-      {/* Spidey component sits here but z-50 keeps him on the top-most layer */}
       <WebSlinger />
 
+      {/* Web Splat Visual Effect */}
+      {showSplat && (
+        <div className="fixed inset-0 flex items-center justify-center z-[60] pointer-events-none">
+          <div className="web-splat bg-white/90 w-72 h-72 flex items-center justify-center" 
+               style={{ clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)' }}>
+            <span className="text-black text-6xl font-bold -rotate-12">THWIP!</span>
+          </div>
+        </div>
+      )}
+
       <div className="relative z-10 flex flex-col items-center w-full max-w-[360px]">
-        
         <ComicHeader />
 
         {!isUnlocked ? (
-          <div className="w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 mt-8">
+          <div className="w-full flex flex-col items-center mt-8">
             <h2 className="text-3xl text-black text-center uppercase mb-6 italic tracking-wide">Enter Secret Code</h2>
-            
             <form onSubmit={handleVerify} className="w-full flex flex-col items-center gap-6">
               <input 
                 type="text" 
@@ -115,10 +116,12 @@ export default function SpideyInvite() {
                <h3 className="text-4xl uppercase mb-2">Mission Intel Unlocked!</h3>
                <p className="text-2xl uppercase font-bold">Friday, March 27 @ 2:00 PM</p>
                <p className="text-2xl uppercase">Spidey Secret HQ</p>
+               <p className="text-xl mt-4 opacity-90 underline cursor-pointer">Tap for Map Location</p>
             </div>
           </div>
         )}
       </div>
     </main>
   );
-}
+                }
+        
