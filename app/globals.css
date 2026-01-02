@@ -15,32 +15,34 @@ body {
   font-family: 'Bangers', cursive;
 }
 
-/* 3D Swing: Spidey gets larger as he swings toward the center */
-@keyframes swing-across {
+@keyframes spidey-path {
   0% { 
-    transform: translate(110vw, -10vh) rotate(-20deg) scale(0.7); 
+    /* Start Top Right */
+    transform: translate(100vw, -10vh) rotate(-20deg); 
   }
-  50% { 
-    transform: translate(45vw, 25vh) rotate(0deg) scale(1.3); 
+  35% { 
+    /* Move to shoot point near Left Center */
+    transform: translate(10vw, 40vh) rotate(0deg); 
   }
   100% { 
-    transform: translate(-40vw, -15vh) rotate(20deg) scale(0.7); 
+    /* Swing down to Lower Right */
+    transform: translate(110vw, 90vh) rotate(30deg); 
   }
 }
 
-/* Comic-style burst for the web splat */
-@keyframes web-splat {
-  0% { transform: scale(0) rotate(-15deg); opacity: 0; }
-  50% { transform: scale(1.2) rotate(5deg); opacity: 1; }
-  100% { transform: scale(1) rotate(0deg); opacity: 0.9; }
+/* We animate the web's length/visibility to match the movement */
+@keyframes web-stretch {
+  0% { opacity: 0; stroke-dashoffset: 1000; }
+  20% { opacity: 1; stroke-dashoffset: 0; }
+  35% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
-.animate-swing {
-  animation: swing-across 6s ease-in-out infinite;
-  position: relative;
-  z-index: 100;
+.animate-spidey-path {
+  animation: spidey-path 5s ease-in-out infinite;
 }
 
-.web-splat {
-  animation: web-splat 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+.web-line {
+  stroke-dasharray: 1000;
+  animation: web-stretch 5s ease-in-out infinite;
 }
