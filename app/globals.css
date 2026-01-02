@@ -12,7 +12,6 @@ body {
   transition: background-color 0.3s ease;
 }
 
-/* Red Pulse for background */
 .bg-error {
   animation: pulse-red 0.5s ease-in-out;
 }
@@ -22,7 +21,6 @@ body {
   50% { background-color: #E62429; }
 }
 
-/* Shake animation for input box */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-10px); }
@@ -33,23 +31,19 @@ body {
   animation: shake 0.2s ease-in-out 0s 2;
 }
 
-/* J-SHAPED SWING: Smooth gravitational arc */
+/* Isolated J-Swing Path with fixed scale range */
 @keyframes spidey-path {
   0% { 
-    /* Entry: Top Right */
     transform: translate(110vw, -10vh) rotate(-20deg) scale(0.5); 
   }
   60% { 
-    /* Bottom of the J: Low and toward the center-left */
     transform: translate(30vw, 85vh) rotate(5deg) scale(1.1); 
   }
   100% { 
-    /* Exit: Pulling up toward Center Left Edge */
     transform: translate(-30vw, 40vh) rotate(25deg) scale(1.5); 
   }
 }
 
-/* Web shoots to Top Left and follows the hand */
 @keyframes web-shoot {
   0%, 20% { opacity: 0; stroke-dashoffset: 1500; }
   25% { opacity: 1; stroke-dashoffset: 0; }
@@ -58,11 +52,14 @@ body {
 }
 
 .animate-spidey-path {
-  /* cubic-bezier creates the 'swing' physics (fast fall, smooth pull-up) */
   animation: spidey-path 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
 .web-line {
   stroke-dasharray: 1500;
   animation: web-shoot 6s linear infinite;
+}
+
+.font-comic {
+  font-family: 'Bangers', cursive;
 }
