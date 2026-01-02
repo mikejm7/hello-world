@@ -4,27 +4,34 @@ import './globals.css';
 
 // --- BACKGROUND ANIMATION COMPONENT ---
 const WebSlinger = () => (
+  /* z-50 ensures the character and web fly OVER the header and invitation content */
   <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-50 overflow-hidden">
+    {/* origin-top-right matches the right-to-left swing trajectory */}
     <div className="absolute top-0 left-0 w-[300px] animate-swing origin-top-right">
       <div className="relative">
-        {/* SVG adjusted to point the line toward Spidey's right hand */}
-        <svg className="absolute -top-[250px] left-0 w-full h-[400px] overflow-visible">
+        
+        {/* SVG positioned to anchor the web at the top-right of the screen and connect to the hand */}
+        <svg 
+          className="absolute overflow-visible" 
+          style={{ top: '-380px', left: '0px', width: '600px', height: '500px' }}
+        >
            <line 
-             x1="400" 
-             y1="-200" 
-             x2="160" 
-             y2="140" 
+             x1="600"   /* Web origin (off-screen top right) */
+             y1="0" 
+             x2="115"   /* Adjusted to land on Spidey's right hand */
+             y2="455"   /* Adjusted to land on Spidey's right hand */
              stroke="white" 
-             strokeWidth="4" 
+             strokeWidth="6" 
              strokeLinecap="round"
+             style={{ filter: 'drop-shadow(2px 2px 0px rgba(0,0,0,0.5))' }}
            />
         </svg>
         
         <img 
           src="/spidey-swing.png" 
           alt="Spidey Swinging" 
-          /* Removed -scale-x-100 to keep original orientation */
-          className="w-48 h-auto drop-shadow-lg"
+          /* Scale is original (not flipped) so he faces the right but moves left */
+          className="w-48 h-auto drop-shadow-2xl relative z-10"
           onError={(e) => {
             e.currentTarget.style.display = 'none';
           }}
@@ -75,6 +82,7 @@ export default function SpideyInvite() {
     <main className="w-full min-h-screen bg-[#FFEB3B] flex flex-col items-center justify-center px-4 font-comic relative overflow-hidden">
       <audio ref={audioRef} src="https://www.myinstants.com/media/sounds/thwip.mp3" />
 
+      {/* Spidey component sits here but z-50 keeps him on the top-most layer */}
       <WebSlinger />
 
       <div className="relative z-10 flex flex-col items-center w-full max-w-[360px]">
@@ -114,4 +122,3 @@ export default function SpideyInvite() {
     </main>
   );
 }
-  
