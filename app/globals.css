@@ -15,23 +15,32 @@ body {
   font-family: 'Bangers', cursive;
 }
 
+/* 3D Swing: Spidey gets larger as he swings toward the center */
 @keyframes swing-across {
   0% { 
-    /* Starts off-screen right */
-    transform: translate(110vw, -10vh) rotate(-15deg); 
+    transform: translate(110vw, -10vh) rotate(-20deg) scale(0.7); 
   }
   50% { 
-    /* Swings through the middle */
-    transform: translate(45vw, 20vh) rotate(0deg); 
+    transform: translate(45vw, 25vh) rotate(0deg) scale(1.3); 
   }
   100% { 
-    /* Exits off-screen left */
-    transform: translate(-40vw, -15vh) rotate(15deg); 
+    transform: translate(-40vw, -15vh) rotate(20deg) scale(0.7); 
   }
 }
 
+/* Comic-style burst for the web splat */
+@keyframes web-splat {
+  0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+  50% { transform: scale(1.2) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 0.9; }
+}
+
 .animate-swing {
-  animation: swing-across 7s ease-in-out infinite;
+  animation: swing-across 6s ease-in-out infinite;
   position: relative;
-  z-index: 100; /* High z-index to stay on top */
+  z-index: 100;
+}
+
+.web-splat {
+  animation: web-splat 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
