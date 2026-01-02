@@ -4,31 +4,30 @@ import './globals.css';
 
 const WebSlinger = () => (
   <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+    {/* The animated container for Spidey */}
     <div className="absolute top-0 left-0 animate-spidey-path">
-      <div className="relative">
+      <div className="relative w-40 h-40">
+        
+        {/* The Web: Now anchored relative to Spidey's position */}
         <svg 
           className="absolute overflow-visible" 
-          style={{ top: '0', left: '0' }}
+          style={{ top: '0', left: '0', width: '2000px', height: '2000px' }}
         >
           <line 
-            x1="-150vw" /* Reach far left */
-            y1="50vh"   /* Anchor center-ish */
-            x2="50"     /* Right hand position */
-            y2="110" 
+            x1="45"    /* Spidey's Hand X (Internal to his div) */
+            y1="110"   /* Spidey's Hand Y (Internal to his div) */
+            x2="-1000" /* Far left target */
+            y2="-200"  /* Upward angle for the swing anchor */
             stroke="white" 
-            strokeWidth="6" 
+            strokeWidth="4" 
             className="web-line"
-            style={{ 
-              filter: 'drop-shadow(0px 0px 5px rgba(255,255,255,0.8))',
-              strokeLinecap: 'round'
-            }}
           />
         </svg>
         
         <img 
           src="/spidey-swing.png" 
           alt="Spidey" 
-          className="w-40 h-auto drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)]"
+          className="w-full h-auto drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)]"
           onError={(e) => { e.currentTarget.style.display = 'none'; }}
         />
       </div>
@@ -37,17 +36,9 @@ const WebSlinger = () => (
 );
 
 const ComicHeader = () => (
-  <div className="w-full max-w-[320px] mb-20 transform -rotate-2 relative z-10">
-    <svg 
-      viewBox="0 0 600 500" 
-      className="overflow-visible filter drop-shadow-[8px_8px_0px_rgba(0,0,0,1)]"
-    >
-      <path 
-        d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" 
-        fill="#03A9F4" 
-        stroke="black" 
-        strokeWidth="14" 
-      />
+  <div className="w-full max-w-[320px] mb-12 transform -rotate-2 relative z-10">
+    <svg viewBox="0 0 600 500" className="overflow-visible filter drop-shadow-[8px_8px_0px_rgba(0,0,0,1)]">
+      <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
       <text x="50%" y="35%" textAnchor="middle" fontSize="42" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic">YOU'RE INVITED TO</text>
       <text x="50%" y="54%" textAnchor="middle" fontSize="82" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic">LUCAS'S 5TH</text>
       <text x="50%" y="73%" textAnchor="middle" fontSize="42" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic">BIRTHDAY PARTY!</text>
@@ -58,6 +49,7 @@ const ComicHeader = () => (
 export default function SpideyInvite() {
   const [code, setCode] = useState('');
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const [error, setError] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const handleVerify = (e: React.FormEvent) => {
@@ -66,12 +58,13 @@ export default function SpideyInvite() {
       if (audioRef.current) audioRef.current.play();
       setIsUnlocked(true);
     } else {
-      alert("THWIP! WRONG CODE!");
+      setError(true);
+      setTimeout(() => setError(false), 500); // Reset pulse after 0.5s
     }
   };
 
   return (
-    <main className="w-full min-h-screen bg-[#FFEB3B] flex flex-col items-center justify-center px-4 font-comic relative overflow-hidden">
+    <main className={`w-full min-h-screen flex flex-col items-center justify-center px-4 font-comic relative overflow-hidden transition-colors duration-300 ${error ? 'bg-error' : 'bg-[#FFEB3B]'}`}>
       <audio ref={audioRef} src="https://www.myinstants.com/media/sounds/thwip.mp3" />
 
       <WebSlinger />
@@ -80,19 +73,16 @@ export default function SpideyInvite() {
         <ComicHeader />
 
         {!isUnlocked ? (
-          <div className="w-full flex flex-col items-center mt-8">
+          <div className="w-full flex flex-col items-center mt-4">
             <h2 className="text-3xl text-black text-center uppercase mb-6 italic tracking-wide">Enter Secret Code</h2>
             <form onSubmit={handleVerify} className="w-full flex flex-col items-center gap-6">
               <input 
                 type="text" 
                 value={code} 
-                onChange={(e) => setCode(e.target.value)}
+                onChange={(e) => setCode(e.target.value.toUpperCase())}
                 className="w-[260px] p-3 border-[6px] border-black text-center text-3xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase focus:outline-none"
               />
-              <button 
-                type="submit" 
-                className="bg-[#E62429] text-white text-4xl py-2 px-12 border-[5px] border-black shadow-[6px_6px_0px_black] active:translate-y-1 active:shadow-none transition-all uppercase"
-              >
+              <button type="submit" className="bg-[#E62429] text-white text-4xl py-2 px-12 border-[5px] border-black shadow-[6px_6px_0px_black] active:translate-y-1 active:shadow-none transition-all uppercase">
                 ENTER
               </button>
             </form>
@@ -101,7 +91,7 @@ export default function SpideyInvite() {
           <div className="w-full flex flex-col items-center mt-8 space-y-6 animate-in zoom-in duration-500">
             <div className="w-full bg-[#03A9F4] border-[8px] border-black p-6 text-white shadow-[10px_10px_0px_black] transform rotate-1 text-center">
                <h3 className="text-4xl uppercase mb-2">Mission Intel Unlocked!</h3>
-               <p className="text-2xl uppercase font-bold">Friday, March 27 @ 2:00 PM</p>
+               <p className="text-2xl uppercase font-bold text-yellow-300">Friday, March 27 @ 2:00 PM</p>
                <p className="text-2xl uppercase">Spidey Secret HQ</p>
             </div>
           </div>
@@ -109,4 +99,5 @@ export default function SpideyInvite() {
       </div>
     </main>
   );
-        }
+}
+  
