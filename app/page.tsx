@@ -4,25 +4,29 @@ import './globals.css';
 
 const WebSlinger = () => (
   <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-    {/* This container follows the complex path */}
+    {/* Spidey Container */}
     <div className="absolute top-0 left-0 animate-spidey-path">
       <div className="relative">
         
-        {/* The Web: Anchored at Y=50% (Center) on the Left Edge (X=0) 
-            It connects to the Spidey image position */}
+        {/* The Web: 
+            Originates from 'right hand' (approx x:40, y:120 in the image frame)
+            Targets the left edge of the screen (negative viewport width) */}
         <svg 
           className="absolute overflow-visible" 
-          style={{ top: '0', left: '0', width: '100vw', height: '100vh' }}
+          style={{ top: '0', left: '0' }}
         >
           <line 
-            x1="-10vw"  /* Anchor point at the left edge center */
-            y1="50vh" 
-            x2="50"     /* Attached to the Spidey div */
-            y2="50" 
+            x1="-120vw"  /* Reaches out to the left edge of the screen */
+            y1="20vh"    /* Anchor height on the left */
+            x2="60"      /* Matches Spidey's hand position in the 160px wide image */
+            y2="120" 
             stroke="white" 
-            strokeWidth="4" 
+            strokeWidth="5" 
             className="web-line"
-            style={{ filter: 'drop-shadow(2px 2px 0px rgba(0,0,0,0.3))' }}
+            style={{ 
+              filter: 'drop-shadow(2px 2px 0px rgba(0,0,0,0.2))',
+              strokeLinecap: 'round'
+            }}
           />
         </svg>
         
@@ -30,7 +34,7 @@ const WebSlinger = () => (
           src="/spidey-swing.png" 
           alt="Spidey" 
           className="w-40 h-auto drop-shadow-2xl"
-          style={{ transform: 'scaleX(-1)' }} // Flips him to face the left anchor
+          /* Image is now un-flipped (original orientation) */
           onError={(e) => { e.currentTarget.style.display = 'none'; }}
         />
       </div>
@@ -66,7 +70,7 @@ export default function SpideyInvite() {
     e.preventDefault();
     if (code.toUpperCase() === "SPIDEY6") {
       if (audioRef.current) audioRef.current.play();
-      setIsUnlocked(true); // "Thwip" splat removed, goes straight to unlock
+      setIsUnlocked(true);
     } else {
       alert("THWIP! WRONG CODE!");
     }
@@ -111,4 +115,4 @@ export default function SpideyInvite() {
       </div>
     </main>
   );
-      }
+}
