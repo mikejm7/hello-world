@@ -4,7 +4,6 @@ import './globals.css';
 
 const WebSlinger = () => (
   <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-    {/* Moving Container */}
     <div className="absolute top-0 left-0 animate-spidey-path">
       <div className="relative w-40 h-40">
         <svg 
@@ -12,9 +11,9 @@ const WebSlinger = () => (
           style={{ top: '0', left: '0', width: '2000px', height: '2000px' }}
         >
           <line 
-            x1="45"    /* Hand X */
-            y1="110"   /* Hand Y */
-            x2="-1000" /* Anchor point (Top Left) */
+            x1="45" 
+            y1="110" 
+            x2="-1000" 
             y2="-800" 
             stroke="white" 
             strokeWidth="5" 
@@ -58,9 +57,9 @@ export default function SpideyInvite() {
       <WebSlinger />
 
       <div className="relative z-10 flex flex-col items-center w-full max-w-[360px]">
-        {/* Header Section */}
-        <div className="w-full max-w-[320px] mb-12 transform -rotate-2">
-            <svg viewBox="0 0 600 500" className="overflow-visible filter drop-shadow-[10px_10px_0px_rgba(0,0,0,1)]">
+        {/* REVERTED TO ORIGINAL HEADER SIZE */}
+        <div className="w-full max-w-[320px] mb-20 transform -rotate-2 relative">
+            <svg viewBox="0 0 600 500" className="overflow-visible filter drop-shadow-[8px_8px_0px_rgba(0,0,0,1)]">
                 <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
                 <text x="50%" y="35%" textAnchor="middle" fontSize="42" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic italic">YOU'RE INVITED TO</text>
                 <text x="50%" y="54%" textAnchor="middle" fontSize="82" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="font-comic italic">LUCAS'S 5TH</text>
@@ -69,15 +68,17 @@ export default function SpideyInvite() {
         </div>
 
         {!isUnlocked ? (
-          <div className="w-full flex flex-col items-center mt-4">
+          <div className="w-full flex flex-col items-center mt-8">
             <h2 className="text-3xl text-black text-center uppercase mb-6 italic tracking-wide">Enter Secret Code</h2>
             <form onSubmit={handleVerify} className="w-full flex flex-col items-center gap-6">
+              {/* REVERTED TO ORIGINAL INPUT SIZE */}
               <input 
                 type="text" 
                 value={code} 
                 onChange={(e) => setCode(e.target.value.toUpperCase())}
                 className={`w-[260px] p-3 border-[6px] border-black text-center text-3xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase focus:outline-none transition-transform ${error ? 'animate-shake' : ''}`}
               />
+              {/* REVERTED TO ORIGINAL BUTTON SIZE */}
               <button type="submit" className="bg-[#E62429] text-white text-4xl py-2 px-12 border-[5px] border-black shadow-[6px_6px_0px_black] active:translate-y-1 active:shadow-none transition-all uppercase">
                 ENTER
               </button>
