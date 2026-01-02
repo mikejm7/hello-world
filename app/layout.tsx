@@ -1,8 +1,8 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'Spidey Birthday Invite',
-  description: 'Enter the secret code to unlock the mission intel!',
+  title: "Lucas's Spidey Birthday",
+  description: 'Enter the secret code to join the mission!',
 }
 
 export default function RootLayout({
