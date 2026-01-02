@@ -4,20 +4,27 @@ import './globals.css';
 
 // --- BACKGROUND ANIMATION COMPONENT ---
 const WebSlinger = () => (
-  /* Changed z-0 to z-50 to ensure he flies OVER the header and form */
   <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-50 overflow-hidden">
-    {/* origin-top-right helps the swing feel natural coming from the right */}
     <div className="absolute top-0 left-0 w-[300px] animate-swing origin-top-right">
       <div className="relative">
-        <svg className="absolute -top-[200px] left-[50px] w-full h-[300px] overflow-visible">
-           {/* Angled the web line to match the right-to-left movement */}
-           <line x1="200" y1="-200" x2="50" y2="220" stroke="white" strokeWidth="4" />
+        {/* SVG adjusted to point the line toward Spidey's right hand */}
+        <svg className="absolute -top-[250px] left-0 w-full h-[400px] overflow-visible">
+           <line 
+             x1="400" 
+             y1="-200" 
+             x2="160" 
+             y2="140" 
+             stroke="white" 
+             strokeWidth="4" 
+             strokeLinecap="round"
+           />
         </svg>
         
         <img 
           src="/spidey-swing.png" 
           alt="Spidey Swinging" 
-          className="w-48 h-auto drop-shadow-lg transform -scale-x-100 rotate-12"
+          /* Removed -scale-x-100 to keep original orientation */
+          className="w-48 h-auto drop-shadow-lg"
           onError={(e) => {
             e.currentTarget.style.display = 'none';
           }}
@@ -68,7 +75,6 @@ export default function SpideyInvite() {
     <main className="w-full min-h-screen bg-[#FFEB3B] flex flex-col items-center justify-center px-4 font-comic relative overflow-hidden">
       <audio ref={audioRef} src="https://www.myinstants.com/media/sounds/thwip.mp3" />
 
-      {/* Spidey is placed here, but the z-50 in WebSlinger ensures he stays on top */}
       <WebSlinger />
 
       <div className="relative z-10 flex flex-col items-center w-full max-w-[360px]">
@@ -107,5 +113,5 @@ export default function SpideyInvite() {
       </div>
     </main>
   );
-      }
-        
+}
+  
