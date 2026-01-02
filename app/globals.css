@@ -17,22 +17,21 @@ body {
 
 @keyframes swing-across {
   0% { 
-    /* Start off-screen to the RIGHT */
-    transform: translate(110vw, -10vh) rotate(-25deg); 
+    /* Starts off-screen right */
+    transform: translate(110vw, -10vh) rotate(-15deg); 
   }
   50% { 
-    /* Mid-point swing in the center */
-    transform: translate(40vw, 25vh) rotate(0deg); 
+    /* Swings through the middle */
+    transform: translate(45vw, 20vh) rotate(0deg); 
   }
   100% { 
-    /* Exit off-screen to the LEFT */
-    transform: translate(-30vw, -15vh) rotate(35deg); 
+    /* Exits off-screen left */
+    transform: translate(-40vw, -15vh) rotate(15deg); 
   }
 }
 
 .animate-swing {
   animation: swing-across 7s ease-in-out infinite;
-  /* Keep him on the top layer */
   position: relative;
-  z-index: 99;
+  z-index: 100; /* High z-index to stay on top */
 }
