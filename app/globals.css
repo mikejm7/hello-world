@@ -9,56 +9,55 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  transition: background-color 0.3s ease;
+}
+
+.bg-error {
+  animation: pulse-red 0.5s ease-in-out;
+}
+
+@keyframes pulse-red {
+  0%, 100% { background-color: #FFEB3B; }
+  50% { background-color: #E62429; }
 }
 
 .font-comic {
   font-family: 'Bangers', cursive;
 }
 
+/* Smooth, gradual scale increase across the whole path */
 @keyframes spidey-path {
   0% { 
-    /* Off-screen top right, small */
-    transform: translate(110vw, -10vh) rotate(-15deg) scale(0.7); 
-  }
-  30% {
-    /* Entering screen, getting larger */
-    transform: translate(70vw, 20vh) rotate(-5deg) scale(0.9);
-  }
-  60% { 
-    /* Closest point near the center-left */
-    transform: translate(15vw, 45vh) rotate(5deg) scale(1.4); 
+    transform: translate(110vw, -10vh) rotate(-15deg) scale(0.6); 
   }
   100% { 
-    /* Exiting lower right, slightly smaller but still close */
-    transform: translate(120vw, 95vh) rotate(20deg) scale(1.1); 
+    transform: translate(-30vw, 110vh) rotate(15deg) scale(1.8); 
   }
 }
 
-@keyframes web-stretch {
-  0%, 25% { 
-    /* Web is invisible until Spidey is well onto the screen */
+/* Web appears to shoot FROM Spidey TO the left edge */
+@keyframes web-shoot {
+  0%, 20% { 
     opacity: 0; 
-    stroke-dashoffset: 1000; 
+    stroke-dashoffset: 1500; 
   }
-  35% { 
-    /* Fast "thwip" shot */
+  25% { 
     opacity: 1; 
     stroke-dashoffset: 0; 
   }
-  65% { 
+  80% { 
     opacity: 1; 
   }
-  80%, 100% { 
-    /* Release web as he swings away */
+  100% { 
     opacity: 0; 
   }
 }
 
 .animate-spidey-path {
-  animation: spidey-path 6s ease-in-out infinite;
+  animation: spidey-path 5s linear infinite;
 }
 
 .web-line {
-  stroke-dasharray: 1000;
-  animation: web-stretch 6s ease-in-out infinite;
+  stroke-dasharray: 1500;
+  animation: web-shoot 5s linear infinite;
 }
