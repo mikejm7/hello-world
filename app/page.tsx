@@ -4,27 +4,22 @@ import './globals.css';
 
 const WebSlinger = () => (
   <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-    {/* Spidey Container */}
     <div className="absolute top-0 left-0 animate-spidey-path">
       <div className="relative">
-        
-        {/* The Web: 
-            Originates from 'right hand' (approx x:40, y:120 in the image frame)
-            Targets the left edge of the screen (negative viewport width) */}
         <svg 
           className="absolute overflow-visible" 
           style={{ top: '0', left: '0' }}
         >
           <line 
-            x1="-120vw"  /* Reaches out to the left edge of the screen */
-            y1="20vh"    /* Anchor height on the left */
-            x2="60"      /* Matches Spidey's hand position in the 160px wide image */
-            y2="120" 
+            x1="-150vw" /* Reach far left */
+            y1="50vh"   /* Anchor center-ish */
+            x2="50"     /* Right hand position */
+            y2="110" 
             stroke="white" 
-            strokeWidth="5" 
+            strokeWidth="6" 
             className="web-line"
             style={{ 
-              filter: 'drop-shadow(2px 2px 0px rgba(0,0,0,0.2))',
+              filter: 'drop-shadow(0px 0px 5px rgba(255,255,255,0.8))',
               strokeLinecap: 'round'
             }}
           />
@@ -33,8 +28,7 @@ const WebSlinger = () => (
         <img 
           src="/spidey-swing.png" 
           alt="Spidey" 
-          className="w-40 h-auto drop-shadow-2xl"
-          /* Image is now un-flipped (original orientation) */
+          className="w-40 h-auto drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)]"
           onError={(e) => { e.currentTarget.style.display = 'none'; }}
         />
       </div>
@@ -115,4 +109,4 @@ export default function SpideyInvite() {
       </div>
     </main>
   );
-}
+        }
