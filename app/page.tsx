@@ -2,43 +2,46 @@
 import React, { useState, useRef } from 'react';
 import './globals.css';
 
-// --- ENHANCED SWINGING COMPONENT ---
 const WebSlinger = () => (
-  <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-50 overflow-hidden">
-    <div className="absolute top-0 left-0 w-[300px] animate-swing origin-top-right">
+  <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+    {/* This container follows the complex path */}
+    <div className="absolute top-0 left-0 animate-spidey-path">
       <div className="relative">
+        
+        {/* The Web: Anchored at Y=50% (Center) on the Left Edge (X=0) 
+            It connects to the Spidey image position */}
         <svg 
           className="absolute overflow-visible" 
-          style={{ top: '-380px', left: '0px', width: '600px', height: '500px' }}
+          style={{ top: '0', left: '0', width: '100vw', height: '100vh' }}
         >
-           <line 
-             x1="600" 
-             y1="0" 
-             x2="115" 
-             y2="455" 
-             stroke="white" 
-             strokeWidth="8" 
-             strokeLinecap="round"
-             style={{ filter: 'drop-shadow(0px 0px 8px rgba(255,255,255,0.8))' }}
-           />
+          <line 
+            x1="-10vw"  /* Anchor point at the left edge center */
+            y1="50vh" 
+            x2="50"     /* Attached to the Spidey div */
+            y2="50" 
+            stroke="white" 
+            strokeWidth="4" 
+            className="web-line"
+            style={{ filter: 'drop-shadow(2px 2px 0px rgba(0,0,0,0.3))' }}
+          />
         </svg>
+        
         <img 
           src="/spidey-swing.png" 
           alt="Spidey" 
-          className="w-48 h-auto drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)] relative z-10"
-          onError={(e) => { e.currentTarget.style.opacity = '0'; }}
+          className="w-40 h-auto drop-shadow-2xl"
+          style={{ transform: 'scaleX(-1)' }} // Flips him to face the left anchor
+          onError={(e) => { e.currentTarget.style.display = 'none'; }}
         />
       </div>
     </div>
   </div>
 );
 
-// --- COMIC BURST HEADER ---
 const ComicHeader = () => (
   <div className="w-full max-w-[320px] mb-20 transform -rotate-2 relative z-10">
     <svg 
       viewBox="0 0 600 500" 
-      xmlns="http://www.w3.org/2000/svg" 
       className="overflow-visible filter drop-shadow-[8px_8px_0px_rgba(0,0,0,1)]"
     >
       <path 
@@ -57,16 +60,13 @@ const ComicHeader = () => (
 export default function SpideyInvite() {
   const [code, setCode] = useState('');
   const [isUnlocked, setIsUnlocked] = useState(false);
-  const [showSplat, setShowSplat] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
     if (code.toUpperCase() === "SPIDEY6") {
       if (audioRef.current) audioRef.current.play();
-      setShowSplat(true);
-      // Wait for the splat animation before showing the content
-      setTimeout(() => setIsUnlocked(true), 500);
+      setIsUnlocked(true); // "Thwip" splat removed, goes straight to unlock
     } else {
       alert("THWIP! WRONG CODE!");
     }
@@ -77,16 +77,6 @@ export default function SpideyInvite() {
       <audio ref={audioRef} src="https://www.myinstants.com/media/sounds/thwip.mp3" />
 
       <WebSlinger />
-
-      {/* Web Splat Visual Effect */}
-      {showSplat && (
-        <div className="fixed inset-0 flex items-center justify-center z-[60] pointer-events-none">
-          <div className="web-splat bg-white/90 w-72 h-72 flex items-center justify-center" 
-               style={{ clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)' }}>
-            <span className="text-black text-6xl font-bold -rotate-12">THWIP!</span>
-          </div>
-        </div>
-      )}
 
       <div className="relative z-10 flex flex-col items-center w-full max-w-[360px]">
         <ComicHeader />
@@ -100,7 +90,6 @@ export default function SpideyInvite() {
                 value={code} 
                 onChange={(e) => setCode(e.target.value)}
                 className="w-[260px] p-3 border-[6px] border-black text-center text-3xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase focus:outline-none"
-                autoFocus
               />
               <button 
                 type="submit" 
@@ -116,12 +105,10 @@ export default function SpideyInvite() {
                <h3 className="text-4xl uppercase mb-2">Mission Intel Unlocked!</h3>
                <p className="text-2xl uppercase font-bold">Friday, March 27 @ 2:00 PM</p>
                <p className="text-2xl uppercase">Spidey Secret HQ</p>
-               <p className="text-xl mt-4 opacity-90 underline cursor-pointer">Tap for Map Location</p>
             </div>
           </div>
         )}
       </div>
     </main>
   );
-                }
-        
+      }
