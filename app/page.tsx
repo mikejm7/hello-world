@@ -6,11 +6,23 @@ const WebSlinger = () => (
   <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
     <div className="absolute top-0 left-0 animate-spidey">
       <div className="relative w-40 h-40">
-        <svg className="absolute overflow-visible" style={{ top: '0', left: '0' }}>
-          {/* ENTRY WEB: From hand to Top-Left corner anchor */}
-          <line x1="20" y1="120" x2="-600" y2="-600" stroke="white" strokeWidth="6" className="web-left-anchor" style={{ strokeLinecap: 'round' }} />
-          {/* EXIT WEB: From hand to Top-Right corner anchor */}
-          <line x1="20" y1="120" x2="1500" y2="-600" stroke="white" strokeWidth="6" className="web-right-anchor" style={{ strokeLinecap: 'round' }} />
+        <svg className="absolute overflow-visible" style={{ width: '1px', height: '1px' }}>
+          {/* WEB 1: ENTRY - Anchored to TOP-LEFT */}
+          <line 
+            x1="20" y1="120" 
+            x2="-1000" y2="-1000" 
+            stroke="white" strokeWidth="8" 
+            className="web-entry" 
+            style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 3px rgba(0,0,0,0.5))' }} 
+          />
+          {/* WEB 2: EXIT - Anchored to TOP-RIGHT */}
+          <line 
+            x1="20" y1="120" 
+            x2="2000" y2="-1000" 
+            stroke="white" strokeWidth="8" 
+            className="web-exit" 
+            style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 3px rgba(0,0,0,0.5))' }} 
+          />
         </svg>
         <img src="/spidey-swing.png" alt="Spidey" className="w-full h-auto drop-shadow-2xl" />
       </div>
@@ -18,9 +30,9 @@ const WebSlinger = () => (
   </div>
 );
 
+// Countdown component
 const Countdown = ({ targetDate }: { targetDate: string }) => {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
-  
   useEffect(() => {
     const timer = setInterval(() => {
       const diff = +new Date(targetDate) - +new Date();
@@ -59,18 +71,12 @@ export default function SpideyInvite() {
   const [error, setError] = useState(false);
   const [emailSubmitted, setEmailSubmitted] = useState(false);
 
-  const validateStep1 = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (firstName && lastName) setStep(2);
-    else { setError(true); setTimeout(() => setError(false), 500); }
-  };
-
   return (
     <main className="w-full min-h-screen flex flex-col items-center justify-start pt-8 px-4 font-comic relative overflow-hidden bg-[#FFEB3B]">
       <WebSlinger />
 
       <div className="relative z-10 flex flex-col items-center w-full max-w-[360px]">
-        {/* LOGO HEADER */}
+        {/* HEADER */}
         <div className="w-full max-w-[320px] mb-8 transform -rotate-2">
           <svg viewBox="0 0 600 600" className="overflow-visible filter drop-shadow-[8px_8px_0px_black]">
             <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
@@ -81,10 +87,10 @@ export default function SpideyInvite() {
         </div>
 
         {step === 1 && (
-          <form onSubmit={validateStep1} className="flex flex-col items-center w-full space-y-4">
+          <form onSubmit={(e) => { e.preventDefault(); if(firstName && lastName) setStep(2); else { setError(true); setTimeout(() => setError(false), 500); } }} className="flex flex-col items-center w-full space-y-4">
             <h2 className="text-3xl italic uppercase font-bold">Guest Check-In</h2>
-            <input type="text" placeholder="FIRST NAME" value={firstName} onChange={(e) => setFirstName(e.target.value)} className={`w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none ${error ? 'animate-error' : ''}`} />
-            <input type="text" placeholder="LAST NAME" value={lastName} onChange={(e) => setLastName(e.target.value)} className={`w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none ${error ? 'animate-error' : ''}`} />
+            <input type="text" placeholder="FIRST NAME" value={firstName} onChange={(e) => setFirstName(e.target.value)} className={`w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none ${error ? 'animate-bounce' : ''}`} />
+            <input type="text" placeholder="LAST NAME" value={lastName} onChange={(e) => setLastName(e.target.value)} className={`w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none ${error ? 'animate-bounce' : ''}`} />
             <button type="submit" className="mt-4 bg-[#E62429] text-white text-4xl py-2 px-12 border-[5px] border-black shadow-[6px_6px_0px_black] uppercase italic font-bold">RSVP</button>
           </form>
         )}
@@ -181,5 +187,5 @@ export default function SpideyInvite() {
       </div>
     </main>
   );
-}
-  
+        }
+            
