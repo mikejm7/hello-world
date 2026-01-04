@@ -11,29 +11,29 @@ body {
   overflow-x: hidden;
 }
 
-/* TRACKING ANIMATION: We apply the movement to a container and use variables to "tell" the webs where Spidey is */
+/* Linear Acceleration: Speed 1 -> 5 */
 @keyframes spidey-flight {
-  0% { transform: translate(100vw, 85vh) rotate(50deg) scale(0.5); --x: 100vw; --y: 85vh; }
-  49.9% { transform: translate(-10vw, 45vh) rotate(50deg) scale(1.25) scaleX(1); --x: -10vw; --y: 45vh; }
-  50% { transform: translate(-10vw, 45vh) rotate(-25deg) scale(1.25) scaleX(-1); --x: -10vw; --y: 45vh; }
-  100% { transform: translate(180vw, -40vh) rotate(-25deg) scale(3) scaleX(-1); --x: 180vw; --y: -40vh; }
+  /* Entry: 60deg CW (was 50) */
+  0% { transform: translate(100vw, 85vh) rotate(60deg) scale(0.5); }
+  49.9% { transform: translate(-10vw, 45vh) rotate(60deg) scale(1.25) scaleX(1); }
+  /* Exit: -45deg CCW (was -25) */
+  50% { transform: translate(-10vw, 45vh) rotate(-45deg) scale(1.25) scaleX(-1); }
+  100% { transform: translate(180vw, -40vh) rotate(-45deg) scale(3) scaleX(-1); }
 }
 
-/* ENTRY WEB: From FIXED Top-Left to Spidey */
 @keyframes web-entry-fixed {
   0%, 5% { opacity: 0; stroke-dashoffset: 2000; }
   6% { opacity: 1; stroke-dashoffset: 0; }
   44% { opacity: 1; }
-  50% { opacity: 0; transform: translate(-100px, 100px); } /* Simple drop away */
+  50% { opacity: 0; transform: translateY(200px); }
   100% { opacity: 0; }
 }
 
-/* EXIT WEB: From FIXED Top-Right to Spidey */
 @keyframes web-exit-fixed {
   0%, 51% { opacity: 0; stroke-dashoffset: 2000; }
   52% { opacity: 1; stroke-dashoffset: 0; }
   90% { opacity: 1; }
-  100% { opacity: 0; transform: translate(100px, 100px); } /* Simple drop away */
+  100% { opacity: 0; transform: translateY(200px); }
 }
 
 .animate-spidey { 
