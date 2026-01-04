@@ -50,8 +50,8 @@ export default function SpideyInvite() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [adults, setAdults] = useState<number | ''>('');
-  const [kids, setKids] = useState<number | ''>('');
+  const [adults, setAdults] = useState('');
+  const [kids, setKids] = useState('');
   const [kidNames, setKidNames] = useState<string[]>([]);
   const [emailSubmitted, setEmailSubmitted] = useState(false);
 
@@ -61,12 +61,19 @@ export default function SpideyInvite() {
 
   const handleQtySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (Number(adults) >= 1) {
-      if (Number(kids) > 0) {
-        setKidNames(new Array(Number(kids)).fill(''));
+    const adultNum = parseInt(adults) || 0;
+    const kidNum = parseInt(kids) || 0;
+    
+    if (adultNum >= 1) {
+      if (kidNum > 0) {
+        setKidNames(new Array(kidNum).fill(''));
         setStep(5);
-      } else setStep(4);
-    } else alert("At least 1 Adult is required!");
+      } else {
+        setStep(4);
+      }
+    } else {
+      alert("At least 1 Adult is required!");
+    }
   };
 
   return (
@@ -74,7 +81,7 @@ export default function SpideyInvite() {
       <WebSlinger trigger={swingTrigger} />
       
       <div className="relative z-10 flex flex-col items-center w-full max-w-[380px]">
-        {/* HEADER SECTION - Replaced based on state */}
+        {/* HEADER SECTION */}
         <div className="w-full max-w-[320px] mb-8 transform -rotate-1">
           {step === 1 ? (
             <div className="animate-comic-pop">
@@ -85,17 +92,13 @@ export default function SpideyInvite() {
               </svg>
             </div>
           ) : (
-            <div className="flex flex-col items-center">
-              <div className="animate-comic-pop">
-                <svg viewBox="0 0 600 550" className="overflow-visible filter drop-shadow-[8px_8px_0px_black]">
-                  <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#E62429" stroke="black" strokeWidth="14" />
-                  <text x="50%" y="44%" textAnchor="middle" fontSize="88" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Lucas is</text>
-                  <text x="50%" y="62%" textAnchor="middle" fontSize="88" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">turning 5!</text>
-                </svg>
-              </div>
-              <div className="animate-comic-pop delay-1 transform -rotate-1 -mt-10">
-                 <p className="text-3xl text-center uppercase font-bold italic bg-white border-4 border-black px-6 py-2 shadow-[6px_6px_0px_black]">Join us to celebrate!</p>
-              </div>
+            <div className="flex flex-col items-center animate-comic-pop">
+              <svg viewBox="0 0 600 550" className="overflow-visible filter drop-shadow-[8px_8px_0px_black]">
+                <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#E62429" stroke="black" strokeWidth="14" />
+                <text x="50%" y="44%" textAnchor="middle" fontSize="88" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Lucas is</text>
+                <text x="50%" y="62%" textAnchor="middle" fontSize="88" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">turning 5!</text>
+              </svg>
+              <p className="text-3xl text-center uppercase font-bold italic bg-white border-4 border-black px-6 py-2 shadow-[6px_6px_0px_black] -mt-10 transform rotate-1">Join us to celebrate!</p>
             </div>
           )}
         </div>
@@ -103,15 +106,15 @@ export default function SpideyInvite() {
         <div className="w-full">
           {step === 1 && (
             <form onSubmit={(e) => { e.preventDefault(); if(firstName && lastName) setStep(2); }} className="flex flex-col items-center space-y-4">
-              <input type="text" name="given-name" autoComplete="given-name" id="firstName" placeholder="FIRST NAME" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none" />
-              <input type="text" name="family-name" autoComplete="family-name" id="lastName" placeholder="LAST NAME" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none" />
+              <input type="text" name="given-name" autoComplete="given-name" required placeholder="FIRST NAME" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full p-4 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none" />
+              <input type="text" name="family-name" autoComplete="family-name" required placeholder="LAST NAME" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full p-4 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none" />
               <button type="submit" className="mt-4 bg-[#E62429] text-white text-4xl py-2 px-12 border-[5px] border-black shadow-[6px_6px_0px_black] uppercase italic font-bold">RSVP</button>
             </form>
           )}
 
           {step === 2 && (
-            <div className="flex flex-col items-center space-y-6">
-               <div className="bg-[#03A9F4] border-[6px] border-black p-4 text-white shadow-[8px_8px_0px_black] w-full animate-comic-pop delay-1 opacity-0 text-center italic font-bold">
+            <div className="flex flex-col items-center space-y-6 animate-comic-pop">
+               <div className="bg-[#03A9F4] border-[6px] border-black p-4 text-white shadow-[8px_8px_0px_black] w-full text-center italic font-bold">
                  <p className="text-xl uppercase underline mb-2 tracking-widest">The Mission Details:</p>
                  <div className="text-lg space-y-1">
                     <p><span className="text-yellow-300">DATE:</span> March 27 @ 2:00 PM</p>
@@ -124,7 +127,7 @@ export default function SpideyInvite() {
                  </div>
                </div>
 
-               <div className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] text-center w-full animate-comic-pop delay-2 opacity-0">
+               <div className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] text-center w-full">
                 <h2 className="text-2xl mb-6 uppercase leading-tight italic font-bold">{firstName}, are you coming?</h2>
                 <div className="flex gap-4 justify-center">
                   <button onClick={() => setStep(3)} className="bg-green-500 text-white text-3xl py-2 px-8 border-4 border-black shadow-[4px_4px_0px_black] font-bold">YES</button>
@@ -135,32 +138,45 @@ export default function SpideyInvite() {
           )}
 
           {step === 3 && (
-            <form onSubmit={handleQtySubmit} className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] w-full">
-              <h2 className="text-2xl mb-4 uppercase text-center font-bold italic underline leading-none">Guest Count</h2>
-              <div className="space-y-4 font-bold text-xl uppercase">
-                <div className="flex justify-between items-center bg-gray-100 p-2 border-2 border-black">
+            <form onSubmit={handleQtySubmit} className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] w-full animate-comic-pop">
+              <h2 className="text-3xl mb-6 uppercase text-center font-bold italic underline">Guest Count</h2>
+              <div className="space-y-6 font-bold text-2xl uppercase">
+                <div className="flex justify-between items-center bg-gray-100 p-4 border-4 border-black">
                   <span>Adults:</span>
-                  <input type="number" required value={adults} onChange={(e) => setAdults(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black font-bold" />
+                  <input type="text" inputMode="numeric" pattern="[0-9]*" required value={adults} onChange={(e) => setAdults(e.target.value)} className="w-20 h-14 text-center border-4 border-black font-bold bg-white text-3xl" />
                 </div>
-                <div className="flex justify-between items-center bg-gray-100 p-2 border-2 border-black">
+                <div className="flex justify-between items-center bg-gray-100 p-4 border-4 border-black">
                   <span>Kids:</span>
-                  <input type="number" value={kids} onChange={(e) => setKids(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black font-bold" />
+                  <input type="text" inputMode="numeric" pattern="[0-9]*" value={kids} onChange={(e) => setKids(e.target.value)} className="w-20 h-14 text-center border-4 border-black font-bold bg-white text-3xl" />
                 </div>
               </div>
-              <button type="submit" className="w-full mt-6 bg-[#E62429] text-white text-3xl py-2 border-4 border-black shadow-[4px_4px_0px_black] uppercase italic font-bold">Next</button>
+              <button type="submit" className="w-full mt-8 bg-[#E62429] text-white text-4xl py-3 border-4 border-black shadow-[4px_4px_0px_black] uppercase italic font-bold">Next</button>
             </form>
           )}
 
           {step === 5 && (
-            <div className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] w-full max-h-[400px] overflow-y-auto">
-              <h2 className="text-xl mb-4 uppercase text-center font-bold italic">Spidey's Amazing Friends</h2>
-              {kidNames.map((name, i) => (
-                <input key={i} type="text" placeholder={`FRIEND #${i+1}`} value={name} onChange={(e) => {
-                  const n = [...kidNames]; n[i] = e.target.value; setKidNames(n);
-                }} className="w-full p-2 border-2 border-black mb-2 uppercase font-bold outline-none" />
-              ))}
-              <button onClick={() => setStep(4)} className="w-full mt-4 bg-green-500 text-white text-2xl py-2 border-4 border-black uppercase italic font-bold">Confirm</button>
-            </div>
+            <form onSubmit={(e) => { e.preventDefault(); setStep(4); }} className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] w-full animate-comic-pop">
+              <h2 className="text-xl mb-4 uppercase text-center font-bold italic leading-tight">
+                Spidey's Amazing Friends<br/>
+                <span className="text-sm normal-case">(Your kiddos names)</span>
+              </h2>
+              <div className="max-h-[300px] overflow-y-auto pr-2 space-y-3">
+                {kidNames.map((name, i) => (
+                  <input 
+                    key={i} 
+                    type="text" 
+                    required
+                    placeholder={`FRIEND #${i+1}`} 
+                    value={name} 
+                    onChange={(e) => {
+                      const n = [...kidNames]; n[i] = e.target.value; setKidNames(n);
+                    }} 
+                    className="w-full p-3 border-4 border-black uppercase font-bold text-xl outline-none" 
+                  />
+                ))}
+              </div>
+              <button type="submit" className="w-full mt-6 bg-green-500 text-white text-3xl py-3 border-4 border-black uppercase italic font-bold">Confirm</button>
+            </form>
           )}
 
           {step === 4 && (
@@ -179,19 +195,19 @@ export default function SpideyInvite() {
                 </div>
                 <div className="mt-8 pt-4 border-t-4 border-black text-center">
                   <p className="text-3xl font-black">ACCEPTED</p>
-                  <p className="text-[10px] mt-1">SEE YOU AT THE SECRET HQ</p>
+                  <p className="text-[10px] mt-1 italic tracking-widest uppercase">Secret HQ Coordinates Locked</p>
                 </div>
               </div>
 
-              <div className="mt-10 flex flex-col items-center gap-3 w-full animate-comic-pop delay-1 opacity-0">
+              <div className="mt-10 flex flex-col items-center gap-3 w-full">
                 <h3 className="text-2xl uppercase font-bold italic">Subscribe for Updates</h3>
                 {!emailSubmitted ? (
                   <form onSubmit={(e) => { e.preventDefault(); setEmailSubmitted(true); }} className="flex flex-col gap-3 w-full">
-                    <input type="email" name="email" autoComplete="email" required placeholder="GUEST@EMAIL.COM" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3 border-[6px] border-black text-center text-xl font-bold bg-white uppercase shadow-[6px_6px_0px_black] outline-none" />
-                    <button type="submit" className="bg-[#E62429] text-white py-2 px-8 border-[5px] border-black shadow-[6px_6px_0px_black] uppercase italic font-bold text-2xl">Subscribe</button>
+                    <input type="email" name="email" autoComplete="email" required placeholder="GUEST@EMAIL.COM" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-4 border-[6px] border-black text-center text-xl font-bold bg-white uppercase shadow-[6px_6px_0px_black] outline-none" />
+                    <button type="submit" className="bg-[#E62429] text-white py-3 px-8 border-[5px] border-black shadow-[6px_6px_0px_black] uppercase italic font-bold text-2xl">Subscribe</button>
                   </form>
                 ) : (
-                  <div className="text-green-600 text-2xl uppercase font-bold italic animate-bounce">Subscribed!</div>
+                  <div className="text-green-600 text-3xl uppercase font-bold italic animate-bounce">Subscribed!</div>
                 )}
               </div>
             </div>
@@ -207,4 +223,5 @@ export default function SpideyInvite() {
       </div>
     </main>
   );
-                  }
+    }
+                  
