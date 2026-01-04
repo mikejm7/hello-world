@@ -11,39 +11,45 @@ body {
   overflow-x: hidden;
 }
 
-/* Linear Acceleration: Starts slow, ends with high velocity */
-@keyframes spidey-accel-swing {
+/* Acceleration Curve: Speed 1 to 5 */
+@keyframes spidey-swing-accel {
   0% { transform: translate(100vw, 85vh) rotate(50deg) scale(0.5); }
   49.9% { transform: translate(-10vw, 45vh) rotate(50deg) scale(1.25) scaleX(1); }
   50% { transform: translate(-10vw, 45vh) rotate(-25deg) scale(1.25) scaleX(-1); }
   100% { transform: translate(180vw, -40vh) rotate(-25deg) scale(3) scaleX(-1); }
 }
 
-/* Entry Web: Anchored Top-Left, releases and swings out of view */
-@keyframes web-entry-flow {
-  0%, 5% { opacity: 0; stroke-dashoffset: 1200; transform: translate(0,0); }
+/* ENTRY WEB: From Hand to TOP-LEFT */
+@keyframes web-entry-release {
+  0%, 5% { opacity: 0; stroke-dashoffset: 1500; transform: translate(0,0) rotate(0deg); }
   6% { opacity: 1; stroke-dashoffset: 0; }
-  44% { opacity: 1; transform: translate(0,0); }
-  50% { opacity: 0; transform: translate(-500px, 300px) rotate(-15deg); }
+  44% { opacity: 1; transform: translate(0,0) rotate(0deg); }
+  /* Swings away to the left upon release */
+  50% { opacity: 0; transform: translate(-600px, 400px) rotate(-30deg); }
   100% { opacity: 0; }
 }
 
-/* Exit Web: Anchored Top-Right, releases and swings out of view */
-@keyframes web-exit-flow {
-  0%, 51% { opacity: 0; stroke-dashoffset: 1200; transform: translate(0,0); }
+/* EXIT WEB: From Hand to TOP-RIGHT (After Mirror) */
+@keyframes web-exit-release {
+  0%, 51% { opacity: 0; stroke-dashoffset: 1500; transform: translate(0,0) rotate(0deg); }
   52% { opacity: 1; stroke-dashoffset: 0; }
-  90% { opacity: 1; transform: translate(0,0); }
-  100% { opacity: 0; transform: translate(500px, 300px) rotate(15deg); }
+  90% { opacity: 1; transform: translate(0,0) rotate(0deg); }
+  /* Swings away to the right upon release */
+  100% { opacity: 0; transform: translate(600px, 400px) rotate(30deg); }
 }
 
-.animate-spidey { animation: spidey-accel-swing 8s cubic-bezier(0.3, 0, 1, 1) infinite; }
-.web-left-anchor { stroke-dasharray: 1200; animation: web-entry-flow 8s linear infinite; }
-.web-right-anchor { stroke-dasharray: 1200; animation: web-exit-flow 8s linear infinite; }
-
-@keyframes shake-3d {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px) rotate(-1deg); }
-  75% { transform: translateX(5px) rotate(1deg); }
+.animate-spidey { 
+  animation: spidey-swing-accel 8s cubic-bezier(0.3, 0, 1, 1) infinite; 
 }
-.animate-error { animation: shake-3d 0.2s ease-in-out infinite; }
+
+.web-entry { 
+  stroke-dasharray: 1500; 
+  animation: web-entry-release 8s linear infinite; 
+}
+
+.web-exit { 
+  stroke-dasharray: 1500; 
+  animation: web-exit-release 8s linear infinite; 
+}
+
 .font-comic { font-family: 'Bangers', cursive; }
