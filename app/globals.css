@@ -11,45 +11,43 @@ body {
   overflow-x: hidden;
 }
 
-/* Acceleration Curve: Speed 1 to 5 */
-@keyframes spidey-swing-accel {
+/* Linear Acceleration: Speed 1 (0%) -> Speed 5 (100%) */
+@keyframes spidey-main-path {
   0% { transform: translate(100vw, 85vh) rotate(50deg) scale(0.5); }
   49.9% { transform: translate(-10vw, 45vh) rotate(50deg) scale(1.25) scaleX(1); }
   50% { transform: translate(-10vw, 45vh) rotate(-25deg) scale(1.25) scaleX(-1); }
   100% { transform: translate(180vw, -40vh) rotate(-25deg) scale(3) scaleX(-1); }
 }
 
-/* ENTRY WEB: From Hand to TOP-LEFT */
-@keyframes web-entry-release {
-  0%, 5% { opacity: 0; stroke-dashoffset: 1500; transform: translate(0,0) rotate(0deg); }
+/* ENTRY WEB: From Hand to TOP-LEFT corner anchor */
+@keyframes web-entry-draw {
+  0%, 5% { opacity: 0; stroke-dashoffset: 2000; transform: translate(0,0); }
   6% { opacity: 1; stroke-dashoffset: 0; }
-  44% { opacity: 1; transform: translate(0,0) rotate(0deg); }
-  /* Swings away to the left upon release */
-  50% { opacity: 0; transform: translate(-600px, 400px) rotate(-30deg); }
+  44% { opacity: 1; transform: translate(0,0); }
+  50% { opacity: 0; transform: translate(-800px, 400px) rotate(-45deg); }
   100% { opacity: 0; }
 }
 
-/* EXIT WEB: From Hand to TOP-RIGHT (After Mirror) */
-@keyframes web-exit-release {
-  0%, 51% { opacity: 0; stroke-dashoffset: 1500; transform: translate(0,0) rotate(0deg); }
+/* EXIT WEB: From Hand to TOP-RIGHT corner anchor */
+@keyframes web-exit-draw {
+  0%, 51% { opacity: 0; stroke-dashoffset: 2000; transform: translate(0,0); }
   52% { opacity: 1; stroke-dashoffset: 0; }
-  90% { opacity: 1; transform: translate(0,0) rotate(0deg); }
-  /* Swings away to the right upon release */
-  100% { opacity: 0; transform: translate(600px, 400px) rotate(30deg); }
+  90% { opacity: 1; transform: translate(0,0); }
+  100% { opacity: 0; transform: translate(800px, 400px) rotate(45deg); }
 }
 
 .animate-spidey { 
-  animation: spidey-swing-accel 8s cubic-bezier(0.3, 0, 1, 1) infinite; 
+  animation: spidey-main-path 8s cubic-bezier(0.3, 0, 1, 1) infinite; 
 }
 
-.web-entry { 
-  stroke-dasharray: 1500; 
-  animation: web-entry-release 8s linear infinite; 
+.web-left { 
+  stroke-dasharray: 2000; 
+  animation: web-entry-draw 8s linear infinite; 
 }
 
-.web-exit { 
-  stroke-dasharray: 1500; 
-  animation: web-exit-release 8s linear infinite; 
+.web-right { 
+  stroke-dasharray: 2000; 
+  animation: web-exit-draw 8s linear infinite; 
 }
 
 .font-comic { font-family: 'Bangers', cursive; }
