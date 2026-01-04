@@ -9,55 +9,40 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  transition: background-color 0.3s ease;
 }
 
-.bg-error {
-  animation: pulse-red 0.5s ease-in-out;
+/* 3D Shake: Moves on X and Rotates on Z */
+@keyframes shake-3d {
+  0%, 100% { transform: translateX(0) rotateZ(0deg); }
+  20% { transform: translateX(-8px) rotateZ(-3deg); }
+  40% { transform: translateX(8px) rotateZ(3deg); }
+  60% { transform: translateX(-5px) rotateZ(-1deg); }
+  80% { transform: translateX(5px) rotateZ(1deg); }
 }
 
-@keyframes pulse-red {
-  0%, 100% { background-color: #FFEB3B; }
-  50% { background-color: #E62429; }
+.animate-shake-3d {
+  animation: shake-3d 0.25s ease-in-out infinite;
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-10px); }
-  75% { transform: translateX(10px); }
-}
-
-.animate-shake {
-  animation: shake 0.2s ease-in-out 0s 2;
-}
-
-/* Isolated J-Swing Path with fixed scale range */
 @keyframes spidey-path {
-  0% { 
-    transform: translate(110vw, -10vh) rotate(-20deg) scale(0.5); 
-  }
-  60% { 
-    transform: translate(30vw, 85vh) rotate(5deg) scale(1.1); 
-  }
-  100% { 
-    transform: translate(-30vw, 40vh) rotate(25deg) scale(1.5); 
-  }
+  0% { transform: translate(100vw, 80vh) rotate(-15deg) scale(2); }
+  100% { transform: translate(-40vw, 20vh) rotate(15deg) scale(0.5); }
 }
 
 @keyframes web-shoot {
-  0%, 20% { opacity: 0; stroke-dashoffset: 1500; }
-  25% { opacity: 1; stroke-dashoffset: 0; }
+  0% { opacity: 0; stroke-dashoffset: 1500; }
+  5% { opacity: 1; stroke-dashoffset: 0; }
   85% { opacity: 1; }
   100% { opacity: 0; }
 }
 
 .animate-spidey-path {
-  animation: spidey-path 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation: spidey-path 7s ease-in-out infinite;
 }
 
 .web-line {
   stroke-dasharray: 1500;
-  animation: web-shoot 6s linear infinite;
+  animation: web-shoot 7s linear infinite;
 }
 
 .font-comic {
