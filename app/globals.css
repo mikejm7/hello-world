@@ -10,51 +10,36 @@ body {
   overflow: hidden;
 }
 
-/* Background Cityscape Parallax */
-@keyframes city-slide {
-  from { transform: translateX(0); }
-  to { transform: translateX(-200px); }
-}
-
-/* Rounded Swing Path */
-@keyframes spidey-swing-smooth {
-  0% { transform: translate(100vw, 75vh) rotate(60deg) scale(0.5); }
-  48% { transform: translate(15vw, 50vh) rotate(60deg) scale(1.1) scaleX(1); }
-  /* Snappy Mirror & CCW Tilt */
+/* Constant Acceleration: ease-in makes him faster and faster until the end */
+@keyframes spidey-swing-accel {
+  0% { transform: translate(110vw, 80vh) rotate(60deg) scale(0.5); }
+  49.9% { transform: translate(-5vw, 45vh) rotate(60deg) scale(1.1) scaleX(1); }
   50% { transform: translate(-5vw, 45vh) rotate(-45deg) scale(1.2) scaleX(-1); }
-  100% { transform: translate(180vw, -40vh) rotate(-45deg) scale(3) scaleX(-1); }
+  100% { transform: translate(200vw, -50vh) rotate(-45deg) scale(3.5) scaleX(-1); }
 }
 
-/* Web Shooting Physics */
-@keyframes web-entry-delayed {
-  0%, 19% { opacity: 0; stroke-dashoffset: 2500; }
-  20% { opacity: 1; stroke-dashoffset: 2500; }
-  30% { stroke-dashoffset: 0; }
-  46% { opacity: 1; }
+/* First web shoots BEFORE/AS he enters */
+@keyframes web-entry-immediate {
+  0% { opacity: 1; stroke-dashoffset: 0; }
+  45% { opacity: 1; }
   50% { opacity: 0; }
   100% { opacity: 0; }
 }
 
-@keyframes web-exit-delayed {
+@keyframes web-exit-snap {
   0%, 51% { opacity: 0; stroke-dashoffset: 2500; }
   52% { opacity: 1; stroke-dashoffset: 2500; }
-  62% { stroke-dashoffset: 0; }
+  60% { stroke-dashoffset: 0; }
   90% { opacity: 1; }
   100% { opacity: 0; }
 }
 
 .animate-spidey { 
-  animation: spidey-swing-smooth 10s cubic-bezier(0.4, 0, 0.2, 1) infinite; 
+  animation: spidey-swing-accel 7s ease-in infinite; 
 }
 
 .web-line { 
-  stroke-dasharray: 2500; 
   filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
 }
 
-.animate-city {
-  animation: city-slide 20s linear infinite alternate;
-}
-
 .font-comic { font-family: 'Bangers', cursive; }
-    
