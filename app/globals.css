@@ -11,39 +11,58 @@ body {
   overflow-x: hidden;
 }
 
+/* 3D Shake for RSVP Errors */
 @keyframes shake-3d {
   0%, 100% { transform: translateX(0) rotateZ(0deg); }
   20% { transform: translateX(-8px) rotateZ(-3deg); }
   40% { transform: translateX(8px) rotateZ(3deg); }
-  60% { transform: translateX(-5px) rotateZ(-1deg); }
-  80% { transform: translateX(5px) rotateZ(1deg); }
+}
+.animate-shake-3d { animation: shake-3d 0.25s ease-in-out infinite; }
+
+/* COMPLEX SWING PATH */
+@keyframes spidey-swing-complex {
+  0% { 
+    /* Enter Bottom Right, Small */
+    transform: translate(100vw, 85vh) rotate(35deg) scale(0.5); 
+  }
+  50% { 
+    /* Reach Left Edge Centerline - FLIP HERE */
+    transform: translate(-5vw, 50vh) rotate(35deg) scale(1.25) scaleX(-1); 
+  }
+  100% { 
+    /* Exit Top Right, Large */
+    transform: translate(110vw, -10vh) rotate(35deg) scale(2) scaleX(-1); 
+  }
 }
 
-.animate-shake-3d {
-  animation: shake-3d 0.25s ease-in-out infinite;
+/* WEB 1: Shoots to Top Left Corner */
+@keyframes web-one {
+  0%, 15% { opacity: 0; stroke-dashoffset: 1500; } /* Wait until 75% on page */
+  20% { opacity: 1; stroke-dashoffset: 0; }
+  48% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
-@keyframes spidey-path {
-  0% { transform: translate(100vw, 80vh) rotate(-15deg) scale(2); }
-  100% { transform: translate(-40vw, 20vh) rotate(15deg) scale(0.5); }
-}
-
-@keyframes web-shoot {
-  0% { opacity: 0; stroke-dashoffset: 1500; }
-  5% { opacity: 1; stroke-dashoffset: 0; }
-  85% { opacity: 1; }
+/* WEB 2: Shoots to Top Right Corner after flip */
+@keyframes web-two {
+  0%, 50% { opacity: 0; stroke-dashoffset: 1500; }
+  55% { opacity: 1; stroke-dashoffset: 0; }
+  95% { opacity: 1; }
   100% { opacity: 0; }
 }
 
 .animate-spidey-path {
-  animation: spidey-path 7s ease-in-out infinite;
+  animation: spidey-swing-complex 8s ease-in-out infinite;
 }
 
-.web-line {
+.web-1 {
   stroke-dasharray: 1500;
-  animation: web-shoot 7s linear infinite;
+  animation: web-one 8s ease-in-out infinite;
 }
 
-.font-comic {
-  font-family: 'Bangers', cursive;
+.web-2 {
+  stroke-dasharray: 1500;
+  animation: web-two 8s ease-in-out infinite;
 }
+
+.font-comic { font-family: 'Bangers', cursive; }
