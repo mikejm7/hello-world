@@ -11,43 +11,43 @@ body {
   overflow-x: hidden;
 }
 
-/* Linear Acceleration: Speed 1 (0%) -> Speed 5 (100%) */
-@keyframes spidey-main-path {
-  0% { transform: translate(100vw, 85vh) rotate(50deg) scale(0.5); }
-  49.9% { transform: translate(-10vw, 45vh) rotate(50deg) scale(1.25) scaleX(1); }
-  50% { transform: translate(-10vw, 45vh) rotate(-25deg) scale(1.25) scaleX(-1); }
-  100% { transform: translate(180vw, -40vh) rotate(-25deg) scale(3) scaleX(-1); }
+/* TRACKING ANIMATION: We apply the movement to a container and use variables to "tell" the webs where Spidey is */
+@keyframes spidey-flight {
+  0% { transform: translate(100vw, 85vh) rotate(50deg) scale(0.5); --x: 100vw; --y: 85vh; }
+  49.9% { transform: translate(-10vw, 45vh) rotate(50deg) scale(1.25) scaleX(1); --x: -10vw; --y: 45vh; }
+  50% { transform: translate(-10vw, 45vh) rotate(-25deg) scale(1.25) scaleX(-1); --x: -10vw; --y: 45vh; }
+  100% { transform: translate(180vw, -40vh) rotate(-25deg) scale(3) scaleX(-1); --x: 180vw; --y: -40vh; }
 }
 
-/* ENTRY WEB: From Hand to TOP-LEFT corner anchor */
-@keyframes web-entry-draw {
-  0%, 5% { opacity: 0; stroke-dashoffset: 2000; transform: translate(0,0); }
+/* ENTRY WEB: From FIXED Top-Left to Spidey */
+@keyframes web-entry-fixed {
+  0%, 5% { opacity: 0; stroke-dashoffset: 2000; }
   6% { opacity: 1; stroke-dashoffset: 0; }
-  44% { opacity: 1; transform: translate(0,0); }
-  50% { opacity: 0; transform: translate(-800px, 400px) rotate(-45deg); }
+  44% { opacity: 1; }
+  50% { opacity: 0; transform: translate(-100px, 100px); } /* Simple drop away */
   100% { opacity: 0; }
 }
 
-/* EXIT WEB: From Hand to TOP-RIGHT corner anchor */
-@keyframes web-exit-draw {
-  0%, 51% { opacity: 0; stroke-dashoffset: 2000; transform: translate(0,0); }
+/* EXIT WEB: From FIXED Top-Right to Spidey */
+@keyframes web-exit-fixed {
+  0%, 51% { opacity: 0; stroke-dashoffset: 2000; }
   52% { opacity: 1; stroke-dashoffset: 0; }
-  90% { opacity: 1; transform: translate(0,0); }
-  100% { opacity: 0; transform: translate(800px, 400px) rotate(45deg); }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translate(100px, 100px); } /* Simple drop away */
 }
 
 .animate-spidey { 
-  animation: spidey-main-path 8s cubic-bezier(0.3, 0, 1, 1) infinite; 
+  animation: spidey-flight 8s cubic-bezier(0.3, 0, 1, 1) infinite; 
 }
 
-.web-left { 
+.web-entry { 
   stroke-dasharray: 2000; 
-  animation: web-entry-draw 8s linear infinite; 
+  animation: web-entry-fixed 8s linear infinite; 
 }
 
-.web-right { 
+.web-exit { 
   stroke-dasharray: 2000; 
-  animation: web-exit-draw 8s linear infinite; 
+  animation: web-exit-fixed 8s linear infinite; 
 }
 
 .font-comic { font-family: 'Bangers', cursive; }
