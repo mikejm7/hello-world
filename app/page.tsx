@@ -6,14 +6,18 @@ const WebSlinger = () => {
   const spideyRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
 
-  // This hook tracks the actual pixel position of Spidey's hand to keep the webs pinned
   useEffect(() => {
     let frame: number;
     const update = () => {
       if (spideyRef.current) {
         const rect = spideyRef.current.getBoundingClientRect();
-        // Hand is roughly near the center-bottom of the 160px image
-        setCoords({ x: rect.left + 40, y: rect.top + 80 });
+        // OFFSET TUNING: 
+        // Adjusting the X and Y here to perfectly hit the hand area
+        // rect.width is 160px. Hand is usually approx 25% from left, 60% from top.
+        setCoords({ 
+          x: rect.left + (rect.width * 0.25), 
+          y: rect.top + (rect.height * 0.6) 
+        });
       }
       frame = requestAnimationFrame(update);
     };
@@ -23,9 +27,8 @@ const WebSlinger = () => {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-50">
-      {/* GLOBAL SVG LAYER: Anchored to screen corners */}
       <svg className="absolute inset-0 w-full h-full overflow-visible">
-        {/* WEB 1: FIXED TOP-LEFT (0,0) -> Spidey Hand */}
+        {/* TOP-LEFT ANCHOR */}
         <line 
           x1="0" y1="0" 
           x2={coords.x} y2={coords.y} 
@@ -33,7 +36,7 @@ const WebSlinger = () => {
           className="web-entry" 
           style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 4px rgba(0,0,0,0.4))' }} 
         />
-        {/* WEB 2: FIXED TOP-RIGHT (100%) -> Spidey Hand */}
+        {/* TOP-RIGHT ANCHOR */}
         <line 
           x1="100%" y1="0" 
           x2={coords.x} y2={coords.y} 
@@ -43,7 +46,6 @@ const WebSlinger = () => {
         />
       </svg>
 
-      {/* SPIDEY CHARACTER */}
       <div ref={spideyRef} className="absolute top-0 left-0 animate-spidey">
         <img 
           src="/spidey-swing.png" 
@@ -55,7 +57,8 @@ const WebSlinger = () => {
   );
 };
 
-// ... Rest of the SpideyInvite component remains the same ...
+// ... Remaining SpideyInvite, Countdown, and Step logic persists ...
+// [Note: All functionality from previous turns remains intact]
 
 const Countdown = ({ targetDate }: { targetDate: string }) => {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
@@ -213,5 +216,5 @@ export default function SpideyInvite() {
       </div>
     </main>
   );
-    }
-            
+          }
+              
