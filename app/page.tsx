@@ -11,8 +11,7 @@ const WebSlinger = () => {
     const update = () => {
       if (handRef.current) {
         const rect = handRef.current.getBoundingClientRect();
-        // Locks the web origin to the specific pixel position of the hand marker
-        setCoords({ x: rect.left + 5, y: rect.top + 5 });
+        setCoords({ x: rect.left + 5, y: rect.top + window.scrollY + 5 });
       }
       frame = requestAnimationFrame(update);
     };
@@ -21,9 +20,8 @@ const WebSlinger = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-50">
+    <div className="absolute inset-0 pointer-events-none z-50">
       <svg className="absolute inset-0 w-full h-full overflow-visible">
-        {/* Web 1: Shooting from Top-Left, active immediately as he enters */}
         <line 
           x1="0" y1="0" 
           x2={coords.x} y2={coords.y} 
@@ -31,7 +29,6 @@ const WebSlinger = () => {
           className="web-line" 
           style={{ animation: 'web-entry-immediate 7s linear infinite', strokeDasharray: '2500' }}
         />
-        {/* Web 2: Shooting from Top-Right, snaps active after the flip */}
         <line 
           x1="100%" y1="0" 
           x2={coords.x} y2={coords.y} 
@@ -40,11 +37,9 @@ const WebSlinger = () => {
           style={{ animation: 'web-exit-snap 7s linear infinite', strokeDasharray: '2500' }}
         />
       </svg>
-
-      <div className="absolute top-0 left-0 animate-spidey">
+      <div className="fixed top-0 left-0 animate-spidey">
         <div className="relative w-40 h-40">
           <img src="/spidey-swing.png" alt="Spidey" className="w-full h-auto drop-shadow-2xl" />
-          {/* Hand Pin: Precise target for the SVG lines */}
           <div ref={handRef} className="absolute" style={{ top: '65%', left: '15%', width: '1px', height: '1px' }} />
         </div>
       </div>
@@ -54,7 +49,6 @@ const WebSlinger = () => {
 
 const Countdown = ({ targetDate }: { targetDate: string }) => {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
-  
   useEffect(() => {
     const timer = setInterval(() => {
       const diff = +new Date(targetDate) - +new Date();
@@ -73,8 +67,8 @@ const Countdown = ({ targetDate }: { targetDate: string }) => {
   return (
     <div className="flex gap-2 text-center font-bold text-yellow-300 mt-2">
       {Object.entries(timeLeft).map(([unit, val]) => (
-        <div key={unit} className="bg-black/50 p-1 rounded min-w-[45px] border border-white/10 shadow-lg">
-          <div className="text-xl leading-none">{val}</div>
+        <div key={unit} className="bg-black/50 p-1 rounded min-w-[45px] border border-white/10">
+          <div className="text-xl leading-none font-bold">{val}</div>
           <div className="text-[10px] uppercase">{unit}</div>
         </div>
       ))}
@@ -94,13 +88,12 @@ export default function SpideyInvite() {
   const [emailSubmitted, setEmailSubmitted] = useState(false);
 
   return (
-    <main className="w-full min-h-screen flex flex-col items-center justify-start pt-20 px-4 font-comic relative overflow-hidden bg-[#FFEB3B]">
+    <main className="w-full min-h-screen flex flex-col items-center justify-start pt-20 pb-20 px-4 font-comic relative bg-[#FFEB3B]">
       <WebSlinger />
-
+      
       <div className="relative z-10 flex flex-col items-center w-full max-w-[360px]">
-        
         {/* HEADER LOGO */}
-        <div className="w-full max-w-[320px] mb-2 transform -rotate-2">
+        <div className="w-full max-w-[320px] mb-4 transform -rotate-2">
           <svg viewBox="0 0 600 550" className="overflow-visible filter drop-shadow-[8px_8px_0px_black]">
             <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
             <text x="50%" y="32%" textAnchor="middle" fontSize="42" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="italic uppercase font-bold">You're Invited to</text>
@@ -109,13 +102,12 @@ export default function SpideyInvite() {
           </svg>
         </div>
 
-        {/* INTERACTIVE FORM STEPS */}
         <div className="mt-4 w-full flex flex-col items-center">
           {step === 1 && (
-            <form onSubmit={(e) => { e.preventDefault(); if(firstName && lastName) setStep(2); else { setError(true); setTimeout(() => setError(false), 500); } }} className="flex flex-col items-center w-full space-y-4">
+            <form onSubmit={(e) => { e.preventDefault(); if(firstName && lastName) setStep(2); else setError(true); }} className="flex flex-col items-center w-full space-y-4">
               <h2 className="text-3xl italic uppercase font-bold">Guest Check-In</h2>
-              <input type="text" placeholder="FIRST NAME" value={firstName} onChange={(e) => setFirstName(e.target.value)} className={`w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none ${error ? 'animate-pulse' : ''}`} />
-              <input type="text" placeholder="LAST NAME" value={lastName} onChange={(e) => setLastName(e.target.value)} className={`w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none ${error ? 'animate-pulse' : ''}`} />
+              <input type="text" placeholder="FIRST NAME" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none" />
+              <input type="text" placeholder="LAST NAME" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none" />
               <button type="submit" className="mt-4 bg-[#E62429] text-white text-4xl py-2 px-12 border-[5px] border-black shadow-[6px_6px_0px_black] uppercase italic font-bold">RSVP</button>
             </form>
           )}
@@ -132,15 +124,15 @@ export default function SpideyInvite() {
 
           {step === 3 && (
             <form onSubmit={(e) => { e.preventDefault(); if(Number(adults) >= 1) { if(Number(kids) > 0) { setKidNames(new Array(Number(kids)).fill('')); setStep(5); } else setStep(4); } else alert("1 Adult required!"); }} className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] w-full">
-              <h2 className="text-2xl mb-4 uppercase text-center font-bold italic underline">Guest Count</h2>
+              <h2 className="text-2xl mb-4 uppercase text-center font-bold italic underline leading-none">Guest Count</h2>
               <div className="space-y-4 font-bold text-xl uppercase">
                 <div className="flex justify-between items-center bg-gray-100 p-2 border-2 border-black">
                   <span>Adults:</span>
-                  <input type="number" value={adults} onChange={(e) => setAdults(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black" placeholder="0" />
+                  <input type="number" value={adults} onChange={(e) => setAdults(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black font-bold" placeholder="0" />
                 </div>
                 <div className="flex justify-between items-center bg-gray-100 p-2 border-2 border-black">
                   <span>Kids:</span>
-                  <input type="number" value={kids} onChange={(e) => setKids(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black" placeholder="0" />
+                  <input type="number" value={kids} onChange={(e) => setKids(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black font-bold" placeholder="0" />
                 </div>
               </div>
               <button type="submit" className="w-full mt-6 bg-[#E62429] text-white text-3xl py-2 border-4 border-black shadow-[4px_4px_0px_black] uppercase italic font-bold">Next</button>
@@ -162,43 +154,36 @@ export default function SpideyInvite() {
           {step === 4 && (
             <div className="space-y-6 w-full animate-in zoom-in">
               <div className="bg-[#03A9F4] border-[8px] border-black p-5 text-white shadow-[10px_10px_0px_black] text-center">
-                 <h3 className="text-2xl uppercase font-bold underline mb-2 leading-tight italic">Party Details</h3>
+                 <h3 className="text-2xl uppercase font-bold underline mb-2 italic">Party Details</h3>
                  <div className="text-left text-lg space-y-2 mb-4 italic font-bold">
-                    <p><span className="text-yellow-300">DATE:</span> March 27 @ 2:00 PM</p>
-                    <p><span className="text-yellow-300">LOCATION:</span> Spidey Secret HQ</p>
+                    <p><span className="text-yellow-300 font-bold">DATE:</span> March 27 @ 2:00 PM</p>
+                    <p><span className="text-yellow-300 font-bold">LOCATION:</span> Secret HQ</p>
                  </div>
                  <div className="border-t-2 border-white/30 pt-2 flex flex-col items-center">
-                   <p className="uppercase text-xs tracking-tighter mb-1 font-bold">Time until Party:</p>
+                   <p className="uppercase text-[10px] mb-1 font-bold">Countdown to Party:</p>
                    <Countdown targetDate="2026-03-27T14:00:00" />
                  </div>
               </div>
 
-              <table className="w-full bg-white border-4 border-black text-[10px] uppercase shadow-[6px_6px_0px_black] font-bold">
-                <thead className="bg-gray-200 border-b-2 border-black">
-                  <tr><th className="p-1">Guest</th><th className="p-1">A</th><th className="p-1">K</th><th className="p-1">Friends</th></tr>
-                </thead>
-                <tbody>
-                  <tr className="text-center border-t-2 border-black italic">
-                    <td className="border-r border-black p-1">{firstName} {lastName}</td>
-                    <td className="border-r border-black">{adults}</td>
-                    <td className="border-r border-black">{kids}</td>
-                    <td className="p-1 break-words">{kidNames.join(', ') || 'N/A'}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div className="bg-white border-4 border-black p-4 shadow-[6px_6px_0px_black]">
+                <h4 className="font-bold underline uppercase mb-2">Guest Summary</h4>
+                <div className="text-sm font-bold uppercase space-y-1">
+                  <p>Primary: {firstName} {lastName}</p>
+                  <p>Adults: {adults} | Kids: {kids}</p>
+                  {kidNames.length > 0 && <p className="text-[10px]">Friends: {kidNames.filter(n => n).join(', ')}</p>}
+                </div>
+              </div>
 
               {!emailSubmitted ? (
                 <form onSubmit={(e) => { e.preventDefault(); setEmailSubmitted(true); }} className="bg-white border-4 border-black p-4 shadow-[6px_6px_0px_black] flex flex-col gap-2">
-                  <label className="text-sm uppercase font-bold italic">Notify me of changes:</label>
+                  <label className="text-sm uppercase font-bold italic">Updates Email:</label>
                   <div className="flex gap-2">
-                    <input type="email" required placeholder="GUEST@EMAIL.COM" value={email} onChange={(e) => setEmail(e.target.value)} className="flex-1 p-2 border-2 border-black uppercase text-sm font-bold outline-none" />
-                    <button type="submit" className="bg-[#E62429] text-white px-4 py-1 border-2 border-black font-bold uppercase text-xs italic">Join</button>
+                    <input type="email" required placeholder="GUEST@EMAIL.COM" value={email} onChange={(e) => setEmail(e.target.value)} className="flex-1 p-2 border-2 border-black uppercase text-xs font-bold outline-none" />
+                    <button type="submit" className="bg-[#E62429] text-white px-3 py-1 border-2 border-black font-bold uppercase text-[10px]">Join</button>
                   </div>
                 </form>
               ) : (
-                <div className="bg-green-500 text-white border-4 border-black p-3 text-center uppercase font-bold italic shadow-[6px_6px_0px_black]">
-                  Communication Established!
-                </div>
+                <div className="bg-green-500 text-white border-4 border-black p-3 text-center uppercase font-bold italic shadow-[6px_6px_0px_black]">Link Established!</div>
               )}
             </div>
           )}
@@ -213,4 +198,5 @@ export default function SpideyInvite() {
       </div>
     </main>
   );
-              }
+                                            }
+          
