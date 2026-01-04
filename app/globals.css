@@ -12,17 +12,22 @@ html, body {
   width: 100%;
 }
 
-/* Animations */
-.animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* Comic Book Style Entry Animation */
+@keyframes comic-pop {
+  0% { opacity: 0; transform: scale(0.5) rotate(-5deg); }
+  70% { transform: scale(1.1) rotate(2deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
 
-/* Comic Receipt Style */
+.animate-comic-pop { animation: comic-pop 0.5s cubic-bezier(0.26, 1.36, 0.74, 1.29) forwards; }
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+
 .comic-receipt {
   background-color: #fff;
-  background-image: radial-gradient(#ddd 1px, transparent 1px);
-  background-size: 20px 20px;
-  filter: drop-shadow(5px 5px 0px rgba(0,0,0,0.2));
-  clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 95% 100%, 85% 95%, 75% 100%, 65% 95%, 55% 100%, 45% 95%, 35% 100%, 25% 95%, 15% 100%, 5% 95%, 0% 100%);
+  filter: drop-shadow(8px 8px 0px rgba(0,0,0,1));
+  border: 4px solid black;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 98%, 98% 100%, 94% 98%, 90% 100%, 86% 98%, 82% 100%, 78% 98%, 74% 100%, 70% 98%, 66% 100%, 62% 98%, 58% 100%, 54% 98%, 50% 100%, 46% 98%, 42% 100%, 38% 98%, 34% 100%, 30% 98%, 26% 100%, 22% 98%, 18% 100%, 14% 98%, 10% 100%, 6% 98%, 2% 100%, 0% 98%);
 }
 
 @keyframes spidey-swing-accel {
@@ -40,4 +45,3 @@ html, body {
 @keyframes web-exit-once { 0%, 51% { opacity: 0; stroke-dashoffset: 2500; } 52% { opacity: 1; stroke-dashoffset: 2500; } 60% { stroke-dashoffset: 0; } 99% { opacity: 1; } 100% { opacity: 0; } }
 
 .font-comic { font-family: 'Bangers', cursive; }
-                     
