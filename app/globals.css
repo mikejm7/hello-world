@@ -11,35 +11,39 @@ body {
   overflow-x: hidden;
 }
 
-/* LINEAR ACCELERATION: Speed 1 -> 5 */
-@keyframes spidey-linear-accel {
+/* Linear Acceleration: Starts slow, ends with high velocity */
+@keyframes spidey-accel-swing {
   0% { transform: translate(100vw, 85vh) rotate(50deg) scale(0.5); }
   49.9% { transform: translate(-10vw, 45vh) rotate(50deg) scale(1.25) scaleX(1); }
   50% { transform: translate(-10vw, 45vh) rotate(-25deg) scale(1.25) scaleX(-1); }
   100% { transform: translate(180vw, -40vh) rotate(-25deg) scale(3) scaleX(-1); }
 }
 
-/* WEB 1: Anchor is ~50% off-screen left/top. Releases and falls. */
-@keyframes web-swing-left {
+/* Entry Web: Anchored Top-Left, releases and swings out of view */
+@keyframes web-entry-flow {
   0%, 5% { opacity: 0; stroke-dashoffset: 1200; transform: translate(0,0); }
   6% { opacity: 1; stroke-dashoffset: 0; }
   44% { opacity: 1; transform: translate(0,0); }
-  50% { opacity: 0; transform: translate(-400px, 400px) rotate(-20deg); }
+  50% { opacity: 0; transform: translate(-500px, 300px) rotate(-15deg); }
   100% { opacity: 0; }
 }
 
-/* WEB 2: Anchor is ~50% off-screen right/top. */
-@keyframes web-swing-right {
+/* Exit Web: Anchored Top-Right, releases and swings out of view */
+@keyframes web-exit-flow {
   0%, 51% { opacity: 0; stroke-dashoffset: 1200; transform: translate(0,0); }
   52% { opacity: 1; stroke-dashoffset: 0; }
   90% { opacity: 1; transform: translate(0,0); }
-  100% { opacity: 0; transform: translate(400px, 400px) rotate(20deg); }
+  100% { opacity: 0; transform: translate(500px, 300px) rotate(15deg); }
 }
 
-.animate-spidey-path { 
-  animation: spidey-linear-accel 8s cubic-bezier(0.3, 0, 1, 1) infinite; 
-}
+.animate-spidey { animation: spidey-accel-swing 8s cubic-bezier(0.3, 0, 1, 1) infinite; }
+.web-left-anchor { stroke-dasharray: 1200; animation: web-entry-flow 8s linear infinite; }
+.web-right-anchor { stroke-dasharray: 1200; animation: web-exit-flow 8s linear infinite; }
 
-.web-left { stroke-dasharray: 1200; animation: web-swing-left 8s linear infinite; }
-.web-right { stroke-dasharray: 1200; animation: web-swing-right 8s linear infinite; }
+@keyframes shake-3d {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px) rotate(-1deg); }
+  75% { transform: translateX(5px) rotate(1deg); }
+}
+.animate-error { animation: shake-3d 0.2s ease-in-out infinite; }
 .font-comic { font-family: 'Bangers', cursive; }
