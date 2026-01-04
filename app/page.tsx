@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './globals.css';
 
 const WebSlinger = () => (
@@ -7,10 +7,8 @@ const WebSlinger = () => (
     <div className="absolute top-0 left-0 animate-spidey-path">
       <div className="relative w-40 h-40">
         <svg className="absolute overflow-visible" style={{ top: '0', left: '0', width: '3000px', height: '3000px' }}>
-          {/* Web 1: Anchor point way past top-left corner */}
-          <line x1="20" y1="120" x2="-1000" y2="-1000" stroke="white" strokeWidth="4" className="web-left" style={{ strokeLinecap: 'round' }} />
-          {/* Web 2: Anchor point way past top-right corner */}
-          <line x1="20" y1="120" x2="2500" y2="-1000" stroke="white" strokeWidth="4" className="web-right" style={{ strokeLinecap: 'round' }} />
+          <line x1="20" y1="120" x2="-2000" y2="-2000" stroke="white" strokeWidth="5" className="web-left" style={{ strokeLinecap: 'round' }} />
+          <line x1="20" y1="120" x2="4000" y2="-2000" stroke="white" strokeWidth="5" className="web-right" style={{ strokeLinecap: 'round' }} />
         </svg>
         <img src="/spidey-swing.png" alt="Spidey" className="w-full h-auto drop-shadow-2xl" />
       </div>
@@ -51,10 +49,12 @@ export default function SpideyInvite() {
   const [step, setStep] = useState(1); 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   const [adults, setAdults] = useState<number | ''>('');
   const [kids, setKids] = useState<number | ''>('');
   const [kidNames, setKidNames] = useState<string[]>([]);
   const [error, setError] = useState(false);
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
 
   const handleStep1 = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,7 +78,7 @@ export default function SpideyInvite() {
       <WebSlinger />
 
       <div className="relative z-10 flex flex-col items-center w-full max-w-[360px]">
-        {/* EQUAL SPACED HEADER: 30%, 50%, 70% */}
+        {/* HEADER */}
         <div className="w-full max-w-[320px] mb-8 transform -rotate-2">
           <svg viewBox="0 0 600 600" className="overflow-visible filter drop-shadow-[8px_8px_0px_black]">
             <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
@@ -110,13 +110,13 @@ export default function SpideyInvite() {
         {step === 3 && (
           <form onSubmit={handleHeadcount} className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] w-full">
             <h2 className="text-2xl mb-4 uppercase text-center font-bold italic underline">Guest Count</h2>
-            <div className="space-y-4 font-bold">
+            <div className="space-y-4 font-bold text-xl uppercase">
               <div className="flex justify-between items-center bg-gray-100 p-2 border-2 border-black">
-                <span className="text-xl uppercase">Adults:</span>
+                <span>Adults:</span>
                 <input type="number" value={adults} onChange={(e) => setAdults(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black" placeholder="0" />
               </div>
               <div className="flex justify-between items-center bg-gray-100 p-2 border-2 border-black">
-                <span className="text-xl uppercase">Kids:</span>
+                <span>Kids:</span>
                 <input type="number" value={kids} onChange={(e) => setKids(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black" placeholder="0" />
               </div>
             </div>
@@ -141,11 +141,11 @@ export default function SpideyInvite() {
             <div className="bg-[#03A9F4] border-[8px] border-black p-5 text-white shadow-[10px_10px_0px_black] text-center">
                <h3 className="text-2xl uppercase font-bold underline mb-2 leading-tight">Join us for Lucas' 5th Birthday!</h3>
                <div className="text-left text-lg space-y-2 mb-4">
-                  <p><span className="text-yellow-300">DATE:</span> March 27 @ 2:00 PM</p>
-                  <p><span className="text-yellow-300">LOCATION:</span> Spidey Secret HQ</p>
-                  <p><span className="text-yellow-300">RSVP:</span> By March 15th</p>
+                  <p><span className="text-yellow-300 font-black">DATE:</span> March 27 @ 2:00 PM</p>
+                  <p><span className="text-yellow-300 font-black">LOCATION:</span> Spidey Secret HQ</p>
+                  <p><span className="text-yellow-300 font-black">RSVP:</span> By March 15th</p>
                   <div className="bg-black/30 p-2 text-sm border-l-4 border-yellow-300">
-                    <span className="font-bold">GIFT INFO:</span> No gifts, please. If you'd like, donate at: <br/>
+                    <span className="font-bold uppercase">Gift Info:</span> No gifts, please. If you'd like, donate at: <br/>
                     <a href="https://www.charitywater.org" target="_blank" className="underline font-bold text-yellow-300">charitywater.org</a>
                   </div>
                </div>
@@ -155,12 +155,13 @@ export default function SpideyInvite() {
                </div>
             </div>
 
-            <table className="w-full bg-white border-4 border-black text-[10px] uppercase shadow-[6px_6px_0px_black]">
-              <thead className="bg-gray-200 border-b-2 border-black font-bold">
-                <tr><th className="p-1">Hero</th><th className="p-1">A</th><th className="p-1">K</th><th className="p-1">Friends</th></tr>
+            {/* UPDATED TABLE: "GUEST" instead of "HERO" */}
+            <table className="w-full bg-white border-4 border-black text-[10px] uppercase shadow-[6px_6px_0px_black] font-bold">
+              <thead className="bg-gray-200 border-b-2 border-black">
+                <tr><th className="p-1">Guest</th><th className="p-1">A</th><th className="p-1">K</th><th className="p-1">Friends</th></tr>
               </thead>
               <tbody>
-                <tr className="text-center font-bold">
+                <tr className="text-center border-t-2 border-black">
                   <td className="border-r border-black p-1">{firstName} {lastName}</td>
                   <td className="border-r border-black">{adults}</td>
                   <td className="border-r border-black">{kids}</td>
@@ -168,6 +169,31 @@ export default function SpideyInvite() {
                 </tr>
               </tbody>
             </table>
+
+            {/* EMAIL NOTIFICATION ENTRY */}
+            {!emailSubmitted ? (
+              <form 
+                onSubmit={(e) => { e.preventDefault(); setEmailSubmitted(true); }}
+                className="bg-white border-4 border-black p-4 shadow-[6px_6px_0px_black] flex flex-col gap-2"
+              >
+                <label className="text-sm uppercase font-bold italic">Stay Alert! Enter email for updates:</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="email" 
+                    required
+                    placeholder="AVENGER@HQ.COM" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    className="flex-1 p-2 border-2 border-black uppercase text-sm font-bold"
+                  />
+                  <button type="submit" className="bg-[#E62429] text-white px-3 py-1 border-2 border-black font-bold uppercase text-xs">Join</button>
+                </div>
+              </form>
+            ) : (
+              <div className="bg-green-500 text-white border-4 border-black p-3 text-center uppercase font-bold italic shadow-[6px_6px_0px_black]">
+                Communication Link Established!
+              </div>
+            )}
           </div>
         )}
 
@@ -180,4 +206,4 @@ export default function SpideyInvite() {
       </div>
     </main>
   );
-                      }
+              }
