@@ -18,7 +18,7 @@ const WebSlinger = ({ trigger }: { trigger: number }) => {
     const update = () => {
       if (handRef.current) {
         const rect = handRef.current.getBoundingClientRect();
-        setCoords({ x: rect.left + 5, y: rect.top + window.scrollY + 5 });
+        setCoords({ x: rect.left + 5, y: rect.top + 5 });
       }
       frame = requestAnimationFrame(update);
     };
@@ -34,7 +34,7 @@ const WebSlinger = ({ trigger }: { trigger: number }) => {
         <line x1="-200" y1="-200" x2={coords.x} y2={coords.y} stroke="white" strokeWidth="2.5" className="web-line web-entry-trigger" />
         <line x1="120%" y1="-200" x2={coords.x} y2={coords.y} stroke="white" strokeWidth="2.5" className="web-line web-exit-trigger" />
       </svg>
-      <div className="fixed top-0 left-0 spidey-trigger">
+      <div className="spidey-trigger">
         <div className="relative w-40 h-40">
           <img src="/spidey-swing.png" alt="Spidey" className="w-full h-auto drop-shadow-2xl" />
           <div ref={handRef} className="absolute" style={{ top: '65%', left: '15%', width: '1px', height: '1px' }} />
@@ -55,7 +55,9 @@ export default function SpideyInvite() {
   const [kidNames, setKidNames] = useState<string[]>([]);
   const [emailSubmitted, setEmailSubmitted] = useState(false);
 
+  // Auto-scroll logic
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     if (step === 1 || step === 4 || step === 0) setSwingTrigger(v => v + 1);
   }, [step]);
 
@@ -63,17 +65,12 @@ export default function SpideyInvite() {
     e.preventDefault();
     const adultNum = parseInt(adults) || 0;
     const kidNum = parseInt(kids) || 0;
-    
     if (adultNum >= 1) {
       if (kidNum > 0) {
         setKidNames(new Array(kidNum).fill(''));
         setStep(5);
-      } else {
-        setStep(4);
-      }
-    } else {
-      alert("At least 1 Adult is required!");
-    }
+      } else setStep(4);
+    } else alert("At least 1 Adult is required!");
   };
 
   return (
@@ -126,7 +123,6 @@ export default function SpideyInvite() {
                    <a href="https://charity.link" target="_blank" rel="noopener noreferrer" className="text-yellow-300 underline">Spidey's Charity Link</a>
                  </div>
                </div>
-
                <div className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] text-center w-full">
                 <h2 className="text-2xl mb-6 uppercase leading-tight italic font-bold">{firstName}, are you coming?</h2>
                 <div className="flex gap-4 justify-center">
@@ -160,19 +156,11 @@ export default function SpideyInvite() {
                 Spidey's Amazing Friends<br/>
                 <span className="text-sm normal-case">(Your kiddos names)</span>
               </h2>
-              <div className="max-h-[300px] overflow-y-auto pr-2 space-y-3">
+              <div className="max-h-[300px] overflow-y-auto space-y-3">
                 {kidNames.map((name, i) => (
-                  <input 
-                    key={i} 
-                    type="text" 
-                    required
-                    placeholder={`FRIEND #${i+1}`} 
-                    value={name} 
-                    onChange={(e) => {
+                  <input key={i} type="text" required placeholder={`FRIEND #${i+1}`} value={name} onChange={(e) => {
                       const n = [...kidNames]; n[i] = e.target.value; setKidNames(n);
-                    }} 
-                    className="w-full p-3 border-4 border-black uppercase font-bold text-xl outline-none" 
-                  />
+                    }} className="w-full p-3 border-4 border-black uppercase font-bold text-xl outline-none" />
                 ))}
               </div>
               <button type="submit" className="w-full mt-6 bg-green-500 text-white text-3xl py-3 border-4 border-black uppercase italic font-bold">Confirm</button>
@@ -195,10 +183,9 @@ export default function SpideyInvite() {
                 </div>
                 <div className="mt-8 pt-4 border-t-4 border-black text-center">
                   <p className="text-3xl font-black">ACCEPTED</p>
-                  <p className="text-[10px] mt-1 italic tracking-widest uppercase">Secret HQ Coordinates Locked</p>
+                  <p className="text-[10px] mt-1 italic uppercase">Secret HQ Coordinates Locked</p>
                 </div>
               </div>
-
               <div className="mt-10 flex flex-col items-center gap-3 w-full">
                 <h3 className="text-2xl uppercase font-bold italic">Subscribe for Updates</h3>
                 {!emailSubmitted ? (
@@ -224,4 +211,4 @@ export default function SpideyInvite() {
     </main>
   );
     }
-                  
+            
