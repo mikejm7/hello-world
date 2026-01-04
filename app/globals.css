@@ -11,37 +11,35 @@ body {
   overflow-x: hidden;
 }
 
-@keyframes shake-3d {
-  0%, 100% { transform: translateX(0) rotateZ(0deg); }
-  20% { transform: translateX(-8px) rotateZ(-3deg); }
-  40% { transform: translateX(8px) rotateZ(3deg); }
-}
-.animate-shake-3d { animation: shake-3d 0.25s ease-in-out infinite; }
-
-@keyframes spidey-swing-pro {
-  0% { transform: translate(100vw, 85vh) rotate(50deg) scale(0.5); animation-timing-function: ease-out; }
+/* LINEAR ACCELERATION: Speed 1 -> 5 */
+@keyframes spidey-linear-accel {
+  0% { transform: translate(100vw, 85vh) rotate(50deg) scale(0.5); }
   49.9% { transform: translate(-10vw, 45vh) rotate(50deg) scale(1.25) scaleX(1); }
-  50% { transform: translate(-10vw, 45vh) rotate(-25deg) scale(1.25) scaleX(-1); animation-timing-function: ease-in; }
-  100% { transform: translate(150vw, -30vh) rotate(-25deg) scale(2.5) scaleX(-1); }
+  50% { transform: translate(-10vw, 45vh) rotate(-25deg) scale(1.25) scaleX(-1); }
+  100% { transform: translate(180vw, -40vh) rotate(-25deg) scale(3) scaleX(-1); }
 }
 
-@keyframes web-shot-1 {
-  0%, 4% { opacity: 0; stroke-dashoffset: 1500; transform: translate(0, 0); }
-  5% { opacity: 1; stroke-dashoffset: 0; }
-  45% { opacity: 1; stroke-dashoffset: 0; transform: translate(0, 0); }
-  50% { opacity: 0; transform: translate(-1000px, -1000px); } 
+/* WEB 1: Anchor is ~50% off-screen left/top. Releases and falls. */
+@keyframes web-swing-left {
+  0%, 5% { opacity: 0; stroke-dashoffset: 1200; transform: translate(0,0); }
+  6% { opacity: 1; stroke-dashoffset: 0; }
+  44% { opacity: 1; transform: translate(0,0); }
+  50% { opacity: 0; transform: translate(-400px, 400px) rotate(-20deg); }
   100% { opacity: 0; }
 }
 
-@keyframes web-shot-2 {
-  0%, 51% { opacity: 0; stroke-dashoffset: 1500; transform: translate(0, 0); }
+/* WEB 2: Anchor is ~50% off-screen right/top. */
+@keyframes web-swing-right {
+  0%, 51% { opacity: 0; stroke-dashoffset: 1200; transform: translate(0,0); }
   52% { opacity: 1; stroke-dashoffset: 0; }
-  90% { opacity: 1; stroke-dashoffset: 0; transform: translate(0, 0); }
-  100% { opacity: 0; transform: translate(1200px, -1200px); }
+  90% { opacity: 1; transform: translate(0,0); }
+  100% { opacity: 0; transform: translate(400px, 400px) rotate(20deg); }
 }
 
-.animate-spidey-path { animation: spidey-swing-pro 8s infinite; }
-.web-left { stroke-dasharray: 1500; animation: web-shot-1 8s infinite; }
-.web-right { stroke-dasharray: 1500; animation: web-shot-2 8s infinite; }
+.animate-spidey-path { 
+  animation: spidey-linear-accel 8s cubic-bezier(0.3, 0, 1, 1) infinite; 
+}
+
+.web-left { stroke-dasharray: 1200; animation: web-swing-left 8s linear infinite; }
+.web-right { stroke-dasharray: 1200; animation: web-swing-right 8s linear infinite; }
 .font-comic { font-family: 'Bangers', cursive; }
-         
