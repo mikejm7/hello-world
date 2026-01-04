@@ -2,9 +2,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './globals.css';
 
-const WebSlinger = () => {
+const WebSlinger = ({ trigger }: { trigger: number }) => {
   const handRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [active, setActive] = useState(false);
+
+  // Trigger animation when the "trigger" prop changes
+  useEffect(() => {
+    setActive(false);
+    const timeout = setTimeout(() => setActive(true), 50); // Small delay to reset CSS
+    return () => clearTimeout(timeout);
+  }, [trigger]);
 
   useEffect(() => {
     let frame: number;
@@ -19,25 +27,27 @@ const WebSlinger = () => {
     return () => cancelAnimationFrame(frame);
   }, []);
 
+  if (!active) return null;
+
   return (
     <div className="absolute inset-0 pointer-events-none z-50">
       <svg className="absolute inset-0 w-full h-full overflow-visible">
+        {/* Entry Anchor: Way off-screen Top Left */}
         <line 
-          x1="0" y1="0" 
+          x1="-200" y1="-200" 
           x2={coords.x} y2={coords.y} 
           stroke="white" strokeWidth="2.5" 
-          className="web-line" 
-          style={{ animation: 'web-entry-immediate 7s linear infinite', strokeDasharray: '2500' }}
+          className="web-line web-entry-trigger" 
         />
+        {/* Exit Anchor: Way off-screen Top Right */}
         <line 
-          x1="100%" y1="0" 
+          x1="120%" y1="-200" 
           x2={coords.x} y2={coords.y} 
           stroke="white" strokeWidth="2.5" 
-          className="web-line" 
-          style={{ animation: 'web-exit-snap 7s linear infinite', strokeDasharray: '2500' }}
+          className="web-line web-exit-trigger" 
         />
       </svg>
-      <div className="fixed top-0 left-0 animate-spidey">
+      <div className="fixed top-0 left-0 spidey-trigger">
         <div className="relative w-40 h-40">
           <img src="/spidey-swing.png" alt="Spidey" className="w-full h-auto drop-shadow-2xl" />
           <div ref={handRef} className="absolute" style={{ top: '65%', left: '15%', width: '1px', height: '1px' }} />
@@ -67,7 +77,7 @@ const Countdown = ({ targetDate }: { targetDate: string }) => {
   return (
     <div className="flex gap-2 text-center font-bold text-yellow-300 mt-2">
       {Object.entries(timeLeft).map(([unit, val]) => (
-        <div key={unit} className="bg-black/50 p-1 rounded min-w-[45px] border border-white/10">
+        <div key={unit} className="bg-black/50 p-1 rounded min-w-[45px] border border-white/10 shadow-lg">
           <div className="text-xl leading-none font-bold">{val}</div>
           <div className="text-[10px] uppercase">{unit}</div>
         </div>
@@ -78,20 +88,27 @@ const Countdown = ({ targetDate }: { targetDate: string }) => {
 
 export default function SpideyInvite() {
   const [step, setStep] = useState(1);
+  const [swingTrigger, setSwingTrigger] = useState(0);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [adults, setAdults] = useState<number | ''>('');
   const [kids, setKids] = useState<number | ''>('');
   const [kidNames, setKidNames] = useState<string[]>([]);
-  const [error, setError] = useState(false);
   const [emailSubmitted, setEmailSubmitted] = useState(false);
+
+  // Trigger swing on specific steps
+  useEffect(() => {
+    if (step === 1 || step === 4 || step === 0) {
+      setSwingTrigger(prev => prev + 1);
+    }
+  }, [step]);
 
   return (
     <main className="w-full min-h-screen flex flex-col items-center justify-start pt-20 pb-20 px-4 font-comic relative bg-[#FFEB3B]">
-      <WebSlinger />
+      <WebSlinger trigger={swingTrigger} />
       
-      <div className="relative z-10 flex flex-col items-center w-full max-w-[360px]">
+      <div className="relative z-10 flex flex-col items-center w-full max-w-[380px]">
         {/* HEADER LOGO */}
         <div className="w-full max-w-[320px] mb-4 transform -rotate-2">
           <svg viewBox="0 0 600 550" className="overflow-visible filter drop-shadow-[8px_8px_0px_black]">
@@ -104,7 +121,7 @@ export default function SpideyInvite() {
 
         <div className="mt-4 w-full flex flex-col items-center">
           {step === 1 && (
-            <form onSubmit={(e) => { e.preventDefault(); if(firstName && lastName) setStep(2); else setError(true); }} className="flex flex-col items-center w-full space-y-4">
+            <form onSubmit={(e) => { e.preventDefault(); if(firstName && lastName) setStep(2); }} className="flex flex-col items-center w-full space-y-4">
               <h2 className="text-3xl italic uppercase font-bold">Guest Check-In</h2>
               <input type="text" placeholder="FIRST NAME" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none" />
               <input type="text" placeholder="LAST NAME" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none" />
@@ -128,7 +145,7 @@ export default function SpideyInvite() {
               <div className="space-y-4 font-bold text-xl uppercase">
                 <div className="flex justify-between items-center bg-gray-100 p-2 border-2 border-black">
                   <span>Adults:</span>
-                  <input type="number" value={adults} onChange={(e) => setAdults(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black font-bold" placeholder="0" />
+                  <input type="number" required value={adults} onChange={(e) => setAdults(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black font-bold" placeholder="0" />
                 </div>
                 <div className="flex justify-between items-center bg-gray-100 p-2 border-2 border-black">
                   <span>Kids:</span>
@@ -152,31 +169,46 @@ export default function SpideyInvite() {
           )}
 
           {step === 4 && (
-            <div className="space-y-6 w-full animate-in zoom-in">
+            <div className="space-y-6 w-full">
               <div className="bg-[#03A9F4] border-[8px] border-black p-5 text-white shadow-[10px_10px_0px_black] text-center">
-                 <h3 className="text-2xl uppercase font-bold underline mb-2 italic">Party Details</h3>
+                 <h3 className="text-2xl uppercase font-bold underline mb-2 italic">Party Mission</h3>
                  <div className="text-left text-lg space-y-2 mb-4 italic font-bold">
                     <p><span className="text-yellow-300 font-bold">DATE:</span> March 27 @ 2:00 PM</p>
-                    <p><span className="text-yellow-300 font-bold">LOCATION:</span> Secret HQ</p>
+                    <p><span className="text-yellow-300 font-bold">HQ:</span> The Secret Webb Base</p>
                  </div>
                  <div className="border-t-2 border-white/30 pt-2 flex flex-col items-center">
-                   <p className="uppercase text-[10px] mb-1 font-bold">Countdown to Party:</p>
+                   <p className="uppercase text-[10px] mb-1 font-bold">Countdown to Launch:</p>
                    <Countdown targetDate="2026-03-27T14:00:00" />
                  </div>
               </div>
 
-              <div className="bg-white border-4 border-black p-4 shadow-[6px_6px_0px_black]">
-                <h4 className="font-bold underline uppercase mb-2">Guest Summary</h4>
-                <div className="text-sm font-bold uppercase space-y-1">
-                  <p>Primary: {firstName} {lastName}</p>
-                  <p>Adults: {adults} | Kids: {kids}</p>
-                  {kidNames.length > 0 && <p className="text-[10px]">Friends: {kidNames.filter(n => n).join(', ')}</p>}
+              <div className="bg-white border-[6px] border-black p-4 shadow-[8px_8px_0px_black] space-y-4">
+                <div>
+                  <h4 className="font-bold underline uppercase text-red-600">Spidey's Orders:</h4>
+                  <p className="text-sm font-bold italic uppercase leading-tight mt-1">
+                    Suit up for action! Snacks, training, and cake. No villains allowed!
+                  </p>
+                </div>
+                <div className="border-t-2 border-black/10 pt-2">
+                  <h4 className="font-bold underline uppercase text-blue-600">Hero's Loot:</h4>
+                  <p className="text-sm font-bold italic uppercase leading-tight mt-1">
+                    Your presence is the best gift! Lucas loves Lego, Dinosaurs, and Spiderman.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-black text-white border-4 border-black p-4 shadow-[6px_6px_0px_black]">
+                <h4 className="font-bold underline uppercase text-yellow-300 mb-1 italic">Identity Confirmed:</h4>
+                <div className="text-xs font-bold uppercase space-y-1">
+                  <p>{firstName} {lastName}</p>
+                  <p>Squad: {adults} Adult(s) & {kids} Kid(s)</p>
+                  {kidNames.filter(n => n).length > 0 && <p className="text-[10px] text-gray-400 italic">Sidekicks: {kidNames.filter(n => n).join(', ')}</p>}
                 </div>
               </div>
 
               {!emailSubmitted ? (
                 <form onSubmit={(e) => { e.preventDefault(); setEmailSubmitted(true); }} className="bg-white border-4 border-black p-4 shadow-[6px_6px_0px_black] flex flex-col gap-2">
-                  <label className="text-sm uppercase font-bold italic">Updates Email:</label>
+                  <label className="text-sm uppercase font-bold italic">Secure Updates Channel:</label>
                   <div className="flex gap-2">
                     <input type="email" required placeholder="GUEST@EMAIL.COM" value={email} onChange={(e) => setEmail(e.target.value)} className="flex-1 p-2 border-2 border-black uppercase text-xs font-bold outline-none" />
                     <button type="submit" className="bg-[#E62429] text-white px-3 py-1 border-2 border-black font-bold uppercase text-[10px]">Join</button>
@@ -198,5 +230,5 @@ export default function SpideyInvite() {
       </div>
     </main>
   );
-                                            }
-          
+        }
+      
