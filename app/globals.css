@@ -11,7 +11,6 @@ body {
   overflow-x: hidden;
 }
 
-/* 3D Shake for RSVP Errors */
 @keyframes shake-3d {
   0%, 100% { transform: translateX(0) rotateZ(0deg); }
   20% { transform: translateX(-8px) rotateZ(-3deg); }
@@ -19,27 +18,13 @@ body {
 }
 .animate-shake-3d { animation: shake-3d 0.25s ease-in-out infinite; }
 
-/* CINEMATIC FLYOVER PATH */
 @keyframes spidey-flyover {
-  0% { 
-    /* Entry: Bottom Right, Large & Close */
-    transform: translate(100vw, 85vh) rotate(35deg) scale(0.5); 
-  }
-  49.9% {
-    /* Approaches Left Edge: Still facing left */
-    transform: translate(-10vw, 45vh) rotate(35deg) scale(1.25) scaleX(1);
-  }
-  50% { 
-    /* INSTANT FLIP: Now mirrored to face right */
-    transform: translate(-10vw, 45vh) rotate(35deg) scale(1.25) scaleX(-1); 
-  }
-  100% { 
-    /* Exit: Top Right, Small & Distant */
-    transform: translate(110vw, -15vh) rotate(35deg) scale(2) scaleX(-1); 
-  }
+  0% { transform: translate(100vw, 85vh) rotate(35deg) scale(0.5); }
+  49.9% { transform: translate(-10vw, 45vh) rotate(35deg) scale(1.25) scaleX(1); }
+  50% { transform: translate(-10vw, 45vh) rotate(35deg) scale(1.25) scaleX(-1); }
+  100% { transform: translate(110vw, -15vh) rotate(35deg) scale(2) scaleX(-1); }
 }
 
-/* Web Timing: Land just right of top-left corner */
 @keyframes web-first-shot {
   0%, 15% { opacity: 0; stroke-dashoffset: 1500; }
   20% { opacity: 1; stroke-dashoffset: 0; }
@@ -47,7 +32,6 @@ body {
   50%, 100% { opacity: 0; }
 }
 
-/* Web Timing: Land just left of top-right corner */
 @keyframes web-second-shot {
   0%, 50% { opacity: 0; stroke-dashoffset: 1500; }
   55% { opacity: 1; stroke-dashoffset: 0; }
@@ -55,18 +39,7 @@ body {
   100% { opacity: 0; }
 }
 
-.animate-spidey-path {
-  animation: spidey-flyover 10s ease-in-out infinite;
-}
-
-.web-left {
-  stroke-dasharray: 1500;
-  animation: web-first-shot 10s ease-in-out infinite;
-}
-
-.web-right {
-  stroke-dasharray: 1500;
-  animation: web-second-shot 10s ease-in-out infinite;
-}
-
+.animate-spidey-path { animation: spidey-flyover 10s ease-in-out infinite; }
+.web-left { stroke-dasharray: 1500; animation: web-first-shot 10s ease-in-out infinite; }
+.web-right { stroke-dasharray: 1500; animation: web-second-shot 10s ease-in-out infinite; }
 .font-comic { font-family: 'Bangers', cursive; }
