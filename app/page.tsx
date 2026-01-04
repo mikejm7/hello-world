@@ -2,23 +2,30 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './globals.css';
 
-// --- COMPONENTS ---
 const WebSlinger = () => (
   <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
     <div className="absolute top-0 left-0 animate-spidey-path">
       <div className="relative w-40 h-40">
         <svg className="absolute overflow-visible" style={{ top: '0', left: '0', width: '2000px', height: '2000px' }}>
-          <line x1="45" y1="110" x2="-1000" y2="-1200" stroke="white" strokeWidth="5" className="web-line" style={{ strokeLinecap: 'round' }} />
+          {/* Web 1: Targets Top Left */}
+          <line x1="45" y1="110" x2="-800" y2="-1000" stroke="white" strokeWidth="5" className="web-1" style={{ strokeLinecap: 'round' }} />
+          
+          {/* Web 2: Targets Top Right (After Flip) */}
+          <line x1="45" y1="110" x2="1200" y2="-800" stroke="white" strokeWidth="5" className="web-2" style={{ strokeLinecap: 'round' }} />
         </svg>
-        <img src="/spidey-swing.png" alt="Spidey" className="w-full h-auto drop-shadow-2xl" />
+        <img 
+          src="/spidey-swing.png" 
+          alt="Spidey" 
+          className="w-full h-auto drop-shadow-2xl" 
+        />
       </div>
     </div>
   </div>
 );
 
+// Countdown and other logic remains the same...
 const Countdown = ({ targetDate }: { targetDate: string }) => {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
-
   useEffect(() => {
     const timer = setInterval(() => {
       const difference = +new Date(targetDate) - +new Date();
@@ -47,7 +54,7 @@ const Countdown = ({ targetDate }: { targetDate: string }) => {
 };
 
 export default function SpideyInvite() {
-  const [step, setStep] = useState(1); // 1: Name, 2: Coming?, 3: Counts, 4: Info/Table, 0: Rejected
+  const [step, setStep] = useState(1);
   const [userName, setUserName] = useState('');
   const [adults, setAdults] = useState(1);
   const [kids, setKids] = useState(0);
@@ -79,24 +86,17 @@ export default function SpideyInvite() {
           </svg>
         </div>
 
-        {/* STEP 1: ENTER NAME */}
         {step === 1 && (
           <div className="flex flex-col items-center w-full">
             <h2 className="text-3xl mb-4 italic uppercase">Enter Name</h2>
-            <input 
-              type="text" 
-              value={userName} 
-              onChange={(e) => setUserName(e.target.value)}
-              className={`w-[280px] p-3 border-[6px] border-black text-center text-3xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none ${error ? 'animate-shake-3d' : ''}`}
-            />
+            <input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} className={`w-[280px] p-3 border-[6px] border-black text-center text-3xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none ${error ? 'animate-shake-3d' : ''}`} />
             <button onClick={handleNextStep} className="mt-8 bg-[#E62429] text-white text-4xl py-2 px-12 border-[5px] border-black shadow-[6px_6px_0px_black] active:translate-y-1 active:shadow-none uppercase">RSVP</button>
           </div>
         )}
 
-        {/* STEP 2: ARE YOU COMING? */}
         {step === 2 && (
           <div className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] text-center w-full animate-in zoom-in">
-            <h2 className="text-3xl mb-6 uppercase leading-tight">{userName}, are you coming?</h2>
+            <h2 className="text-3xl mb-6 uppercase">{userName}, are you coming?</h2>
             <div className="flex gap-4 justify-center">
               <button onClick={() => setStep(3)} className="bg-green-500 text-white text-3xl py-2 px-8 border-4 border-black shadow-[4px_4px_0px_black]">YES</button>
               <button onClick={() => setStep(0)} className="bg-red-600 text-white text-3xl py-2 px-8 border-4 border-black shadow-[4px_4px_0px_black]">NO</button>
@@ -104,7 +104,6 @@ export default function SpideyInvite() {
           </div>
         )}
 
-        {/* STEP 3: HEADCOUNT */}
         {step === 3 && (
           <div className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] w-full animate-in slide-in-from-right">
             <h2 className="text-2xl mb-4 uppercase text-center font-bold underline">Hero Headcount</h2>
@@ -122,7 +121,6 @@ export default function SpideyInvite() {
           </div>
         )}
 
-        {/* STEP 4: INFO & TABLE */}
         {step === 4 && (
           <div className="space-y-6 w-full animate-in zoom-in">
             <div className="bg-[#03A9F4] border-[8px] border-black p-5 text-white shadow-[10px_10px_0px_black] text-center">
@@ -138,7 +136,6 @@ export default function SpideyInvite() {
                </div>
             </div>
 
-            {/* GUEST TABLE */}
             <div className="bg-white border-4 border-black p-2 shadow-[6px_6px_0px_black]">
               <p className="text-center font-bold text-sm uppercase mb-1">Current Mission Log</p>
               <table className="w-full text-xs uppercase border-collapse border border-black">
@@ -161,7 +158,6 @@ export default function SpideyInvite() {
           </div>
         )}
 
-        {/* REJECTED STEP */}
         {step === 0 && (
           <div className="bg-red-600 border-[8px] border-black p-10 text-white shadow-[10px_10px_0px_black] text-center rotate-3 scale-110">
             <h1 className="text-6xl mb-4 font-bold">THWIP!</h1>
@@ -171,5 +167,4 @@ export default function SpideyInvite() {
       </div>
     </main>
   );
-      }
-          
+}
