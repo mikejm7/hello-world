@@ -12,13 +12,12 @@ html, body {
   width: 100%;
 }
 
-/* Single Swing Animation */
-@keyframes spidey-swing-once {
+@keyframes spidey-swing-accel {
   0% { transform: translate(110vw, 80vh) rotate(60deg) scale(0.5); opacity: 1; }
   49.9% { transform: translate(-5vw, 45vh) rotate(60deg) scale(1.1) scaleX(1); opacity: 1; }
   50% { transform: translate(-5vw, 45vh) rotate(-45deg) scale(1.2) scaleX(-1); opacity: 1; }
   99% { transform: translate(200vw, -50vh) rotate(-45deg) scale(4) scaleX(-1); opacity: 1; }
-  100% { transform: translate(200vw, -50vh); opacity: 0; } /* Hide at end */
+  100% { transform: translate(200vw, -50vh); opacity: 0; }
 }
 
 @keyframes web-entry-once {
@@ -35,21 +34,17 @@ html, body {
   100% { opacity: 0; }
 }
 
-.spidey-trigger { 
-  animation: spidey-swing-once 6s ease-in forwards; 
-}
-
-.web-entry-trigger { 
-  animation: web-entry-once 6s linear forwards; 
-}
-
-.web-exit-trigger { 
-  animation: web-exit-once 6s linear forwards; 
-}
+.spidey-trigger { animation: spidey-swing-accel 5s ease-in forwards; }
+.web-entry-trigger { animation: web-entry-once 5s linear forwards; }
+.web-exit-trigger { animation: web-exit-once 5s linear forwards; }
 
 .web-line { 
   stroke-dasharray: 2500;
   filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
+}
+
+.receipt-shadow {
+  box-shadow: 2px 10px 20px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05);
 }
 
 .font-comic { font-family: 'Bangers', cursive; }
