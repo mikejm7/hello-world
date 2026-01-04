@@ -7,47 +7,51 @@
 body {
   background-color: #FFEB3B;
   margin: 0;
-  padding: 0;
   overflow-x: hidden;
 }
 
-/* Linear Acceleration: Speed 1 -> 5 */
-@keyframes spidey-flight {
-  /* Entry: 60deg CW (was 50) */
-  0% { transform: translate(100vw, 85vh) rotate(60deg) scale(0.5); }
-  49.9% { transform: translate(-10vw, 45vh) rotate(60deg) scale(1.25) scaleX(1); }
-  /* Exit: -45deg CCW (was -25) */
-  50% { transform: translate(-10vw, 45vh) rotate(-45deg) scale(1.25) scaleX(-1); }
+/* SWING PATH: More rounded "U" shape */
+@keyframes spidey-swing-arc {
+  0% { transform: translate(100vw, 70vh) rotate(60deg) scale(0.5); }
+  /* Deepest point of the swing */
+  45% { transform: translate(30vw, 55vh) rotate(60deg) scale(1.1) scaleX(1); }
+  /* Slowed Mirror Point */
+  50% { transform: translate(-5vw, 45vh) rotate(-45deg) scale(1.2) scaleX(-1); }
+  /* Exit Ascent */
   100% { transform: translate(180vw, -40vh) rotate(-45deg) scale(3) scaleX(-1); }
 }
 
-@keyframes web-entry-fixed {
-  0%, 5% { opacity: 0; stroke-dashoffset: 2000; }
-  6% { opacity: 1; stroke-dashoffset: 0; }
+/* WEB 1: Delayed entry (75% on page) and slower draw */
+@keyframes web-entry-delayed {
+  0%, 19% { opacity: 0; stroke-dashoffset: 2000; }
+  20% { opacity: 1; stroke-dashoffset: 2000; }
+  35% { stroke-dashoffset: 0; } /* Slower shot speed */
   44% { opacity: 1; }
-  50% { opacity: 0; transform: translateY(200px); }
+  50% { opacity: 0; transform: translateY(100px); }
   100% { opacity: 0; }
 }
 
-@keyframes web-exit-fixed {
+/* WEB 2: Slower exit shot */
+@keyframes web-exit-slow {
   0%, 51% { opacity: 0; stroke-dashoffset: 2000; }
-  52% { opacity: 1; stroke-dashoffset: 0; }
+  52% { opacity: 1; stroke-dashoffset: 2000; }
+  70% { stroke-dashoffset: 0; } /* Slower shot speed */
   90% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(200px); }
+  100% { opacity: 0; transform: translateY(100px); }
 }
 
 .animate-spidey { 
-  animation: spidey-flight 8s cubic-bezier(0.3, 0, 1, 1) infinite; 
+  animation: spidey-swing-arc 10s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; 
 }
 
 .web-entry { 
   stroke-dasharray: 2000; 
-  animation: web-entry-fixed 8s linear infinite; 
+  animation: web-entry-delayed 10s linear infinite; 
 }
 
 .web-exit { 
   stroke-dasharray: 2000; 
-  animation: web-exit-fixed 8s linear infinite; 
+  animation: web-exit-slow 10s linear infinite; 
 }
 
 .font-comic { font-family: 'Bangers', cursive; }
