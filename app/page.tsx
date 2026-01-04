@@ -3,20 +3,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import './globals.css';
 
 const WebSlinger = () => {
-  const spideyRef = useRef<HTMLDivElement>(null);
+  const handRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     let frame: number;
     const update = () => {
-      if (spideyRef.current) {
-        const rect = spideyRef.current.getBoundingClientRect();
-        // OFFSET TUNING: 
-        // Adjusting the X and Y here to perfectly hit the hand area
-        // rect.width is 160px. Hand is usually approx 25% from left, 60% from top.
+      if (handRef.current) {
+        const rect = handRef.current.getBoundingClientRect();
+        // Target the center of the hand marker
         setCoords({ 
-          x: rect.left + (rect.width * 0.25), 
-          y: rect.top + (rect.height * 0.6) 
+          x: rect.left + rect.width / 2, 
+          y: rect.top + rect.height / 2 
         });
       }
       frame = requestAnimationFrame(update);
@@ -27,38 +25,45 @@ const WebSlinger = () => {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-50">
+      {/* WEB LAYER */}
       <svg className="absolute inset-0 w-full h-full overflow-visible">
-        {/* TOP-LEFT ANCHOR */}
         <line 
           x1="0" y1="0" 
           x2={coords.x} y2={coords.y} 
-          stroke="white" strokeWidth="6" 
+          stroke="white" strokeWidth="3" /* Thinned Line */
           className="web-entry" 
-          style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 4px rgba(0,0,0,0.4))' }} 
+          style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.3))' }} 
         />
-        {/* TOP-RIGHT ANCHOR */}
         <line 
           x1="100%" y1="0" 
           x2={coords.x} y2={coords.y} 
-          stroke="white" strokeWidth="6" 
+          stroke="white" strokeWidth="3" /* Thinned Line */
           className="web-exit" 
-          style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 4px rgba(0,0,0,0.4))' }} 
+          style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.3))' }} 
         />
       </svg>
 
-      <div ref={spideyRef} className="absolute top-0 left-0 animate-spidey">
-        <img 
-          src="/spidey-swing.png" 
-          alt="Spidey" 
-          className="w-40 h-auto drop-shadow-2xl" 
-        />
+      {/* SPIDEY CONTAINER */}
+      <div className="absolute top-0 left-0 animate-spidey">
+        <div className="relative w-40 h-40">
+          <img 
+            src="/spidey-swing.png" 
+            alt="Spidey" 
+            className="w-full h-auto drop-shadow-2xl" 
+          />
+          {/* HAND MARKER: Positioned over his leading hand on the PNG */}
+          <div 
+            ref={handRef}
+            className="absolute"
+            style={{ top: '65%', left: '20%', width: '10px', height: '10px' }}
+          />
+        </div>
       </div>
     </div>
   );
 };
 
-// ... Remaining SpideyInvite, Countdown, and Step logic persists ...
-// [Note: All functionality from previous turns remains intact]
+// ... Countdown and RSVP Form logic remain unchanged for stability ...
 
 const Countdown = ({ targetDate }: { targetDate: string }) => {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
@@ -82,7 +87,7 @@ const Countdown = ({ targetDate }: { targetDate: string }) => {
       {Object.entries(timeLeft).map(([unit, val]) => (
         <div key={unit} className="bg-black/50 p-1 rounded min-w-[45px] border border-white/10 shadow-lg">
           <div className="text-xl leading-none">{val}</div>
-          <div className="text-[10px] uppercase font-bold">{unit}</div>
+          <div className="text-[10px] uppercase">{unit}</div>
         </div>
       ))}
     </div>
@@ -103,7 +108,6 @@ export default function SpideyInvite() {
   return (
     <main className="w-full min-h-screen flex flex-col items-center justify-start pt-8 px-4 font-comic relative overflow-hidden bg-[#FFEB3B]">
       <WebSlinger />
-
       <div className="relative z-10 flex flex-col items-center w-full max-w-[360px]">
         {/* HEADER */}
         <div className="w-full max-w-[320px] mb-8 transform -rotate-2">
@@ -216,5 +220,5 @@ export default function SpideyInvite() {
       </div>
     </main>
   );
-          }
-              
+      }
+          
