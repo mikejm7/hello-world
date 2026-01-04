@@ -11,6 +11,7 @@ body {
   overflow-x: hidden;
 }
 
+/* 3D Shake for RSVP Errors */
 @keyframes shake-3d {
   0%, 100% { transform: translateX(0) rotateZ(0deg); }
   20% { transform: translateX(-8px) rotateZ(-3deg); }
@@ -18,28 +19,44 @@ body {
 }
 .animate-shake-3d { animation: shake-3d 0.25s ease-in-out infinite; }
 
-@keyframes spidey-flyover {
-  0% { transform: translate(100vw, 85vh) rotate(35deg) scale(0.5); }
-  49.9% { transform: translate(-10vw, 45vh) rotate(35deg) scale(1.25) scaleX(1); }
-  50% { transform: translate(-10vw, 45vh) rotate(35deg) scale(1.25) scaleX(-1); }
-  100% { transform: translate(110vw, -15vh) rotate(35deg) scale(2) scaleX(-1); }
+/* REFINED SWING PHYSICS */
+@keyframes spidey-swing-pro {
+  0% { 
+    /* Entry: 50deg Tilt, Bottom Right */
+    transform: translate(100vw, 85vh) rotate(50deg) scale(0.5); 
+  }
+  49.9% {
+    /* Approaching Left Edge: Maintaining entry tilt */
+    transform: translate(-10vw, 45vh) rotate(50deg) scale(1.25) scaleX(1);
+  }
+  50% { 
+    /* MIDPOINT SNAP: Mirror Y-axis and rotate to 90deg */
+    transform: translate(-10vw, 45vh) rotate(90deg) scale(1.25) scaleX(-1); 
+  }
+  100% { 
+    /* Exit: Top Right, Scaled Up */
+    transform: translate(110vw, -15vh) rotate(90deg) scale(2) scaleX(-1); 
+  }
 }
 
-@keyframes web-first-shot {
-  0%, 15% { opacity: 0; stroke-dashoffset: 1500; }
-  20% { opacity: 1; stroke-dashoffset: 0; }
-  49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+/* Web 1: Anchor point remains static off-screen */
+@keyframes web-shot-1 {
+  0%, 14.9% { opacity: 0; stroke-dashoffset: 1500; }
+  15% { opacity: 1; stroke-dashoffset: 0; } /* Shot on entry */
+  49.9% { opacity: 1; stroke-dashoffset: 0; }
+  50% { opacity: 0; }
 }
 
-@keyframes web-second-shot {
+/* Web 2: Anchor point static top-right */
+@keyframes web-shot-2 {
   0%, 50% { opacity: 0; stroke-dashoffset: 1500; }
-  55% { opacity: 1; stroke-dashoffset: 0; }
-  90% { opacity: 1; }
+  51% { opacity: 1; stroke-dashoffset: 0; } /* Shot on direction change */
+  95% { opacity: 1; stroke-dashoffset: 0; }
   100% { opacity: 0; }
 }
 
-.animate-spidey-path { animation: spidey-flyover 10s ease-in-out infinite; }
-.web-left { stroke-dasharray: 1500; animation: web-first-shot 10s ease-in-out infinite; }
-.web-right { stroke-dasharray: 1500; animation: web-second-shot 10s ease-in-out infinite; }
+.animate-spidey-path { animation: spidey-swing-pro 10s ease-in-out infinite; }
+.web-left { stroke-dasharray: 1500; animation: web-shot-1 10s ease-in-out infinite; }
+.web-right { stroke-dasharray: 1500; animation: web-shot-2 10s ease-in-out infinite; }
 .font-comic { font-family: 'Bangers', cursive; }
+      
