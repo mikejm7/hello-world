@@ -19,50 +19,54 @@ body {
 }
 .animate-shake-3d { animation: shake-3d 0.25s ease-in-out infinite; }
 
-/* COMPLEX SWING PATH */
-@keyframes spidey-swing-complex {
+/* CINEMATIC FLYOVER PATH */
+@keyframes spidey-flyover {
   0% { 
-    /* Enter Bottom Right, Small */
+    /* Entry: Bottom Right, Large & Close */
     transform: translate(100vw, 85vh) rotate(35deg) scale(0.5); 
   }
+  49.9% {
+    /* Approaches Left Edge: Still facing left */
+    transform: translate(-10vw, 45vh) rotate(35deg) scale(1.25) scaleX(1);
+  }
   50% { 
-    /* Reach Left Edge Centerline - FLIP HERE */
-    transform: translate(-5vw, 50vh) rotate(35deg) scale(1.25) scaleX(-1); 
+    /* INSTANT FLIP: Now mirrored to face right */
+    transform: translate(-10vw, 45vh) rotate(35deg) scale(1.25) scaleX(-1); 
   }
   100% { 
-    /* Exit Top Right, Large */
-    transform: translate(110vw, -10vh) rotate(35deg) scale(2) scaleX(-1); 
+    /* Exit: Top Right, Small & Distant */
+    transform: translate(110vw, -15vh) rotate(35deg) scale(2) scaleX(-1); 
   }
 }
 
-/* WEB 1: Shoots to Top Left Corner */
-@keyframes web-one {
-  0%, 15% { opacity: 0; stroke-dashoffset: 1500; } /* Wait until 75% on page */
+/* Web Timing: Land just right of top-left corner */
+@keyframes web-first-shot {
+  0%, 15% { opacity: 0; stroke-dashoffset: 1500; }
   20% { opacity: 1; stroke-dashoffset: 0; }
-  48% { opacity: 1; }
+  49% { opacity: 1; }
   50%, 100% { opacity: 0; }
 }
 
-/* WEB 2: Shoots to Top Right Corner after flip */
-@keyframes web-two {
+/* Web Timing: Land just left of top-right corner */
+@keyframes web-second-shot {
   0%, 50% { opacity: 0; stroke-dashoffset: 1500; }
   55% { opacity: 1; stroke-dashoffset: 0; }
-  95% { opacity: 1; }
+  90% { opacity: 1; }
   100% { opacity: 0; }
 }
 
 .animate-spidey-path {
-  animation: spidey-swing-complex 8s ease-in-out infinite;
+  animation: spidey-flyover 10s ease-in-out infinite;
 }
 
-.web-1 {
+.web-left {
   stroke-dasharray: 1500;
-  animation: web-one 8s ease-in-out infinite;
+  animation: web-first-shot 10s ease-in-out infinite;
 }
 
-.web-2 {
+.web-right {
   stroke-dasharray: 1500;
-  animation: web-two 8s ease-in-out infinite;
+  animation: web-second-shot 10s ease-in-out infinite;
 }
 
 .font-comic { font-family: 'Bangers', cursive; }
