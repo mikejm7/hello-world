@@ -50,7 +50,7 @@ const WebSlinger = ({ trigger }: { trigger: number }) => {
       <div className="fixed top-0 left-0 spidey-trigger">
         <div className="relative w-40 h-40">
           <img src="/spidey-swing.png" alt="Spidey" className="w-full h-auto drop-shadow-2xl" />
-          <div ref={handRef} className="absolute" style={{ top: '60%', left: '15%', width: '1px', height: '1px' }} />
+          <div ref={handRef} className="absolute" style={{ top: '70%', left: '15%', width: '1px', height: '1px' }} />
         </div>
       </div>
     </div>
