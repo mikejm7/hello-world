@@ -4,19 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+html, body {
   background-color: #FFEB3B;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  /* Prevents any scrollbars during Spidey's massive exit scale */
+  overflow-x: hidden; /* Allows vertical scroll, prevents horizontal */
+  width: 100%;
 }
 
-/* SPIDEY MOTION: 
-   Uses ease-in for constant acceleration (slow start, lightning finish).
-   0% to 49.9% is the Entry Swing.
-   50% to 100% is the Exit Swing with Mirror/CCW tilt.
-*/
 @keyframes spidey-swing-accel {
   0% { transform: translate(110vw, 80vh) rotate(60deg) scale(0.5); }
   49.9% { transform: translate(-5vw, 45vh) rotate(60deg) scale(1.1) scaleX(1); }
@@ -24,20 +19,13 @@ body {
   100% { transform: translate(200vw, -50vh) rotate(-45deg) scale(4) scaleX(-1); }
 }
 
-/* ENTRY WEB: 
-   Starts at 0% (off-screen) so it's already attached as he appears. 
-*/
 @keyframes web-entry-immediate {
   0% { opacity: 1; stroke-dashoffset: 0; }
   45% { opacity: 1; }
-  /* Snap off exactly when he flips */
   50% { opacity: 0; }
   100% { opacity: 0; }
 }
 
-/* EXIT WEB: 
-   Snaps on at 52% and "draws" quickly across the screen to the top right. 
-*/
 @keyframes web-exit-snap {
   0%, 51% { opacity: 0; stroke-dashoffset: 2500; }
   52% { opacity: 1; stroke-dashoffset: 2500; }
@@ -47,33 +35,12 @@ body {
 }
 
 .animate-spidey { 
-  /* 7 second loop with constant speed increase */
   animation: spidey-swing-accel 7s ease-in infinite; 
 }
 
 .web-line { 
   stroke-dasharray: 2500;
   filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
-  transition: all 0.1s ease-out;
 }
 
-.font-comic { 
-  font-family: 'Bangers', cursive; 
-}
-
-/* Basic form styling to match the comic aesthetic */
-input::placeholder {
-  color: rgba(0, 0, 0, 0.4);
-}
-
-/* Custom Scrollbar for the friend list if it gets long */
-.max-h-\[400px\]::-webkit-scrollbar {
-  width: 8px;
-}
-.max-h-\[400px\]::-webkit-scrollbar-track {
-  background: #000;
-}
-.max-h-\[400px\]::-webkit-scrollbar-thumb {
-  background: #E62429;
-  border: 2px solid #000;
-}
+.font-comic { font-family: 'Bangers', cursive; }
