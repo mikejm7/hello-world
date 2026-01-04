@@ -1,46 +1,62 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './globals.css';
 
-const WebSlinger = () => (
-  <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-    {/* Spidey Container */}
-    <div className="absolute top-0 left-0 animate-spidey">
-      <div className="relative w-40 h-40">
-        
-        {/* SVG anchored to the character's hand/center */}
-        <svg className="absolute top-0 left-0 overflow-visible pointer-events-none">
-          {/* WEB 1: ENTRY - Fixed toward Top-Left */}
-          <line 
-            x1="20" y1="120" 
-            x2="-1200" y2="-1200" 
-            stroke="white" 
-            strokeWidth="8" 
-            className="web-left" 
-            style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 4px rgba(0,0,0,0.4))' }} 
-          />
-          {/* WEB 2: EXIT - Fixed toward Top-Right */}
-          <line 
-            x1="20" y1="120" 
-            x2="2400" y2="-1200" 
-            stroke="white" 
-            strokeWidth="8" 
-            className="web-right" 
-            style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 4px rgba(0,0,0,0.4))' }} 
-          />
-        </svg>
+const WebSlinger = () => {
+  const spideyRef = useRef<HTMLDivElement>(null);
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
 
+  // This hook tracks the actual pixel position of Spidey's hand to keep the webs pinned
+  useEffect(() => {
+    let frame: number;
+    const update = () => {
+      if (spideyRef.current) {
+        const rect = spideyRef.current.getBoundingClientRect();
+        // Hand is roughly near the center-bottom of the 160px image
+        setCoords({ x: rect.left + 40, y: rect.top + 80 });
+      }
+      frame = requestAnimationFrame(update);
+    };
+    update();
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-50">
+      {/* GLOBAL SVG LAYER: Anchored to screen corners */}
+      <svg className="absolute inset-0 w-full h-full overflow-visible">
+        {/* WEB 1: FIXED TOP-LEFT (0,0) -> Spidey Hand */}
+        <line 
+          x1="0" y1="0" 
+          x2={coords.x} y2={coords.y} 
+          stroke="white" strokeWidth="6" 
+          className="web-entry" 
+          style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 4px rgba(0,0,0,0.4))' }} 
+        />
+        {/* WEB 2: FIXED TOP-RIGHT (100%) -> Spidey Hand */}
+        <line 
+          x1="100%" y1="0" 
+          x2={coords.x} y2={coords.y} 
+          stroke="white" strokeWidth="6" 
+          className="web-exit" 
+          style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 4px rgba(0,0,0,0.4))' }} 
+        />
+      </svg>
+
+      {/* SPIDEY CHARACTER */}
+      <div ref={spideyRef} className="absolute top-0 left-0 animate-spidey">
         <img 
           src="/spidey-swing.png" 
           alt="Spidey" 
-          className="w-full h-auto drop-shadow-2xl" 
+          className="w-40 h-auto drop-shadow-2xl" 
         />
       </div>
     </div>
-  </div>
-);
+  );
+};
 
-// Countdown component
+// ... Rest of the SpideyInvite component remains the same ...
+
 const Countdown = ({ targetDate }: { targetDate: string }) => {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
   useEffect(() => {
@@ -63,7 +79,7 @@ const Countdown = ({ targetDate }: { targetDate: string }) => {
       {Object.entries(timeLeft).map(([unit, val]) => (
         <div key={unit} className="bg-black/50 p-1 rounded min-w-[45px] border border-white/10 shadow-lg">
           <div className="text-xl leading-none">{val}</div>
-          <div className="text-[10px] uppercase">{unit}</div>
+          <div className="text-[10px] uppercase font-bold">{unit}</div>
         </div>
       ))}
     </div>
@@ -86,7 +102,7 @@ export default function SpideyInvite() {
       <WebSlinger />
 
       <div className="relative z-10 flex flex-col items-center w-full max-w-[360px]">
-        {/* LOGO HEADER */}
+        {/* HEADER */}
         <div className="w-full max-w-[320px] mb-8 transform -rotate-2">
           <svg viewBox="0 0 600 600" className="overflow-visible filter drop-shadow-[8px_8px_0px_black]">
             <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
@@ -96,17 +112,15 @@ export default function SpideyInvite() {
           </svg>
         </div>
 
-        {/* STEP 1: LOGIN */}
         {step === 1 && (
           <form onSubmit={(e) => { e.preventDefault(); if(firstName && lastName) setStep(2); else { setError(true); setTimeout(() => setError(false), 500); } }} className="flex flex-col items-center w-full space-y-4">
-            <h2 className="text-3xl italic uppercase font-bold text-black">Guest Check-In</h2>
-            <input type="text" placeholder="FIRST NAME" value={firstName} onChange={(e) => setFirstName(e.target.value)} className={`w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none ${error ? 'animate-pulse border-red-500' : ''}`} />
-            <input type="text" placeholder="LAST NAME" value={lastName} onChange={(e) => setLastName(e.target.value)} className={`w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none ${error ? 'animate-pulse border-red-500' : ''}`} />
+            <h2 className="text-3xl italic uppercase font-bold">Guest Check-In</h2>
+            <input type="text" placeholder="FIRST NAME" value={firstName} onChange={(e) => setFirstName(e.target.value)} className={`w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none ${error ? 'animate-pulse' : ''}`} />
+            <input type="text" placeholder="LAST NAME" value={lastName} onChange={(e) => setLastName(e.target.value)} className={`w-[280px] p-3 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none ${error ? 'animate-pulse' : ''}`} />
             <button type="submit" className="mt-4 bg-[#E62429] text-white text-4xl py-2 px-12 border-[5px] border-black shadow-[6px_6px_0px_black] uppercase italic font-bold">RSVP</button>
           </form>
         )}
 
-        {/* [Other steps remain functional and logically sound] */}
         {step === 2 && (
           <div className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] text-center w-full">
             <h2 className="text-3xl mb-6 uppercase leading-tight italic font-bold">{firstName}, are you coming?</h2>
@@ -123,11 +137,11 @@ export default function SpideyInvite() {
             <div className="space-y-4 font-bold text-xl uppercase">
               <div className="flex justify-between items-center bg-gray-100 p-2 border-2 border-black">
                 <span>Adults:</span>
-                <input type="number" value={adults} onChange={(e) => setAdults(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black" placeholder="0" />
+                <input type="number" value={adults} onChange={(e) => setAdults(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black font-bold" placeholder="0" />
               </div>
               <div className="flex justify-between items-center bg-gray-100 p-2 border-2 border-black">
                 <span>Kids:</span>
-                <input type="number" value={kids} onChange={(e) => setKids(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black" placeholder="0" />
+                <input type="number" value={kids} onChange={(e) => setKids(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 text-center border-2 border-black font-bold" placeholder="0" />
               </div>
             </div>
             <button type="submit" className="w-full mt-6 bg-[#E62429] text-white text-3xl py-2 border-4 border-black shadow-[4px_4px_0px_black] uppercase italic font-bold">Next</button>
@@ -149,7 +163,7 @@ export default function SpideyInvite() {
         {step === 4 && (
           <div className="space-y-6 w-full animate-in zoom-in">
             <div className="bg-[#03A9F4] border-[8px] border-black p-5 text-white shadow-[10px_10px_0px_black] text-center">
-               <h3 className="text-2xl uppercase font-bold underline mb-2 leading-tight italic">Party Details</h3>
+               <h3 className="text-2xl uppercase font-bold underline mb-2 leading-tight italic font-bold">Party Details</h3>
                <div className="text-left text-lg space-y-2 mb-4 italic font-bold">
                   <p><span className="text-yellow-300 font-bold">DATE:</span> March 27 @ 2:00 PM</p>
                   <p><span className="text-yellow-300 font-bold">LOCATION:</span> Spidey Secret HQ</p>
@@ -176,7 +190,7 @@ export default function SpideyInvite() {
 
             {!emailSubmitted ? (
               <form onSubmit={(e) => { e.preventDefault(); setEmailSubmitted(true); }} className="bg-white border-4 border-black p-4 shadow-[6px_6px_0px_black] flex flex-col gap-2">
-                <label className="text-sm uppercase font-bold italic">Notify me of changes:</label>
+                <label className="text-sm uppercase font-bold italic">Party Updates:</label>
                 <div className="flex gap-2">
                   <input type="email" required placeholder="GUEST@EMAIL.COM" value={email} onChange={(e) => setEmail(e.target.value)} className="flex-1 p-2 border-2 border-black uppercase text-sm font-bold outline-none" />
                   <button type="submit" className="bg-[#E62429] text-white px-4 py-1 border-2 border-black font-bold uppercase text-xs italic">Join</button>
@@ -184,7 +198,7 @@ export default function SpideyInvite() {
               </form>
             ) : (
               <div className="bg-green-500 text-white border-4 border-black p-3 text-center uppercase font-bold italic shadow-[6px_6px_0px_black]">
-                Communication Link Established!
+                Communication Established!
               </div>
             )}
           </div>
