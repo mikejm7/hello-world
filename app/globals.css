@@ -18,33 +18,30 @@ body {
 }
 .animate-shake-3d { animation: shake-3d 0.25s ease-in-out infinite; }
 
-/* REFINED SWING: Entry Tilt 50deg -> Exit Tilt 0deg */
 @keyframes spidey-swing-pro {
-  0% { transform: translate(100vw, 85vh) rotate(50deg) scale(0.5); }
+  0% { transform: translate(100vw, 85vh) rotate(50deg) scale(0.5); animation-timing-function: ease-out; }
   49.9% { transform: translate(-10vw, 45vh) rotate(50deg) scale(1.25) scaleX(1); }
-  50% { transform: translate(-10vw, 45vh) rotate(0deg) scale(1.25) scaleX(-1); }
-  100% { transform: translate(110vw, -15vh) rotate(0deg) scale(2) scaleX(-1); }
+  50% { transform: translate(-10vw, 45vh) rotate(-25deg) scale(1.25) scaleX(-1); animation-timing-function: ease-in; }
+  100% { transform: translate(150vw, -30vh) rotate(-25deg) scale(2.5) scaleX(-1); }
 }
 
-/* WEB 1: Shoots through top-left, then swings off */
 @keyframes web-shot-1 {
-  0%, 4% { opacity: 0; transform: translateY(0); }
+  0%, 4% { opacity: 0; stroke-dashoffset: 1500; transform: translate(0, 0); }
   5% { opacity: 1; stroke-dashoffset: 0; }
-  45% { opacity: 1; transform: translateY(0); }
-  50% { opacity: 0; transform: translateY(-500px) translateX(-500px); } /* Swings off */
+  45% { opacity: 1; stroke-dashoffset: 0; transform: translate(0, 0); }
+  50% { opacity: 0; transform: translate(-1000px, -1000px); } 
   100% { opacity: 0; }
 }
 
-/* WEB 2: Shoots through top-right after mirror */
 @keyframes web-shot-2 {
-  0%, 51% { opacity: 0; }
+  0%, 51% { opacity: 0; stroke-dashoffset: 1500; transform: translate(0, 0); }
   52% { opacity: 1; stroke-dashoffset: 0; }
-  90% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-500px) translateX(500px); }
+  90% { opacity: 1; stroke-dashoffset: 0; transform: translate(0, 0); }
+  100% { opacity: 0; transform: translate(1200px, -1200px); }
 }
 
-.animate-spidey-path { animation: spidey-swing-pro 10s ease-in-out infinite; }
-.web-left { stroke-dasharray: 1500; animation: web-shot-1 10s ease-in-out infinite; }
-.web-right { stroke-dasharray: 1500; animation: web-shot-2 10s ease-in-out infinite; }
+.animate-spidey-path { animation: spidey-swing-pro 8s infinite; }
+.web-left { stroke-dasharray: 1500; animation: web-shot-1 8s infinite; }
+.web-right { stroke-dasharray: 1500; animation: web-shot-2 8s infinite; }
 .font-comic { font-family: 'Bangers', cursive; }
-       
+         
