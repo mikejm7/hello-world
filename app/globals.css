@@ -7,51 +7,54 @@
 body {
   background-color: #FFEB3B;
   margin: 0;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
-/* SWING PATH: More rounded "U" shape */
-@keyframes spidey-swing-arc {
-  0% { transform: translate(100vw, 70vh) rotate(60deg) scale(0.5); }
-  /* Deepest point of the swing */
-  45% { transform: translate(30vw, 55vh) rotate(60deg) scale(1.1) scaleX(1); }
-  /* Slowed Mirror Point */
+/* Background Cityscape Parallax */
+@keyframes city-slide {
+  from { transform: translateX(0); }
+  to { transform: translateX(-200px); }
+}
+
+/* Rounded Swing Path */
+@keyframes spidey-swing-smooth {
+  0% { transform: translate(100vw, 75vh) rotate(60deg) scale(0.5); }
+  48% { transform: translate(15vw, 50vh) rotate(60deg) scale(1.1) scaleX(1); }
+  /* Snappy Mirror & CCW Tilt */
   50% { transform: translate(-5vw, 45vh) rotate(-45deg) scale(1.2) scaleX(-1); }
-  /* Exit Ascent */
   100% { transform: translate(180vw, -40vh) rotate(-45deg) scale(3) scaleX(-1); }
 }
 
-/* WEB 1: Delayed entry (75% on page) and slower draw */
+/* Web Shooting Physics */
 @keyframes web-entry-delayed {
-  0%, 19% { opacity: 0; stroke-dashoffset: 2000; }
-  20% { opacity: 1; stroke-dashoffset: 2000; }
-  35% { stroke-dashoffset: 0; } /* Slower shot speed */
-  44% { opacity: 1; }
-  50% { opacity: 0; transform: translateY(100px); }
+  0%, 19% { opacity: 0; stroke-dashoffset: 2500; }
+  20% { opacity: 1; stroke-dashoffset: 2500; }
+  30% { stroke-dashoffset: 0; }
+  46% { opacity: 1; }
+  50% { opacity: 0; }
   100% { opacity: 0; }
 }
 
-/* WEB 2: Slower exit shot */
-@keyframes web-exit-slow {
-  0%, 51% { opacity: 0; stroke-dashoffset: 2000; }
-  52% { opacity: 1; stroke-dashoffset: 2000; }
-  70% { stroke-dashoffset: 0; } /* Slower shot speed */
+@keyframes web-exit-delayed {
+  0%, 51% { opacity: 0; stroke-dashoffset: 2500; }
+  52% { opacity: 1; stroke-dashoffset: 2500; }
+  62% { stroke-dashoffset: 0; }
   90% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(100px); }
+  100% { opacity: 0; }
 }
 
 .animate-spidey { 
-  animation: spidey-swing-arc 10s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; 
+  animation: spidey-swing-smooth 10s cubic-bezier(0.4, 0, 0.2, 1) infinite; 
 }
 
-.web-entry { 
-  stroke-dasharray: 2000; 
-  animation: web-entry-delayed 10s linear infinite; 
+.web-line { 
+  stroke-dasharray: 2500; 
+  filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
 }
 
-.web-exit { 
-  stroke-dasharray: 2000; 
-  animation: web-exit-slow 10s linear infinite; 
+.animate-city {
+  animation: city-slide 20s linear infinite alternate;
 }
 
 .font-comic { font-family: 'Bangers', cursive; }
+    
