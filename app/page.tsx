@@ -74,13 +74,30 @@ export default function SpideyInvite() {
       <WebSlinger trigger={swingTrigger} />
       
       <div className="relative z-10 flex flex-col items-center w-full max-w-[380px]">
-        {/* HEADER LOGO - Updates based on Step */}
-        <div className="w-full max-w-[320px] mb-8 transform -rotate-1 animate-fade-in">
-          <svg viewBox="0 0 600 550" className="overflow-visible filter drop-shadow-[8px_8px_0px_black]">
-            <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#E62429" stroke="black" strokeWidth="14" />
-            <text x="50%" y="38%" textAnchor="middle" fontSize="48" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="italic uppercase font-bold">You're Invited</text>
-            <text x="50%" y="54%" textAnchor="middle" fontSize="52" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="italic uppercase font-bold">to a Party!</text>
-          </svg>
+        {/* HEADER SECTION */}
+        <div className="w-full max-w-[320px] mb-8 transform -rotate-1">
+          {step === 1 ? (
+            <div className="animate-comic-pop">
+              <svg viewBox="0 0 600 550" className="overflow-visible filter drop-shadow-[8px_8px_0px_black]">
+                <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
+                <text x="50%" y="38%" textAnchor="middle" fontSize="48" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="italic uppercase font-bold">You're Invited</text>
+                <text x="50%" y="54%" textAnchor="middle" fontSize="52" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="italic uppercase font-bold">to a Party!</text>
+              </svg>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center">
+              <div className="animate-comic-pop">
+                <svg viewBox="0 0 600 350" className="overflow-visible filter drop-shadow-[8px_8px_0px_black]">
+                  <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#E62429" stroke="black" strokeWidth="14" />
+                  <text x="50%" y="55%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Lucas is</text>
+                </svg>
+              </div>
+              <div className="animate-comic-pop delay-1 -mt-16 relative">
+                 <h1 className="text-8xl text-white font-black italic uppercase drop-shadow-[6px_6px_0px_black] stroke-black" style={{ WebkitTextStroke: '3px black' }}>Turning 5!</h1>
+                 <p className="text-3xl text-center uppercase font-bold italic bg-white border-4 border-black px-4 py-1 shadow-[4px_4px_0px_black] transform rotate-2 -mt-2">Join us to celebrate!</p>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="w-full">
@@ -92,21 +109,23 @@ export default function SpideyInvite() {
             </form>
           )}
 
-          {/* TRANSITION STEP (2): Are you coming? with New Header and Details Faded in */}
           {step === 2 && (
             <div className="flex flex-col items-center space-y-6">
-               {/* New Header */}
-               <h1 className="text-4xl text-center uppercase font-bold italic animate-fade-in">Lucas is turning 5!</h1>
-               
-               {/* Details Preview */}
-               <div className="bg-[#03A9F4] border-[6px] border-black p-4 text-white shadow-[8px_8px_0px_black] w-full animate-fade-in [animation-delay:0.3s] opacity-0 text-center italic font-bold">
-                 <p className="text-xl uppercase underline mb-2">The Mission Details:</p>
-                 <p>MARCH 27 @ 2:00 PM</p>
-                 <p>123 SPIDEY LANE, WEBB CITY</p>
+               {/* RESTORED PARTY DETAILS */}
+               <div className="bg-[#03A9F4] border-[6px] border-black p-4 text-white shadow-[8px_8px_0px_black] w-full animate-comic-pop delay-1 opacity-0 text-center italic font-bold">
+                 <p className="text-xl uppercase underline mb-2 tracking-widest">The Mission Details:</p>
+                 <div className="text-lg space-y-1">
+                    <p><span className="text-yellow-300">DATE:</span> March 27 @ 2:00 PM</p>
+                    <p><span className="text-yellow-300">HQ:</span> 123 Spidey Lane, Webb City</p>
+                    <p><span className="text-yellow-300">RSVP BY:</span> March 15</p>
+                 </div>
+                 <div className="mt-3 pt-2 border-t border-white/30 text-sm uppercase">
+                   <p>No gifts, please! Donate to:</p>
+                   <a href="https://charity.link" target="_blank" rel="noopener noreferrer" className="text-yellow-300 underline">Spidey's Charity Link</a>
+                 </div>
                </div>
 
-               {/* Prompt */}
-               <div className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] text-center w-full animate-fade-in [animation-delay:0.6s] opacity-0">
+               <div className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] text-center w-full animate-comic-pop delay-2 opacity-0">
                 <h2 className="text-2xl mb-6 uppercase leading-tight italic font-bold">{firstName}, are you coming?</h2>
                 <div className="flex gap-4 justify-center">
                   <button onClick={() => setStep(3)} className="bg-green-500 text-white text-3xl py-2 px-8 border-4 border-black shadow-[4px_4px_0px_black] font-bold">YES</button>
@@ -146,13 +165,12 @@ export default function SpideyInvite() {
           )}
 
           {step === 4 && (
-            <div className="space-y-6 w-full animate-fade-in">
-              {/* FINAL RECEIPT STYLE */}
-              <div className="comic-receipt p-8 text-black font-mono shadow-2xl relative border-t-4 border-black">
-                <h4 className="font-bold border-b-4 border-black pb-2 text-center uppercase mb-6 text-2xl tracking-tighter">THE DAILY BUGLE: RSVP</h4>
+            <div className="space-y-6 w-full animate-comic-pop">
+              <div className="comic-receipt p-8 text-black font-mono relative">
+                <h4 className="font-bold border-b-4 border-black pb-2 text-center uppercase mb-6 text-2xl">THE DAILY BUGLE: RSVP</h4>
                 <div className="text-sm space-y-3 uppercase font-bold">
                   <div className="flex justify-between border-b border-black border-dotted"><span>GUEST ID:</span><span>{firstName} {lastName}</span></div>
-                  <div className="flex justify-between border-b border-black border-dotted"><span>SQUAD SIZE:</span><span>{adults}A / {kids}K</span></div>
+                  <div className="flex justify-between border-b border-black border-dotted"><span>SQUAD:</span><span>{adults}A / {kids}K</span></div>
                   {kidNames.filter(n => n).length > 0 && (
                     <div className="pt-2">
                       <p className="text-[10px] underline mb-1">REGISTERED SIDEKICKS:</p>
@@ -166,8 +184,7 @@ export default function SpideyInvite() {
                 </div>
               </div>
 
-              {/* SUBSCRIBE BOX (FLOATING) */}
-              <div className="mt-10 flex flex-col items-center gap-3 w-full">
+              <div className="mt-10 flex flex-col items-center gap-3 w-full animate-comic-pop delay-1 opacity-0">
                 <h3 className="text-2xl uppercase font-bold italic">Subscribe for Updates</h3>
                 {!emailSubmitted ? (
                   <form onSubmit={(e) => { e.preventDefault(); setEmailSubmitted(true); }} className="flex flex-col gap-3 w-full">
@@ -184,12 +201,12 @@ export default function SpideyInvite() {
           {step === 0 && (
             <div className="bg-red-600 border-[8px] border-black p-10 text-white text-center rotate-3 scale-110">
               <h1 className="text-6xl font-bold italic underline leading-none">THWIP!</h1>
-              <p className="text-3xl uppercase font-black">STAY HOME VILLAINS.</p>
+              <p className="text-3xl uppercase font-black">FUCK RIGHT OFF.</p>
             </div>
           )}
         </div>
       </div>
     </main>
   );
-          }
-                  
+                }
+                    
