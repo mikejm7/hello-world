@@ -39,10 +39,10 @@ html, body {
 /* Receipt Printing Upwards */
 @keyframes receipt-up {
   0% { height: 0; opacity: 0; }
-  100% { height: 260px; opacity: 1; } /* Reduced height to match smaller receipt */
+  100% { height: 230px; opacity: 1; } 
 }
 
-/* Shaking Printer Line - Runs for exactly 2 seconds (20 iterations of 0.1s) */
+/* Shaking Printer Line */
 @keyframes shake-line {
   0%, 100% { transform: scaleX(1); }
   25% { transform: scaleX(1.02) translateX(-1px); }
@@ -51,7 +51,7 @@ html, body {
 
 .animate-pop { animation: comic-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 .animate-receipt-up { animation: receipt-up 2s ease-out forwards; }
-.animate-shake-limited { animation: shake-line 0.1s linear 20 forwards; } /* Stops after 2s */
+.animate-shake-limited { animation: shake-line 0.1s linear 20 forwards; }
 
 .spidey-trigger { animation: spidey-swing-accel 2.5s ease-in-out forwards; }
 .web-entry-trigger { animation: web-entry-once 2.5s linear forwards; }
@@ -67,3 +67,4 @@ html, body {
 }
 
 .receipt-font { font-family: 'Courier Prime', monospace; }
+                                           
