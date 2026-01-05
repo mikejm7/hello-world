@@ -2,6 +2,49 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './globals.css';
 
+const Countdown = () => {
+  const [timeLeft, setTimeLeft] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null);
+
+  useEffect(() => {
+    const targetDate = new Date('2026-03-27T14:00:00');
+
+    const calculateTimeLeft = () => {
+      const difference = +targetDate - +new Date();
+      if (difference > 0) {
+        return {
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
+        };
+      }
+      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    };
+
+    setTimeLeft(calculateTimeLeft());
+
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  if (!timeLeft) return null;
+
+  return (
+    <div className="bg-yellow-400 border-4 border-black p-2 mb-4 shadow-[4px_4px_0px_black] text-center w-[240px]">
+        <h4 className="text-sm font-bold uppercase italic border-b-2 border-black mb-1">Time Remaining</h4>
+        <div className="flex justify-between text-xs font-bold uppercase">
+            <div className="flex flex-col"><span>{timeLeft.days}</span><span>Days</span></div>
+            <div className="flex flex-col"><span>{timeLeft.hours}</span><span>Hrs</span></div>
+            <div className="flex flex-col"><span>{timeLeft.minutes}</span><span>Min</span></div>
+            <div className="flex flex-col"><span>{timeLeft.seconds}</span><span>Sec</span></div>
+        </div>
+    </div>
+  );
+};
+
 const WebSlinger = ({ trigger }: { trigger: number }) => {
   const handRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
@@ -174,6 +217,7 @@ export default function SpideyInvite() {
           
           {/* Receipt - Narrower (w-[240px]) */}
           <div className="animate-receipt-up overflow-hidden absolute bottom-[50%] flex flex-col justify-end z-10 w-[240px]">
+             <Countdown />
              <div className="bg-white p-4 receipt-font text-black border-x-4 border-t-4 border-black uppercase font-bold text-xs">
               <div className="flex justify-between"><span>DATE:</span><span>MAR 27, 2026</span></div>
               <div className="flex justify-between"><span>TIME:</span><span>2:00 PM</span></div>
@@ -208,7 +252,7 @@ export default function SpideyInvite() {
         <div className="flex flex-col items-center justify-center h-full animate-pop">
            <div className="bg-red-600 border-[8px] border-black p-8 text-white text-center rotate-3">
               <h1 className="text-6xl font-black italic underline leading-none">THWIP!</h1>
-              <p className="text-3xl uppercase font-black">FUCK RIGHT OFF.</p>
+              <p className="text-3xl uppercase font-black">See you another time!</p>
            </div>
         </div>
       )}
