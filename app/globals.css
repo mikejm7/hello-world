@@ -10,52 +10,60 @@ html, body {
   background-color: #FFEB3B;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Strict no-scroll */
+  overflow: hidden; 
   height: 100vh;
   width: 100vw;
   font-family: 'Bangers', cursive;
 }
 
-/* Comic Animations */
+/* Entry Pop */
 @keyframes comic-pop {
   0% { opacity: 0; transform: scale(0) rotate(-10deg); }
   70% { transform: scale(1.1) rotate(2deg); }
   100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
-@keyframes receipt-out {
+/* Restored Spidey Logic */
+@keyframes spidey-swing-accel {
+  0% { transform: translate(110vw, 80vh) rotate(60deg) scale(0.5); opacity: 1; }
+  49.9% { transform: translate(-5vw, 45vh) rotate(60deg) scale(1.1) scaleX(1); opacity: 1; }
+  50% { transform: translate(-5vw, 45vh) rotate(-45deg) scale(1.2) scaleX(-1); opacity: 1; }
+  99% { transform: translate(200vw, -50vh) rotate(-45deg) scale(4) scaleX(-1); opacity: 1; }
+  100% { transform: translate(200vw, -50vh); opacity: 0; }
+}
+
+/* Web Line Animations */
+@keyframes web-entry-once { 0% { opacity: 1; stroke-dashoffset: 0; } 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes web-exit-once { 0%, 51% { opacity: 0; stroke-dashoffset: 2500; } 52% { opacity: 1; stroke-dashoffset: 2500; } 60% { stroke-dashoffset: 0; } 99% { opacity: 1; } 100% { opacity: 0; } }
+
+/* Receipt Printing Upwards */
+@keyframes receipt-up {
   0% { height: 0; opacity: 0; }
   100% { height: 320px; opacity: 1; }
 }
 
-.animate-pop { animation: comic-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-.animate-receipt { animation: receipt-out 2s ease-out forwards; }
-
-/* Spidey Swing */
-@keyframes spidey-swing {
-  0% { transform: translate(110vw, 80vh) rotate(60deg); opacity: 1; }
-  50% { transform: translate(-10vw, 40vh) rotate(-45deg) scaleX(-1); }
-  100% { transform: translate(150vw, -20vh) rotate(-45deg) scale(3); opacity: 0; }
+/* Shaking Printer Line */
+@keyframes shake-line {
+  0%, 100% { transform: scaleX(1); }
+  25% { transform: scaleX(1.02) translateX(-1px); }
+  75% { transform: scaleX(0.98) translateX(1px); }
 }
 
-.spidey-active { animation: spidey-swing 2.5s ease-in-out forwards; }
+.animate-pop { animation: comic-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.animate-receipt-up { animation: receipt-up 2s ease-out forwards; }
+.animate-shake { animation: shake-line 0.1s linear infinite; }
 
-/* Styles */
+.spidey-trigger { animation: spidey-swing-accel 2.5s ease-in-out forwards; }
+.web-entry-trigger { animation: web-entry-once 2.5s linear forwards; }
+.web-exit-trigger { animation: web-exit-once 2.5s linear forwards; }
+
+.web-line { stroke-dasharray: 2500; }
+
 .comic-panel {
   background: white;
   border: 4px solid black;
   box-shadow: 6px 6px 0px black;
   position: relative;
-}
-
-.comic-panel::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(black 1px, transparent 1px);
-  background-size: 10px 10px;
-  opacity: 0.05;
-  pointer-events: none;
 }
 
 .receipt-font { font-family: 'Courier Prime', monospace; }
