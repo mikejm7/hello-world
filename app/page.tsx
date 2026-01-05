@@ -86,8 +86,8 @@ export default function SpideyInvite() {
           <div className="animate-pop">
             <svg viewBox="-50 0 700 600" className="w-72 overflow-visible filter drop-shadow-[6px_6px_0px_black]">
               <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
-              <text x="50%" y="42%" textAnchor="middle" fontSize="60" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">You're Invited</text>
-              <text x="50%" y="58%" textAnchor="middle" fontSize="65" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">to a Party!</text>
+              <text x="46%" y="42%" textAnchor="middle" fontSize="60" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">You're Invited</text>
+              <text x="46%" y="58%" textAnchor="middle" fontSize="65" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">to a Party!</text>
             </svg>
           </div>
           <form onSubmit={(e) => { e.preventDefault(); if(firstName && lastName) triggerTransition(2); }} 
@@ -108,8 +108,8 @@ export default function SpideyInvite() {
             <svg viewBox="0 0 600 600" className="w-64 overflow-visible filter drop-shadow-[6px_6px_0px_black]">
               <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#E62429" stroke="black" strokeWidth="14" />
               {/* Centered text in new viewbox */}
-              <text x="50%" y="45%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Lucas is</text>
-              <text x="50%" y="60%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Turning 5!</text>
+              <text x="46%" y="45%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Lucas is</text>
+              <text x="46%" y="60%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Turning 5!</text>
             </svg>
           </div>
 
@@ -145,8 +145,8 @@ export default function SpideyInvite() {
           <div className="comic-panel p-6 w-full max-w-[320px]">
             <h2 className="text-3xl text-center italic underline mb-6 uppercase">Guest Count</h2>
             <div className="space-y-4">
-              <div className="flex justify-between items-center"><label className="text-2xl">ADULTS:</label><input type="text" inputMode="numeric" pattern="[0-9]*" required value={adults} onChange={(e) => setAdults(e.target.value)} className="w-16 h-12 text-center border-4 border-black text-2xl font-bold" /></div>
-              <div className="flex justify-between items-center"><label className="text-2xl">KIDS:</label><input type="text" inputMode="numeric" pattern="[0-9]*" value={kids} onChange={(e) => setKids(e.target.value)} className="w-16 h-12 text-center border-4 border-black text-2xl font-bold" /></div>
+              <div className="flex justify-between items-center"><label className="text-2xl">ADULTS:</label><input type="number" min="1" required value={adults} onChange={(e) => setAdults(e.target.value)} className="w-16 h-12 text-center border-4 border-black text-2xl font-bold" /></div>
+              <div className="flex justify-between items-center"><label className="text-2xl">KIDS:</label><input type="number" min="0" value={kids} onChange={(e) => setKids(e.target.value)} className="w-16 h-12 text-center border-4 border-black text-2xl font-bold" /></div>
             </div>
             <button type="submit" className="w-full mt-6 bg-[#E62429] text-white text-3xl py-2 border-4 border-black shadow-[4px_4px_0px_black] uppercase italic font-bold">NEXT</button>
           </div>
