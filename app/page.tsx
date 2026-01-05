@@ -2,6 +2,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './globals.css';
 
+// Comic themed 8-segment display style
+const Segment = ({ value, label }: { value: number, label: string }) => (
+  <div className="flex flex-col items-center mx-1">
+    <div className="bg-black border-2 border-gray-600 p-2 rounded shadow-[2px_2px_0px_rgba(0,0,0,0.5)] min-w-[40px] flex justify-center">
+      <span className="font-mono text-xl text-[#E62429] font-bold tracking-widest leading-none">
+        {value.toString().padStart(2, '0')}
+      </span>
+    </div>
+    <span className="text-[10px] font-bold mt-1 uppercase text-black bg-white px-1 border border-black">{label}</span>
+  </div>
+);
+
 const Countdown = () => {
   const [timeLeft, setTimeLeft] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null);
 
@@ -32,18 +44,6 @@ const Countdown = () => {
 
   if (!timeLeft) return null;
 
-  // Comic themed 8-segment display style
-  const Segment = ({ value, label }: { value: number, label: string }) => (
-    <div className="flex flex-col items-center mx-1">
-      <div className="bg-black border-2 border-gray-600 p-2 rounded shadow-[2px_2px_0px_rgba(0,0,0,0.5)] min-w-[40px] flex justify-center">
-        <span className="font-mono text-xl text-[#E62429] font-bold tracking-widest leading-none">
-          {value.toString().padStart(2, '0')}
-        </span>
-      </div>
-      <span className="text-[10px] font-bold mt-1 uppercase text-black bg-white px-1 border border-black">{label}</span>
-    </div>
-  );
-
   return (
     <div className="bg-[#03A9F4] border-4 border-black p-2 mb-4 shadow-[6px_6px_0px_black] text-center w-auto inline-block rotate-[-2deg] z-20">
         <h4 className="text-white text-lg font-black uppercase italic mb-2 tracking-wider drop-shadow-[2px_2px_0px_black] text-stroke-black">Mission Countdown</h4>
@@ -66,7 +66,7 @@ const WebSlinger = ({ trigger }: { trigger: number }) => {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    if (trigger === 0) return;
+    if (trigger <= 0) return;
     setActive(false);
     const timeout = setTimeout(() => setActive(true), 50);
     return () => clearTimeout(timeout);
@@ -147,8 +147,8 @@ export default function SpideyInvite() {
               <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
               <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="50" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">
                 <tspan x="50%" dy="-1.2em">Thwip,</tspan>
-                <tspan x="50%" dy="1.2em" x="50%">Spidey needs</tspan>
-                <tspan x="50%" dy="1.2em" x="50%">your help!</tspan>
+                <tspan x="50%" dy="1.2em">Spidey needs</tspan>
+                <tspan x="50%" dy="1.2em">your help!</tspan>
               </text>
             </svg>
           </div>
