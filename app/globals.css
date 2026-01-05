@@ -23,7 +23,7 @@ html, body {
   100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
-/* Restored Spidey Logic */
+/* Spidey Logic */
 @keyframes spidey-swing-accel {
   0% { transform: translate(110vw, 80vh) rotate(60deg) scale(0.5); opacity: 1; }
   49.9% { transform: translate(-5vw, 45vh) rotate(60deg) scale(1.1) scaleX(1); opacity: 1; }
@@ -39,10 +39,10 @@ html, body {
 /* Receipt Printing Upwards */
 @keyframes receipt-up {
   0% { height: 0; opacity: 0; }
-  100% { height: 320px; opacity: 1; }
+  100% { height: 260px; opacity: 1; } /* Reduced height to match smaller receipt */
 }
 
-/* Shaking Printer Line */
+/* Shaking Printer Line - Runs for exactly 2 seconds (20 iterations of 0.1s) */
 @keyframes shake-line {
   0%, 100% { transform: scaleX(1); }
   25% { transform: scaleX(1.02) translateX(-1px); }
@@ -51,7 +51,7 @@ html, body {
 
 .animate-pop { animation: comic-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 .animate-receipt-up { animation: receipt-up 2s ease-out forwards; }
-.animate-shake { animation: shake-line 0.1s linear infinite; }
+.animate-shake-limited { animation: shake-line 0.1s linear 20 forwards; } /* Stops after 2s */
 
 .spidey-trigger { animation: spidey-swing-accel 2.5s ease-in-out forwards; }
 .web-entry-trigger { animation: web-entry-once 2.5s linear forwards; }
