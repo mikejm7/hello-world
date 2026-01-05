@@ -1,52 +1,10 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './globals.css';
 
-const WebSlinger = ({ trigger }: { trigger: number }) => {
-  const handRef = useRef<HTMLDivElement>(null);
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
-  const [active, setActive] = useState(false);
-
-  useEffect(() => {
-    setActive(false);
-    const timeout = setTimeout(() => setActive(true), 50);
-    return () => clearTimeout(timeout);
-  }, [trigger]);
-
-  useEffect(() => {
-    let frame: number;
-    const update = () => {
-      if (handRef.current) {
-        const rect = handRef.current.getBoundingClientRect();
-        setCoords({ x: rect.left + 5, y: rect.top + 5 });
-      }
-      frame = requestAnimationFrame(update);
-    };
-    update();
-    return () => cancelAnimationFrame(frame);
-  }, []);
-
-  if (!active) return null;
-
-  return (
-    <div className="absolute inset-0 pointer-events-none z-50">
-      <svg className="absolute inset-0 w-full h-full overflow-visible">
-        <line x1="-200" y1="-200" x2={coords.x} y2={coords.y} stroke="white" strokeWidth="2.5" className="web-line web-entry-trigger" />
-        <line x1="120%" y1="-200" x2={coords.x} y2={coords.y} stroke="white" strokeWidth="2.5" className="web-line web-exit-trigger" />
-      </svg>
-      <div className="spidey-trigger">
-        <div className="relative w-40 h-40">
-          <img src="/spidey-swing.png" alt="Spidey" className="w-full h-auto drop-shadow-2xl" />
-          <div ref={handRef} className="absolute" style={{ top: '65%', left: '15%', width: '1px', height: '1px' }} />
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export default function SpideyInvite() {
-  const [step, setStep] = useState(1);
-  const [swingTrigger, setSwingTrigger] = useState(0);
+  const [step, setStep] = useState(1); // 1: Name, 2: Info, 3: Qty, 4: Kids, 5: Final
+  const [isSwinging, setIsSwinging] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -55,160 +13,175 @@ export default function SpideyInvite() {
   const [kidNames, setKidNames] = useState<string[]>([]);
   const [emailSubmitted, setEmailSubmitted] = useState(false);
 
-  // Auto-scroll logic
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (step === 1 || step === 4 || step === 0) setSwingTrigger(v => v + 1);
-  }, [step]);
+  // Transition helper
+  const triggerTransition = (nextStep: number) => {
+    setIsSwinging(true);
+    setTimeout(() => {
+      setStep(nextStep);
+      setIsSwinging(false);
+    }, 2000); // Clears screen during the swing
+  };
+
+  const handleInitialRSVP = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (firstName && lastName) triggerTransition(2);
+  };
 
   const handleQtySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const adultNum = parseInt(adults) || 0;
-    const kidNum = parseInt(kids) || 0;
-    if (adultNum >= 1) {
-      if (kidNum > 0) {
-        setKidNames(new Array(kidNum).fill(''));
-        setStep(5);
-      } else setStep(4);
-    } else alert("At least 1 Adult is required!");
+    if (parseInt(adults) >= 1) {
+      if (parseInt(kids) > 0) {
+        setKidNames(new Array(parseInt(kids)).fill(''));
+        setStep(4);
+      } else {
+        triggerTransition(5);
+      }
+    } else alert("At least 1 adult is required!");
   };
 
   return (
-    <main className="w-full min-h-screen flex flex-col items-center justify-start pt-16 pb-20 px-4 font-comic relative bg-[#FFEB3B]">
-      <WebSlinger trigger={swingTrigger} />
+    <main className="relative w-full h-screen overflow-hidden flex flex-col items-center bg-[#FFEB3B]">
       
-      <div className="relative z-10 flex flex-col items-center w-full max-w-[380px]">
-        {/* HEADER SECTION */}
-        <div className="w-full max-w-[320px] mb-8 transform -rotate-1">
-          {step === 1 ? (
-            <div className="animate-comic-pop">
-              <svg viewBox="0 0 600 550" className="overflow-visible filter drop-shadow-[8px_8px_0px_black]">
-                <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
-                <text x="50%" y="42%" textAnchor="middle" fontSize="56" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="italic uppercase font-bold">You're Invited</text>
-                <text x="50%" y="58%" textAnchor="middle" fontSize="64" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="italic uppercase font-bold">to a Party!</text>
-              </svg>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center animate-comic-pop">
-              <svg viewBox="0 0 600 550" className="overflow-visible filter drop-shadow-[8px_8px_0px_black]">
-                <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#E62429" stroke="black" strokeWidth="14" />
-                <text x="50%" y="44%" textAnchor="middle" fontSize="88" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Lucas is</text>
-                <text x="50%" y="62%" textAnchor="middle" fontSize="88" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">turning 5!</text>
-              </svg>
-              <p className="text-3xl text-center uppercase font-bold italic bg-white border-4 border-black px-6 py-2 shadow-[6px_6px_0px_black] -mt-10 transform rotate-1">Join us to celebrate!</p>
-            </div>
-          )}
+      {/* SPIDEY ANIMATION LAYER */}
+      {isSwinging && (
+        <div className="fixed inset-0 z-50 pointer-events-none">
+          <img src="/spidey-swing.png" alt="Spidey" className="w-64 spidey-active" />
         </div>
+      )}
 
-        <div className="w-full">
-          {step === 1 && (
-            <form onSubmit={(e) => { e.preventDefault(); if(firstName && lastName) setStep(2); }} className="flex flex-col items-center space-y-4">
-              <input type="text" name="given-name" autoComplete="given-name" required placeholder="FIRST NAME" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full p-4 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none" />
-              <input type="text" name="family-name" autoComplete="family-name" required placeholder="LAST NAME" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full p-4 border-[6px] border-black text-center text-2xl font-bold bg-white shadow-[8px_8px_0px_black] uppercase outline-none" />
-              <button type="submit" className="mt-4 bg-[#E62429] text-white text-4xl py-2 px-12 border-[5px] border-black shadow-[6px_6px_0px_black] uppercase italic font-bold">RSVP</button>
-            </form>
-          )}
+      {/* STEP 1: WELCOME SCREEN */}
+      {!isSwinging && step === 1 && (
+        <div className="flex flex-col items-center w-full h-full justify-center">
+          <div className="animate-pop transform -translate-y-[10%] mb-12">
+            <svg viewBox="0 0 600 550" className="w-72 overflow-visible filter drop-shadow-[6px_6px_0px_black]">
+              <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
+              <text x="50%" y="42%" textAnchor="middle" fontSize="60" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">You're Invited</text>
+              <text x="50%" y="58%" textAnchor="middle" fontSize="65" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">to a Party!</text>
+            </svg>
+          </div>
+          <form onSubmit={handleInitialRSVP} className="flex flex-col items-center gap-4 w-64 transform translate-y-[10%] animate-pop delay-150">
+            <input name="given-name" autoComplete="given-name" required placeholder="FIRST NAME" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full p-2 border-4 border-black text-center text-lg font-bold bg-white shadow-[4px_4px_0px_black] uppercase outline-none" />
+            <input name="family-name" autoComplete="family-name" required placeholder="LAST NAME" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full p-2 border-4 border-black text-center text-lg font-bold bg-white shadow-[4px_4px_0px_black] uppercase outline-none" />
+            <button type="submit" className="mt-2 bg-[#E62429] text-white text-3xl py-1 px-10 border-4 border-black shadow-[4px_4px_0px_black] uppercase italic font-bold">RSVP</button>
+          </form>
+        </div>
+      )}
 
-          {step === 2 && (
-            <div className="flex flex-col items-center space-y-6 animate-comic-pop">
-               <div className="bg-[#03A9F4] border-[6px] border-black p-4 text-white shadow-[8px_8px_0px_black] w-full text-center italic font-bold">
-                 <p className="text-xl uppercase underline mb-2 tracking-widest">The Mission Details:</p>
-                 <div className="text-lg space-y-1">
-                    <p><span className="text-yellow-300">DATE:</span> March 27 @ 2:00 PM</p>
-                    <p><span className="text-yellow-300">HQ:</span> 123 Spidey Lane, Webb City</p>
-                    <p><span className="text-yellow-300">RSVP BY:</span> March 15</p>
-                 </div>
-                 <div className="mt-3 pt-2 border-t border-white/30 text-sm uppercase">
-                   <p>No gifts, please! Donate to:</p>
-                   <a href="https://charity.link" target="_blank" rel="noopener noreferrer" className="text-yellow-300 underline">Spidey's Charity Link</a>
-                 </div>
-               </div>
-               <div className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] text-center w-full">
-                <h2 className="text-2xl mb-6 uppercase leading-tight italic font-bold">{firstName}, are you coming?</h2>
-                <div className="flex gap-4 justify-center">
-                  <button onClick={() => setStep(3)} className="bg-green-500 text-white text-3xl py-2 px-8 border-4 border-black shadow-[4px_4px_0px_black] font-bold">YES</button>
-                  <button onClick={() => setStep(0)} className="bg-red-600 text-white text-3xl py-2 px-8 border-4 border-black shadow-[4px_4px_0px_black] font-bold">NO</button>
-                </div>
+      {/* STEP 2: MISSION DETAILS & CHOICE */}
+      {!isSwinging && step === 2 && (
+        <div className="flex flex-col items-center w-full h-full justify-center px-4">
+          <div className="animate-pop mb-4">
+            <svg viewBox="0 0 600 350" className="w-64 overflow-visible filter drop-shadow-[6px_6px_0px_black]">
+              <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#E62429" stroke="black" strokeWidth="14" />
+              <text x="50%" y="45%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Lucas is</text>
+              <text x="50%" y="65%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Turning 5!</text>
+            </svg>
+          </div>
+          <p className="animate-pop delay-100 text-2xl uppercase font-bold italic bg-white border-4 border-black px-6 py-1 shadow-[4px_4px_0px_black] transform rotate-1 mb-6">Join us to celebrate!</p>
+          
+          <div className="comic-panel animate-pop delay-200 p-4 w-full max-w-[320px] text-center mb-6">
+            <p className="text-xl underline mb-2 italic">THE MISSION:</p>
+            <p className="text-lg">MARCH 27 @ 2:00 PM</p>
+            <p className="text-lg">123 SPIDEY LANE, WEBB CITY</p>
+            <p className="text-sm mt-2">RSVP BY MARCH 15</p>
+            <a href="#" className="text-sm underline text-blue-600 block mt-1 uppercase">Donate to Charity</a>
+          </div>
+
+          <div className="bg-white border-4 border-black p-4 shadow-[6px_6px_0px_black] text-center w-full max-w-[300px] animate-pop delay-300">
+            <h2 className="text-xl mb-4 italic font-bold">ARE YOU COMING?</h2>
+            <div className="flex gap-4 justify-center">
+              <button onClick={() => setStep(3)} className="bg-green-500 text-white text-2xl py-1 px-8 border-4 border-black font-bold">YES</button>
+              <button onClick={() => setStep(0)} className="bg-red-600 text-white text-2xl py-1 px-8 border-4 border-black font-bold">NO</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* STEP 3: GUEST COUNT */}
+      {!isSwinging && step === 3 && (
+        <form onSubmit={handleQtySubmit} className="flex flex-col items-center justify-center h-full w-full px-6 animate-pop">
+          <div className="comic-panel p-6 w-full max-w-[320px]">
+            <h2 className="text-3xl text-center italic underline mb-6 uppercase">Guest Count</h2>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <label className="text-2xl">ADULTS:</label>
+                <input type="text" inputMode="numeric" required value={adults} onChange={(e) => setAdults(e.target.value)} className="w-16 h-12 text-center border-4 border-black text-2xl font-bold" />
+              </div>
+              <div className="flex justify-between items-center">
+                <label className="text-2xl">KIDS:</label>
+                <input type="text" inputMode="numeric" value={kids} onChange={(e) => setKids(e.target.value)} className="w-16 h-12 text-center border-4 border-black text-2xl font-bold" />
               </div>
             </div>
-          )}
+            <button type="submit" className="w-full mt-6 bg-[#E62429] text-white text-3xl py-2 border-4 border-black shadow-[4px_4px_0px_black] uppercase italic font-bold">NEXT</button>
+          </div>
+        </form>
+      )}
 
-          {step === 3 && (
-            <form onSubmit={handleQtySubmit} className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] w-full animate-comic-pop">
-              <h2 className="text-3xl mb-6 uppercase text-center font-bold italic underline">Guest Count</h2>
-              <div className="space-y-6 font-bold text-2xl uppercase">
-                <div className="flex justify-between items-center bg-gray-100 p-4 border-4 border-black">
-                  <span>Adults:</span>
-                  <input type="text" inputMode="numeric" pattern="[0-9]*" required value={adults} onChange={(e) => setAdults(e.target.value)} className="w-20 h-14 text-center border-4 border-black font-bold bg-white text-3xl" />
-                </div>
-                <div className="flex justify-between items-center bg-gray-100 p-4 border-4 border-black">
-                  <span>Kids:</span>
-                  <input type="text" inputMode="numeric" pattern="[0-9]*" value={kids} onChange={(e) => setKids(e.target.value)} className="w-20 h-14 text-center border-4 border-black font-bold bg-white text-3xl" />
-                </div>
-              </div>
-              <button type="submit" className="w-full mt-8 bg-[#E62429] text-white text-4xl py-3 border-4 border-black shadow-[4px_4px_0px_black] uppercase italic font-bold">Next</button>
-            </form>
-          )}
-
-          {step === 5 && (
-            <form onSubmit={(e) => { e.preventDefault(); setStep(4); }} className="bg-white border-[6px] border-black p-6 shadow-[10px_10px_0px_black] w-full animate-comic-pop">
-              <h2 className="text-xl mb-4 uppercase text-center font-bold italic leading-tight">
-                Spidey's Amazing Friends<br/>
-                <span className="text-sm normal-case">(Your kiddos names)</span>
-              </h2>
-              <div className="max-h-[300px] overflow-y-auto space-y-3">
-                {kidNames.map((name, i) => (
-                  <input key={i} type="text" required placeholder={`FRIEND #${i+1}`} value={name} onChange={(e) => {
-                      const n = [...kidNames]; n[i] = e.target.value; setKidNames(n);
-                    }} className="w-full p-3 border-4 border-black uppercase font-bold text-xl outline-none" />
-                ))}
-              </div>
-              <button type="submit" className="w-full mt-6 bg-green-500 text-white text-3xl py-3 border-4 border-black uppercase italic font-bold">Confirm</button>
-            </form>
-          )}
-
-          {step === 4 && (
-            <div className="space-y-6 w-full animate-comic-pop">
-              <div className="comic-receipt p-8 text-black font-mono relative">
-                <h4 className="font-bold border-b-4 border-black pb-2 text-center uppercase mb-6 text-2xl">THE DAILY BUGLE: RSVP</h4>
-                <div className="text-sm space-y-3 uppercase font-bold">
-                  <div className="flex justify-between border-b border-black border-dotted"><span>GUEST ID:</span><span>{firstName} {lastName}</span></div>
-                  <div className="flex justify-between border-b border-black border-dotted"><span>SQUAD:</span><span>{adults}A / {kids}K</span></div>
-                  {kidNames.filter(n => n).length > 0 && (
-                    <div className="pt-2">
-                      <p className="text-[10px] underline mb-1">REGISTERED SIDEKICKS:</p>
-                      <p className="text-[11px] leading-tight italic">{kidNames.filter(n => n).join(', ')}</p>
-                    </div>
-                  )}
-                </div>
-                <div className="mt-8 pt-4 border-t-4 border-black text-center">
-                  <p className="text-3xl font-black">ACCEPTED</p>
-                  <p className="text-[10px] mt-1 italic uppercase">Secret HQ Coordinates Locked</p>
-                </div>
-              </div>
-              <div className="mt-10 flex flex-col items-center gap-3 w-full">
-                <h3 className="text-2xl uppercase font-bold italic">Subscribe for Updates</h3>
-                {!emailSubmitted ? (
-                  <form onSubmit={(e) => { e.preventDefault(); setEmailSubmitted(true); }} className="flex flex-col gap-3 w-full">
-                    <input type="email" name="email" autoComplete="email" required placeholder="GUEST@EMAIL.COM" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-4 border-[6px] border-black text-center text-xl font-bold bg-white uppercase shadow-[6px_6px_0px_black] outline-none" />
-                    <button type="submit" className="bg-[#E62429] text-white py-3 px-8 border-[5px] border-black shadow-[6px_6px_0px_black] uppercase italic font-bold text-2xl">Subscribe</button>
-                  </form>
-                ) : (
-                  <div className="text-green-600 text-3xl uppercase font-bold italic animate-bounce">Subscribed!</div>
-                )}
-              </div>
+      {/* STEP 4: KID NAMES */}
+      {!isSwinging && step === 4 && (
+        <form onSubmit={(e) => { e.preventDefault(); triggerTransition(5); }} className="flex flex-col items-center justify-center h-full w-full px-6 animate-pop">
+          <div className="comic-panel p-6 w-full max-w-[320px]">
+            <h2 className="text-xl text-center italic leading-tight mb-4 uppercase">
+              Spidey's Amazing Friends<br/><span className="text-xs normal-case">(your kiddos names)</span>
+            </h2>
+            <div className="max-h-[200px] overflow-y-auto space-y-2 mb-4">
+              {kidNames.map((_, i) => (
+                <input key={i} required placeholder={`FRIEND #${i+1}`} onChange={(e) => { const n = [...kidNames]; n[i] = e.target.value; setKidNames(n); }} className="w-full p-2 border-2 border-black uppercase font-bold text-lg outline-none" />
+              ))}
             </div>
-          )}
+            <button type="submit" className="w-full bg-green-500 text-white text-3xl py-2 border-4 border-black uppercase italic font-bold">CONFIRM</button>
+          </div>
+        </form>
+      )}
 
-          {step === 0 && (
-            <div className="bg-red-600 border-[8px] border-black p-10 text-white text-center rotate-3 scale-110">
-              <h1 className="text-6xl font-bold italic underline leading-none">THWIP!</h1>
+      {/* STEP 5: RECEIPT & SUBSCRIBE */}
+      {!isSwinging && step === 5 && (
+        <div className="flex flex-col items-center w-full h-full pt-[50vh]">
+          {/* THE BLACK LINE SLIT */}
+          <div className="w-full h-2 bg-black fixed top-[50%] left-0 z-20" />
+          
+          <div className="animate-receipt overflow-hidden flex flex-col items-center z-10">
+            <div className="bg-white w-[300px] p-6 receipt-font text-black border-x-2 border-black flex flex-col uppercase font-bold text-sm">
+              <p className="text-center border-b-2 border-black mb-2 text-xl font-black">Daily Bugle RSVP</p>
+              <div className="flex justify-between"><span>DATE:</span><span>MAR 27, 2026</span></div>
+              <div className="flex justify-between"><span>TIME:</span><span>2:00 PM</span></div>
+              <div className="flex justify-between border-t border-black mt-2 pt-2"><span>ADULTS:</span><span>{adults}</span></div>
+              <div className="flex justify-between"><span>KIDS:</span><span>{kids}</span></div>
+              {kidNames.length > 0 && (
+                <div className="mt-2 text-[10px]">
+                  <span>SIDEKICKS: {kidNames.join(', ')}</span>
+                </div>
+              )}
+              <p className="text-center border-t-2 border-black mt-4 pt-2 italic">Thank you for joining the team!</p>
+              <div className="text-center text-[8px] mt-2">--- END OF TICKET ---</div>
+            </div>
+          </div>
+
+          <div className="mt-8 flex flex-col items-center gap-2 animate-pop delay-1000">
+             <h3 className="text-xl uppercase italic font-bold">Stay Updated!</h3>
+             {!emailSubmitted ? (
+               <form onSubmit={(e) => { e.preventDefault(); setEmailSubmitted(true); }} className="flex flex-col items-center gap-2">
+                 <input type="email" name="email" autoComplete="email" required placeholder="GUEST@EMAIL.COM" value={email} onChange={(e) => setEmail(e.target.value)} className="w-64 p-2 border-4 border-black text-center font-bold bg-white uppercase outline-none" />
+                 <button type="submit" className="bg-[#E62429] text-white py-1 px-6 border-4 border-black shadow-[3px_3px_0px_black] uppercase italic font-bold">SUBSCRIBE</button>
+               </form>
+             ) : (
+               <p className="text-green-600 text-2xl uppercase italic animate-bounce">SUBSCRIBED!</p>
+             )}
+          </div>
+        </div>
+      )}
+
+      {/* NO STEP */}
+      {step === 0 && (
+        <div className="flex flex-col items-center justify-center h-full animate-pop">
+           <div className="bg-red-600 border-[8px] border-black p-8 text-white text-center rotate-3">
+              <h1 className="text-6xl font-black italic underline leading-none">THWIP!</h1>
               <p className="text-3xl uppercase font-black">FUCK RIGHT OFF.</p>
-            </div>
-          )}
+           </div>
         </div>
-      </div>
+      )}
+
     </main>
   );
-    }
-            
+              }
+        
