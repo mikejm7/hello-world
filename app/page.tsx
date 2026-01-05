@@ -83,16 +83,17 @@ export default function SpideyInvite() {
       {/* STEP 1: WELCOME */}
       {!isSwinging && step === 1 && (
         <div className="flex flex-col items-center justify-center h-full w-full">
-          <div className="animate-pop">
+          {/* Header 10% higher */}
+          <div className="animate-pop absolute top-[15%]">
             <svg viewBox="0 0 600 550" className="w-72 overflow-visible filter drop-shadow-[6px_6px_0px_black]">
               <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
               <text x="50%" y="42%" textAnchor="middle" fontSize="60" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">You're Invited</text>
               <text x="50%" y="58%" textAnchor="middle" fontSize="65" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">to a Party!</text>
             </svg>
           </div>
-          {/* Form moved lower with mt-16 */}
+          {/* Form moved 20% lower (approx top-[45%]) */}
           <form onSubmit={(e) => { e.preventDefault(); if(firstName && lastName) triggerTransition(2); }} 
-                className="flex flex-col items-center gap-3 w-64 animate-pop mt-16 delay-100">
+                className="flex flex-col items-center gap-3 w-64 absolute top-[45%] animate-pop delay-100">
             <input type="text" name="given-name" id="given-name" autoComplete="given-name" required placeholder="FIRST NAME" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full p-2 border-4 border-black text-center text-lg font-bold bg-white shadow-[4px_4px_0px_black] uppercase outline-none" />
             <input type="text" name="family-name" id="family-name" autoComplete="family-name" required placeholder="LAST NAME" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full p-2 border-4 border-black text-center text-lg font-bold bg-white shadow-[4px_4px_0px_black] uppercase outline-none" />
             <button type="submit" className="mt-2 bg-[#E62429] text-white text-3xl py-1 px-10 border-4 border-black shadow-[4px_4px_0px_black] uppercase italic font-bold">RSVP</button>
@@ -104,12 +105,13 @@ export default function SpideyInvite() {
       {!isSwinging && step === 2 && (
         <div className="flex flex-col items-center justify-center h-full w-full px-4">
           
-          {/* 1. Header (Immediate) */}
-          <div className="animate-pop mb-4">
-            <svg viewBox="0 0 600 350" className="w-64 overflow-visible filter drop-shadow-[6px_6px_0px_black]">
+          {/* 1. Header (Immediate) - FIXED VIEWBOX for spacing */}
+          <div className="animate-pop mb-1">
+            <svg viewBox="0 0 600 600" className="w-64 overflow-visible filter drop-shadow-[6px_6px_0px_black]">
               <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#E62429" stroke="black" strokeWidth="14" />
+              {/* Centered text in new viewbox */}
               <text x="50%" y="45%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Lucas is</text>
-              <text x="50%" y="65%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Turning 5!</text>
+              <text x="50%" y="60%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Turning 5!</text>
             </svg>
           </div>
 
@@ -188,8 +190,8 @@ export default function SpideyInvite() {
           {/* Printer Line - 80% width (10% from each end) */}
           <div className="w-[80%] h-2 bg-black absolute top-[50%] z-20 animate-shake-limited" />
 
-          {/* Subscribe - Moved Lower (top-[65%]) */}
-          <div className="absolute top-[65%] flex flex-col items-center gap-2 animate-pop delay-[2000ms] opacity-0" style={{ animationFillMode: 'forwards' }}>
+          {/* Subscribe - Moved Lower (top-[67%]) */}
+          <div className="absolute top-[67%] flex flex-col items-center gap-2 animate-pop delay-[2000ms] opacity-0" style={{ animationFillMode: 'forwards' }}>
              <h3 className="text-xl uppercase italic font-bold">Stay Updated!</h3>
              {!emailSubmitted ? (
                <form onSubmit={(e) => { e.preventDefault(); setEmailSubmitted(true); }} className="flex flex-col items-center gap-2">
@@ -214,4 +216,4 @@ export default function SpideyInvite() {
       )}
     </main>
   );
-}
+          }
