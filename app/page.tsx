@@ -2,6 +2,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './globals.css';
 
+// Comic themed 8-segment display style
+const Segment = ({ value, label }: { value: number, label: string }) => (
+  <div className="flex flex-col items-center mx-1">
+    <div className="bg-black border-2 border-gray-600 p-2 rounded shadow-[2px_2px_0px_rgba(0,0,0,0.5)] min-w-[40px] flex justify-center">
+      <span className="font-mono text-xl text-[#E62429] font-bold tracking-widest leading-none">
+        {value.toString().padStart(2, '0')}
+      </span>
+    </div>
+    <span className="text-[10px] font-bold mt-1 uppercase text-black bg-white px-1 border border-black">{label}</span>
+  </div>
+);
+
 const Countdown = () => {
   const [timeLeft, setTimeLeft] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null);
 
@@ -33,13 +45,16 @@ const Countdown = () => {
   if (!timeLeft) return null;
 
   return (
-    <div className="bg-yellow-400 border-4 border-black p-2 mb-4 shadow-[4px_4px_0px_black] text-center w-[240px]">
-        <h4 className="text-sm font-bold uppercase italic border-b-2 border-black mb-1">Time Remaining</h4>
-        <div className="flex justify-between text-xs font-bold uppercase">
-            <div className="flex flex-col"><span>{timeLeft.days}</span><span>Days</span></div>
-            <div className="flex flex-col"><span>{timeLeft.hours}</span><span>Hrs</span></div>
-            <div className="flex flex-col"><span>{timeLeft.minutes}</span><span>Min</span></div>
-            <div className="flex flex-col"><span>{timeLeft.seconds}</span><span>Sec</span></div>
+    <div className="bg-[#03A9F4] border-4 border-black p-2 mb-4 shadow-[6px_6px_0px_black] text-center w-auto inline-block rotate-[-2deg] z-20">
+        <h4 className="text-white text-lg font-black uppercase italic mb-2 tracking-wider drop-shadow-[2px_2px_0px_black] text-stroke-black">Mission Countdown</h4>
+        <div className="flex justify-center items-center bg-white border-4 border-black p-2 gap-1">
+            <Segment value={timeLeft.days} label="Days" />
+            <span className="text-2xl font-black mb-4">:</span>
+            <Segment value={timeLeft.hours} label="Hrs" />
+            <span className="text-2xl font-black mb-4">:</span>
+            <Segment value={timeLeft.minutes} label="Min" />
+            <span className="text-2xl font-black mb-4">:</span>
+            <Segment value={timeLeft.seconds} label="Sec" />
         </div>
     </div>
   );
@@ -51,6 +66,7 @@ const WebSlinger = ({ trigger }: { trigger: number }) => {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
+    if (trigger <= 0) return;
     setActive(false);
     const timeout = setTimeout(() => setActive(true), 50);
     return () => clearTimeout(timeout);
@@ -129,12 +145,15 @@ export default function SpideyInvite() {
           <div className="animate-pop">
             <svg viewBox="-50 0 700 600" className="w-72 overflow-visible filter drop-shadow-[6px_6px_0px_black]">
               <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
-              <text x="46%" y="42%" textAnchor="middle" fontSize="60" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">You're Invited</text>
-              <text x="46%" y="58%" textAnchor="middle" fontSize="65" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">to a Party!</text>
+              <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="50" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">
+                <tspan x="50%" dy="-1.2em">Thwip,</tspan>
+                <tspan x="50%" dy="1.2em">Spidey needs</tspan>
+                <tspan x="50%" dy="1.2em">your help!</tspan>
+              </text>
             </svg>
           </div>
           <form onSubmit={(e) => { e.preventDefault(); if(firstName && lastName) triggerTransition(2); }} 
-                className="flex flex-col items-center gap-3 w-64 animate-pop delay-100">
+                className="flex flex-col items-center gap-3 w-64 animate-pop delay-100 -translate-y-[10%]">
             <input type="text" name="given-name" id="given-name" autoComplete="given-name" required placeholder="FIRST NAME" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full p-2 border-4 border-black text-center text-lg font-bold bg-white shadow-[4px_4px_0px_black] uppercase outline-none" />
             <input type="text" name="family-name" id="family-name" autoComplete="family-name" required placeholder="LAST NAME" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full p-2 border-4 border-black text-center text-lg font-bold bg-white shadow-[4px_4px_0px_black] uppercase outline-none" />
             <button type="submit" className="mt-2 bg-[#E62429] text-white text-3xl py-1 px-10 border-4 border-black shadow-[4px_4px_0px_black] uppercase italic font-bold">RSVP</button>
@@ -150,9 +169,8 @@ export default function SpideyInvite() {
           <div className="animate-pop mb-1">
             <svg viewBox="0 0 600 600" className="w-64 overflow-visible filter drop-shadow-[6px_6px_0px_black]">
               <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#E62429" stroke="black" strokeWidth="14" />
-              {/* Centered text in new viewbox */}
-              <text x="46%" y="45%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Lucas is</text>
-              <text x="46%" y="60%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Turning 5!</text>
+              <text x="50%" y="45%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Lucas is</text>
+              <text x="50%" y="60%" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="10" paintOrder="stroke" className="italic uppercase font-bold">Turning 5!</text>
             </svg>
           </div>
 
@@ -215,13 +233,18 @@ export default function SpideyInvite() {
       {!isSwinging && step === 5 && (
         <div className="flex flex-col items-center w-full h-full justify-center relative">
           
+          <div className="absolute top-[10%] z-20">
+             <Countdown />
+          </div>
+
           {/* Receipt - Narrower (w-[240px]) */}
           <div className="animate-receipt-up overflow-hidden absolute bottom-[50%] flex flex-col justify-end z-10 w-[240px]">
-             <Countdown />
+             {/* Countdown moved out */}
              <div className="bg-white p-4 receipt-font text-black border-x-4 border-t-4 border-black uppercase font-bold text-xs">
               <div className="flex justify-between"><span>DATE:</span><span>MAR 27, 2026</span></div>
               <div className="flex justify-between"><span>TIME:</span><span>2:00 PM</span></div>
               <div className="flex justify-between border-t border-black mt-2 pt-2"><span>ADULTS:</span><span>{adults}</span></div>
+              <div className="flex justify-between"><span>GUEST:</span><span>{firstName} {lastName}</span></div>
               <div className="flex justify-between"><span>KIDS:</span><span>{kids}</span></div>
               {kidNames.length > 0 && <div className="mt-2 text-[10px]"><span>NAMES: {kidNames.join(', ')}</span></div>}
               <p className="text-center border-t-2 border-black mt-4 pt-2 italic text-sm">Thank You!</p>
@@ -232,16 +255,16 @@ export default function SpideyInvite() {
           {/* Printer Line - 80% width (10% from each end) */}
           <div className="w-[80%] h-2 bg-black absolute top-[50%] z-20 animate-shake-limited" />
 
-          {/* Subscribe - Moved Lower (top-[67%]) */}
-          <div className="absolute top-[67%] flex flex-col items-center gap-2 animate-pop delay-[2000ms] opacity-0" style={{ animationFillMode: 'forwards' }}>
-             <h3 className="text-xl uppercase italic font-bold">Stay Updated!</h3>
+          {/* Subscribe - Moved Lower (top-[70%]) */}
+          <div className="absolute top-[70%] flex flex-col items-center gap-2 animate-pop delay-[2000ms] opacity-0" style={{ animationFillMode: 'forwards' }}>
+             <h3 className="text-xl uppercase italic font-bold">Send me a calendar invite</h3>
              {!emailSubmitted ? (
                <form onSubmit={(e) => { e.preventDefault(); setEmailSubmitted(true); }} className="flex flex-col items-center gap-2">
                  <input type="email" name="email" id="email" autoComplete="email" required placeholder="GUEST@EMAIL.COM" value={email} onChange={(e) => setEmail(e.target.value)} className="w-64 p-2 border-4 border-black text-center font-bold bg-white uppercase outline-none" />
-                 <button type="submit" className="bg-[#E62429] text-white py-1 px-6 border-4 border-black shadow-[3px_3px_0px_black] uppercase italic font-bold">SUBSCRIBE</button>
+                 <button type="submit" className="bg-[#E62429] text-white py-1 px-6 border-4 border-black shadow-[3px_3px_0px_black] uppercase italic font-bold">SEND</button>
                </form>
              ) : (
-               <p className="text-green-600 text-2xl uppercase italic animate-bounce">SUBSCRIBED!</p>
+               <p className="text-green-600 text-2xl uppercase italic animate-bounce">SENT!</p>
              )}
           </div>
 
@@ -258,4 +281,4 @@ export default function SpideyInvite() {
       )}
     </main>
   );
-          }
+}

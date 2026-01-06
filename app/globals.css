@@ -51,7 +51,7 @@ html, body {
 
 .animate-pop { animation: comic-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 .animate-receipt-up { animation: receipt-up 2s ease-out forwards; }
-.animate-shake-limited { animation: shake-line 0.1s linear 20 forwards; }
+.animate-shake-limited { animation: shake-line 0.2s linear 20 forwards; }
 
 .spidey-trigger { animation: spidey-swing-accel 2.5s ease-in-out forwards; }
 .web-entry-trigger { animation: web-entry-once 2.5s linear forwards; }
