@@ -143,12 +143,12 @@ export default function SpideyInvite() {
       {!isSwinging && step === 1 && (
         <div className="flex flex-col items-center justify-evenly h-full w-full py-10">
           <div className="animate-pop">
-            <svg viewBox="-50 0 700 600" className="w-72 overflow-visible filter drop-shadow-[6px_6px_0px_black]">
+            <svg viewBox="-50 0 700 600" className="w-96 overflow-visible filter drop-shadow-[6px_6px_0px_black]">
               <path d="M300,20 L350,110 L440,30 L450,150 L570,100 L530,210 L640,230 L540,320 L620,440 L490,410 L480,540 L380,450 L300,560 L220,450 L120,540 L110,410 L-20,440 L60,320 L-40,230 L70,210 L30,100 L150,150 L160,30 L250,110 Z" fill="#03A9F4" stroke="black" strokeWidth="14" />
-              <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="50" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">
-                <tspan x="50%" dy="-1.2em">Thwip,</tspan>
-                <tspan x="50%" dy="1.2em">Spidey needs</tspan>
-                <tspan x="50%" dy="1.2em">your help!</tspan>
+              <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="80" fill="white" stroke="black" strokeWidth="8" paintOrder="stroke" className="uppercase font-bold italic">
+                <tspan x="50%" dy="-1.1em">Hurry,</tspan>
+                <tspan x="50%" dy="1.1em">Spidey needs</tspan>
+                <tspan x="50%" dy="1.1em">your help!</tspan>
               </text>
             </svg>
           </div>
